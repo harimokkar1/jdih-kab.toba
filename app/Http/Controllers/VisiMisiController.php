@@ -2,40 +2,54 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\VisiMisi;
 use App\Models\Carousel;
+use App\Models\VisiMisi;
+use Illuminate\Http\Request;
 
 class VisiMisiController extends Controller
 {
-    // tampil halaman
+    /**
+     * Tampilkan Halaman Admin Visi & Misi
+     */
     public function index()
     {
-        $data = VisiMisi::first(); // ambil cuma 1 data
+        $data = VisiMisi::first();
         return view('admin.visi', compact('data'));
     }
 
-    // simpan / update
+    /**
+     * Simpan / Update Visi & Misi
+     */
     public function save(Request $request)
     {
+        $request->validate([
+            'visi' => 'required|string',
+            'misi' => 'required|string',
+        ], [
+            'visi.required' => 'Teks Visi wajib diisi.',
+            'misi.required' => 'Teks Misi wajib diisi.',
+        ]);
+
         VisiMisi::updateOrCreate(
-            ['id' => 1], // biar cuma 1 record
+            ['id' => 1],
             [
                 'visi' => $request->visi,
-                'misi' => $request->misi
+                'misi' => $request->misi,
             ]
         );
 
-        return back()->with('success', 'Data berhasil disimpan');
+        return redirect()->route('admin.visi')
+            ->with('success', 'Visi & Misi Pemerintah Kabupaten Toba berhasil disimpan.');
     }
 
-    // tampil ke user (frontend)
+    /**
+     * Tampilkan Halaman Visi & Misi Publik
+     */
     public function show()
     {
         $data = VisiMisi::first();
-        $carousels = Carousel::all();
+        $carousels = Carousel::latest()->get();
 
         return view('user.visi', compact('data', 'carousels'));
     }
-
 }

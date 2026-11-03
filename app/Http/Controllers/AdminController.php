@@ -2,84 +2,109 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\User;
-use App\Models\Carousel;
-use App\Models\StrukturOrganisasi;
 use App\Models\Berita;
-use App\Models\PeraturanDaerah;
-use App\Models\PeraturanBupati;
-use App\Models\KeputusanBupati;
+use App\Models\Carousel;
+use App\Models\JenisPeraturan;
 use App\Models\Pengumuman;
-
+use App\Models\Peraturan;
+use App\Models\StrukturOrganisasi;
+use App\Models\User;
+use App\Models\Visitor;
+use App\Services\VisitorService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
-    // =========================================================
-    // HALAMAN SUPER ADMIN
-    // =========================================================
-
-    public function superAdmin()
+    /**
+     * Halaman Dasbor Utama Admin
+     */
+    public function dashboard(VisitorService $visitorService)
     {
-        $admins = User::where('role', 'admin')->get();
-        return view(
-            'super-admin.dashboard',
-            compact('admins')
-        );
+        $totalJenis = JenisPeraturan::count();
+        $totalPeraturan = Peraturan::count();
+        $totalBerita = Berita::count();
+        $totalPengumuman = Pengumuman::count();
+        $totalStruktur = StrukturOrganisasi::count();
+        $totalCarousel = Carousel::count();
+        $totalAdmin = User::count();
+
+        // Kunjungan
+        $visitorStats = $visitorService->getStats();
+
+        // Data Terbaru
+        $peraturanTerbaru = Peraturan::with('jenisPeraturan')->latest()->take(5)->get();
+        $beritaTerbaru = Berita::latest()->take(5)->get();
+
+        return view('admin.dashboard', compact(
+            'totalJenis',
+            'totalPeraturan',
+            'totalBerita',
+            'totalPengumuman',
+            'totalStruktur',
+            'totalCarousel',
+            'totalAdmin',
+            'visitorStats',
+            'peraturanTerbaru',
+            'beritaTerbaru'
+        ));
     }
 
-    // =========================================================
-    // TAMBAH ADMIN
-    // =========================================================
+    /**
+     * Halaman Kelola Admin (Khusus Super Admin)
+     */
+    public function superAdmin()
+    {
+        $admins = User::latest()->get();
+        return view('super-admin.dashboard', compact('admins'));
+    }
+
+    /**
+     * Tambah Akun Admin Baru
+     */
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email',
+            'password' => 'required|string|min:6',
+            'role' => 'nullable|in:super_admin,admin',
+        ], [
+            'name.required' => 'Nama admin wajib diisi.',
+            'email.required' => 'Email wajib diisi.',
+            'email.email' => 'Format email tidak valid.',
+            'email.unique' => 'Email ini sudah terdaftar sebagai admin.',
+            'password.required' => 'Password wajib diisi.',
+            'password.min' => 'Password minimal terdiri dari 6 karakter.',
+        ]);
+
         User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => bcrypt($request->password),
-            'role' => 'admin'
+            'password' => Hash::make($request->password),
+            'role' => $request->role ?? 'admin',
         ]);
-        return redirect('/super-admin');
+
+        return redirect()->route('super-admin')
+            ->with('success', 'Akun admin baru berhasil dibuat.');
     }
 
-    // =========================================================
-    // HAPUS ADMIN
-    // =========================================================
+    /**
+     * Hapus Akun Admin
+     */
     public function delete($id)
     {
-        User::find($id)->delete();
-        return redirect('/super-admin');
-    }
+        $user = User::findOrFail($id);
 
-    // =========================================================
-    // DASHBOARD ADMIN
-    // =========================================================
+        if (Auth::id() === $user->id) {
+            return redirect()->route('super-admin')
+                ->with('error', 'Anda tidak dapat menghapus akun Anda sendiri saat sedang login!');
+        }
 
-    public function dashboard()
-    {
-        // Total Carousel
-        $totalCarousel = Carousel::count();
-        // Total Struktur Organisasi
-        $totalStruktur = StrukturOrganisasi::count();
-        // Total Berita
-        $totalBerita = Berita::count();
-        // Total Peraturan Daerah
-        $totalPeraturanDaerah = PeraturanDaerah::count();
-        // Total Peraturan Bupati
-        $totalPeraturanBupati = PeraturanBupati::count();
-        // Total Keputusan Bupati
-        $totalKeputusanBupati = KeputusanBupati::count();
-        // TOTAL PENGUMUMAN
-        $totalPengumuman = Pengumuman::count();
+        $user->delete();
 
-        return view('admin.dashboard', compact(
-            'totalCarousel',
-            'totalStruktur',
-            'totalBerita',
-            'totalPeraturanDaerah',
-            'totalPeraturanBupati',
-            'totalKeputusanBupati',
-            'totalPengumuman'
-        ));
+        return redirect()->route('super-admin')
+            ->with('success', "Akun admin {$user->name} berhasil dihapus.");
     }
 }

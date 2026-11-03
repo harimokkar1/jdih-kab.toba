@@ -3,105 +3,53 @@
 namespace App\Http\Controllers;
 
 use App\Models\Berita;
-use App\Models\PeraturanDaerah;
-use App\Models\PeraturanBupati;
-use App\Models\KeputusanBupati;
+use App\Models\Carousel;
+use App\Models\JenisPeraturan;
+use App\Models\Pengumuman;
+use App\Models\Peraturan;
 
 class HomeController extends Controller
 {
     public function index()
     {
-        // ==============================
-        // CAROUSEL
-        // ==============================
-        $carousels = \App\Models\Carousel::latest()->get();
+        // 1. CAROUSEL
+        $carousels = Carousel::latest()->get();
 
+        // 2. BERITA TERBARU (3 items)
+        $beritas = Berita::latest()->take(3)->get();
 
-        // ==============================
-        // BERITA TERBARU
-        // ==============================
-        $beritas = Berita::latest()
-            ->take(3)
+        // 3. PENGUMUMAN TERBARU (4 items)
+        $pengumumans = Pengumuman::latest('tanggal_upload')->take(4)->get();
+
+        // 4. JENIS PRODUK HUKUM DINAMIS DENGAN TOTAL DOKUMEN (Requirement #4)
+        $jenisPeraturans = JenisPeraturan::where('is_active', true)
+            ->withCount('peraturans')
+            ->orderBy('urutan')
             ->get();
 
-
-        // ==============================
-        // JUMLAH PRODUK HUKUM
-        // ==============================
-        $jumlahPeraturanDaerah = PeraturanDaerah::count();
-
-        $jumlahPeraturanBupati = PeraturanBupati::count();
-
-        $jumlahKeputusanBupati = KeputusanBupati::count();
-
-
-        // ==============================
-        // 3 PRODUK HUKUM TERBARU
-        // ==============================
-
-        $peraturanDaerahTerbaru = PeraturanDaerah::latest()
-            ->take(3)
-            ->get()
-            ->map(function ($item) {
-
-                $item->kategori_produk = 'Peraturan Daerah';
-                $item->url_produk = route(
-                    'user.peraturan-daerah.detail',
-                    $item->id
-                );
-
-                return $item;
-            });
-
-
-        $peraturanBupatiTerbaru = PeraturanBupati::latest()
-            ->take(3)
-            ->get()
-            ->map(function ($item) {
-
-                $item->kategori_produk = 'Peraturan Bupati';
-                $item->url_produk = route(
-                    'user.peraturan-bupati.detail',
-                    $item->id
-                );
-
-                return $item;
-            });
-
-
-        $keputusanBupatiTerbaru = KeputusanBupati::latest()
-            ->take(3)
-            ->get()
-            ->map(function ($item) {
-
-                $item->kategori_produk = 'Keputusan Bupati';
-                $item->url_produk = route(
-                    'user.keputusan-bupati.detail',
-                    $item->id
-                );
-
-                return $item;
-            });
-
-
-        // Gabungkan ketiga data
-        $produkHukumTerbaru = $peraturanDaerahTerbaru
-            ->concat($peraturanBupatiTerbaru)
-            ->concat($keputusanBupatiTerbaru)
-            ->sortByDesc('created_at')
+        // 5. PRODUK HUKUM TERBARU (4 items terbaru lintas seluruh jenis)
+        $produkHukumTerbaru = Peraturan::with('jenisPeraturan')
+            ->latest()
             ->take(4)
-            ->values();
+            ->get();
 
+        // 6. TOTAL STATISTIK DOKUMEN
+        $totalDokumen = Peraturan::count();
+
+        // 7. LIST TAHUN UNTUK FILTER HERO SEARCH BAR (Requirement #1)
+        $tahunList = Peraturan::whereNotNull('tahun')
+            ->distinct()
+            ->orderBy('tahun', 'desc')
+            ->pluck('tahun');
 
         return view('user.home', compact(
             'carousels',
             'beritas',
-
-            'jumlahPeraturanDaerah',
-            'jumlahPeraturanBupati',
-            'jumlahKeputusanBupati',
-
-            'produkHukumTerbaru'
+            'pengumumans',
+            'jenisPeraturans',
+            'produkHukumTerbaru',
+            'totalDokumen',
+            'tahunList'
         ));
     }
 }

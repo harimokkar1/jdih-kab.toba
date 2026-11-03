@@ -2,57 +2,45 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Carousel;
 use App\Models\StrukturOrganisasi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use App\Models\Carousel;
 
 class StrukturController extends Controller
 {
     /**
-     * Halaman user
+     * Halaman Publik Struktur Organisasi
      */
     public function index()
     {
         $struktur = StrukturOrganisasi::whereNull('parent_id')
             ->with('children')
+            ->orderBy('urutan')
             ->get();
 
         $carousels = Carousel::latest()->get();
 
-        return view('user.organisasi', compact(
-            'struktur',
-            'carousels'
-        ));
+        return view('user.organisasi', compact('struktur', 'carousels'));
     }
 
     /**
-     * Halaman admin
+     * Halaman Admin Struktur Organisasi
      */
     public function admin()
     {
         $struktur = StrukturOrganisasi::with('parent')
             ->orderBy('tingkat')
             ->orderBy('urutan')
-            ->paginate(10);
+            ->paginate(15);
 
-        return view('admin.struktur', compact('struktur'));
+        $allParents = StrukturOrganisasi::orderBy('tingkat')->orderBy('urutan')->get();
+
+        return view('admin.struktur', compact('struktur', 'allParents'));
     }
 
     /**
-     * Form tambah
-     */
-    public function create()
-    {
-        $parent = StrukturOrganisasi::orderBy('tingkat')
-            ->orderBy('urutan')
-            ->get();
-
-        return view('admin.struktur-create', compact('parent'));
-    }
-
-    /**
-     * Simpan data
+     * Simpan Data Struktur Organisasi
      */
     public function store(Request $request)
     {
@@ -61,8 +49,13 @@ class StrukturController extends Controller
             'jabatan' => 'required|string|max:255',
             'tingkat' => 'required|integer|min:1',
             'parent_id' => 'nullable|exists:struktur_organisasis,id',
-            'foto' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'foto' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:3072',
             'urutan' => 'nullable|integer|min:0',
+        ], [
+            'nama.required' => 'Nama pejabat/staf wajib diisi.',
+            'jabatan.required' => 'Nama jabatan wajib diisi.',
+            'tingkat.required' => 'Level hierarki wajib diisi.',
+            'foto.image' => 'File foto harus berupa gambar.',
         ]);
 
         $data = $request->only([
@@ -74,37 +67,17 @@ class StrukturController extends Controller
         ]);
 
         if ($request->hasFile('foto')) {
-            $data['foto'] = $request->file('foto')
-                ->store('struktur', 'public');
+            $data['foto'] = $request->file('foto')->store('struktur', 'public');
         }
 
         StrukturOrganisasi::create($data);
 
-        return redirect()
-            ->route('admin.struktur')
+        return redirect()->route('admin.struktur')
             ->with('success', 'Struktur organisasi berhasil ditambahkan.');
     }
 
     /**
-     * Form edit
-     */
-    public function edit($id)
-    {
-        $struktur = StrukturOrganisasi::findOrFail($id);
-
-        $parent = StrukturOrganisasi::where('id', '!=', $id)
-            ->orderBy('tingkat')
-            ->orderBy('urutan')
-            ->get();
-
-        return view('admin.struktur-edit', compact(
-            'struktur',
-            'parent'
-        ));
-    }
-
-    /**
-     * Update
+     * Update Data Struktur Organisasi
      */
     public function update(Request $request, $id)
     {
@@ -115,7 +88,7 @@ class StrukturController extends Controller
             'jabatan' => 'required|string|max:255',
             'tingkat' => 'required|integer|min:1',
             'parent_id' => 'nullable|exists:struktur_organisasis,id',
-            'foto' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'foto' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:3072',
             'urutan' => 'nullable|integer|min:0',
         ]);
 
@@ -128,24 +101,21 @@ class StrukturController extends Controller
         ]);
 
         if ($request->hasFile('foto')) {
-
             if ($struktur->foto) {
                 Storage::disk('public')->delete($struktur->foto);
             }
 
-            $data['foto'] = $request->file('foto')
-                ->store('struktur', 'public');
+            $data['foto'] = $request->file('foto')->store('struktur', 'public');
         }
 
         $struktur->update($data);
 
-        return redirect()
-            ->route('admin.struktur')
+        return redirect()->route('admin.struktur')
             ->with('success', 'Struktur organisasi berhasil diperbarui.');
     }
 
     /**
-     * Hapus
+     * Hapus Data Struktur Organisasi
      */
     public function destroy($id)
     {
@@ -157,8 +127,7 @@ class StrukturController extends Controller
 
         $struktur->delete();
 
-        return redirect()
-            ->route('admin.struktur')
+        return redirect()->route('admin.struktur')
             ->with('success', 'Struktur organisasi berhasil dihapus.');
     }
 }

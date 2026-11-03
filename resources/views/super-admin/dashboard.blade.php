@@ -1,151 +1,135 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Super Admin</title>
+@extends('layouts.admin')
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+@section('title', 'Kelola Admin Sistem')
+@section('page-title', 'Kelola Akun Administrator (Super Admin)')
 
-    <style>
-        body { margin: 0; }
-
-        .sidebar {
-            width: 250px;
-            height: 100vh;
-            background: #0d6efd;
-            color: white;
-            position: fixed;
-        }
-
-        .sidebar h4 { padding: 20px; }
-
-        .sidebar a {
-            display: block;
-            color: white;
-            padding: 12px 20px;
-            text-decoration: none;
-        }
-
-        .sidebar a:hover {
-            background: rgba(255,255,255,0.2);
-        }
-
-        .content {
-            margin-left: 250px;
-            padding: 20px;
-        }
-
-        .navbar-custom {
-            background: white;
-            padding: 10px 20px;
-            border-bottom: 1px solid #ddd;
-        }
-    </style>
-</head>
-<body>
-
-<!-- SIDEBAR -->
-<div class="sidebar">
-    <h4>JDIH</h4>
-
-    <a href="#">Dashboard</a>
-
-    <form method="POST" action="/logout" class="mt-3 px-3">
-        @csrf
-        <button class="btn btn-light w-100">Logout</button>
-    </form>
+@section('content')
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <p class="text-muted small mb-0">Manajemen hak akses pengguna dan staf administrator portal JDIH Kabupaten Toba</p>
+    </div>
+    <button type="button" class="btn btn-primary rounded-pill px-4 shadow-sm" data-bs-toggle="modal" data-bs-target="#modalTambahAdmin">
+        <i class="bi bi-person-plus-fill me-1"></i> Tambah Admin Baru
+    </button>
 </div>
 
-<!-- CONTENT -->
-<div class="content">
-
-    <div class="navbar-custom mb-3">
-        <strong>Super Admin Panel</strong>
-    </div>
-
-    <h4>Kelola Admin</h4>
-
-    <div class="row mt-4">
-
-        <!-- FORM -->
-        <div class="col-md-4">
-            <div class="card shadow">
-                <div class="card-body">
-
-                    <h5>Tambah Admin</h5>
-
-                    <form method="POST" action="/admin/store">
-                        @csrf
-
-                        <div class="mb-2">
-                            <label>Nama</label>
-                            <input type="text" name="name" class="form-control" required>
-                        </div>
-
-                        <div class="mb-2">
-                            <label>Email</label>
-                            <input type="email" name="email" class="form-control" required>
-                        </div>
-
-                        <div class="mb-2">
-                            <label>Password</label>
-                            <input type="password" name="password" class="form-control" required>
-                        </div>
-
-                        <button class="btn btn-primary w-100 mt-2">Simpan</button>
-                    </form>
-
-                </div>
-            </div>
-        </div>
-
-        <!-- TABEL -->
-        <div class="col-md-8">
-            <div class="card shadow">
-                <div class="card-body">
-
-                    <h5>Data Admin</h5>
-
-                    <table class="table table-bordered mt-3">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Nama</th>
-                                <th>Email</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($admins as $admin)
-                            <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $admin->name }}</td>
-                                <td>{{ $admin->email }}</td>
-                                <td>
-                                    <form method="POST" action="/admin/delete/{{ $admin->id }}">
-                                        @csrf
-                                        <button class="btn btn-danger btn-sm">Hapus</button>
-                                    </form>
-                                </td>
-                            </tr>
-                            @endforeach
-
-                            @if($admins->isEmpty())
-                            <tr>
-                                <td colspan="4" class="text-center">Belum ada admin</td>
-                            </tr>
+<!-- TABEL DAFTAR ADMIN -->
+<div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light text-muted small text-uppercase">
+                <tr>
+                    <th class="ps-4" style="width: 60px;">No</th>
+                    <th>Nama Administrator</th>
+                    <th>Email</th>
+                    <th>Peran (Role)</th>
+                    <th>Terdaftar Sejak</th>
+                    <th class="text-end pe-4" style="width: 140px;">Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($admins as $index => $adm)
+                    <tr>
+                        <td class="ps-4 fw-bold text-muted">{{ $index + 1 }}</td>
+                        <td>
+                            <strong class="text-dark">{{ $adm->name }}</strong>
+                            @if(auth()->id() === $adm->id)
+                                <span class="badge bg-light text-primary border ms-2">Akun Anda</span>
                             @endif
-                        </tbody>
-                    </table>
+                        </td>
+                        <td><span class="text-muted">{{ $adm->email }}</span></td>
+                        <td>
+                            <span class="badge {{ $adm->role === 'super_admin' ? 'bg-danger' : 'bg-primary' }} rounded-pill px-3 py-1">
+                                {{ $adm->role === 'super_admin' ? 'Super Admin' : 'Admin' }}
+                            </span>
+                        </td>
+                        <td><small class="text-muted">{{ $adm->created_at ? $adm->created_at->format('d/m/Y H:i') : '-' }}</small></td>
+                        <td class="text-end pe-4">
+                            @if(auth()->id() !== $adm->id)
+                                <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalHapus{{ $adm->id }}" title="Hapus Admin">
+                                    <i class="bi bi-trash"></i> Hapus
+                                </button>
+                            @else
+                                <span class="badge bg-light text-muted border">Aktif</span>
+                            @endif
+                        </td>
+                    </tr>
 
-                </div>
-            </div>
-        </div>
-
+                    <!-- MODAL HAPUS -->
+                    @if(auth()->id() !== $adm->id)
+                        <div class="modal fade" id="modalHapus{{ $adm->id }}" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content rounded-4 border-0 shadow">
+                                    <form action="{{ route('admin.delete', $adm->id) }}" method="POST">
+                                        @csrf
+                                        <div class="modal-header border-bottom">
+                                            <h5 class="modal-title fw-bold text-danger">Konfirmasi Hapus Admin</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body p-4 text-center">
+                                            <i class="bi bi-exclamation-triangle text-danger display-4 mb-3 d-block"></i>
+                                            <p class="mb-1">Apakah Anda yakin ingin menghapus akses administrator untuk:</p>
+                                            <h6 class="fw-bold">{{ $adm->name }} ({{ $adm->email }})?</h6>
+                                        </div>
+                                        <div class="modal-footer border-top">
+                                            <button type="button" class="btn btn-light rounded-pill px-3" data-bs-dismiss="modal">Batal</button>
+                                            <button type="submit" class="btn btn-danger rounded-pill px-4">Ya, Hapus</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+                @empty
+                    <tr>
+                        <td colspan="6" class="text-center py-4 text-muted">Belum ada akun admin terdaftar.</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
     </div>
-
 </div>
 
-</body>
-</html>
+<!-- MODAL TAMBAH ADMIN -->
+<div class="modal fade" id="modalTambahAdmin" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow">
+            <form action="{{ route('admin.store') }}" method="POST">
+                @csrf
+                <div class="modal-header border-bottom">
+                    <h5 class="modal-title fw-bold">Tambah Akun Administrator Baru</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Nama Lengkap <span class="text-danger">*</span></label>
+                        <input type="text" name="name" class="form-control" placeholder="Nama staf / admin..." required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Alamat Email <span class="text-danger">*</span></label>
+                        <input type="email" name="email" class="form-control" placeholder="admin@jdih.tobakab.go.id" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Kata Sandi (Password) <span class="text-danger">*</span></label>
+                        <input type="password" name="password" class="form-control" placeholder="Minimal 6 karakter..." minlength="6" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Peran (Role Akses)</label>
+                        <select name="role" class="form-select">
+                            <option value="admin">Admin Standar (Kelola Dokumen & Berita)</option>
+                            <option value="super_admin">Super Admin (Hak Penuh & Kelola Admin)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer border-top">
+                    <button type="button" class="btn btn-light rounded-pill px-3" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4">Buat Akun</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endsection

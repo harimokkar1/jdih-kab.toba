@@ -1,444 +1,95 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+@section('title', 'Kontak Kami - JDIH Kabupaten Toba')
 
-    <title>JDIH Kabupaten Toba</title>
-
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-
-    <style>
-        /* GLOBAL */
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            padding-top: 70px;
-            /* biar konten tidak ketutup navbar */
-            background: #f8f9fa;
-        }
-
-        /* NAVBAR */
-        .custom-navbar {
-            top: 0;
-            background: rgba(0, 0, 0, .35);
-            backdrop-filter: blur(10px);
-            transition: .3s;
-            padding: 10px 0;
-        }
-
-        .custom-navbar.scrolled {
-            background: #0d6efd;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, .2);
-        }
-
-        .navbar-nav .nav-link {
-            color: white !important;
-            margin-left: 10px;
-            font-weight: 500;
-            transition: .2s;
-        }
-
-        .navbar-nav .nav-link:hover {
-            color: #ffc107 !important;
-        }
-
-        /* DROPDOWN */
-        .dropdown-menu {
-            border-radius: 10px;
-            border: none;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, .15);
-        }
-
-        .dropdown-item {
-            transition: .2s;
-        }
-
-        .dropdown-item:hover {
-            background: #0d6efd;
-            color: white;
-        }
-
-        /* CAROUSEL */
-        .carousel-img {
-            height: 600px;
-            object-fit: cover;
-        }
-
-        .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom,
-                    rgba(0, 0, 0, .2),
-                    rgba(0, 0, 0, .75));
-        }
-
-        /* CAPTION */
-        .carousel-caption {
-            position: absolute;
-            left: 8%;
-            right: auto;
-            bottom: 15%;
-            width: 45%;
-            text-align: left;
-            z-index: 2;
-        }
-
-        .carousel-caption h1 {
-            display: inline-block;
-            padding: 12px 22px;
-            background: rgba(0, 0, 0, .5);
-            border-radius: 10px;
-            font-size: 45px;
-            font-weight: 700;
-            color: white;
-            animation: slideDown 1s ease;
-        }
-
-        /* ANIMATION */
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-
-            to {
-                opacity: 1;
-                transform: none;
-            }
-        }
-
-        /* WELCOME */
-        .welcome h2 {
-            font-weight: 700;
-            color: #333;
-        }
-
-        /* CARD ITEM KONTAK */
-        .contact-card-item {
-            background: #ffffff;
-            border-radius: 15px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, .08);
-            transition: .3s;
-            height: 100%;
-        }
-
-        .contact-card-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 25px rgba(0, 0, 0, .15);
-        }
-
-        .contact-card-item h6 {
-            font-weight: 600;
-            margin-bottom: 5px;
-            color: #0d6efd;
-        }
-
-        .contact-card-item p {
-            margin: 0;
-            font-size: 14px;
-            color: #555;
-        }
-
-
-        /* FOOTER */
-        footer {
-            background:  #111827;
-            color: white;
-            padding: 50px 0 20px;
-        }
-
-        footer h5 {
-            font-weight: 700;
-            margin-bottom: 20px;
-        }
-
-        footer ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        footer ul li {
-            margin-bottom: 10px;
-        }
-
-        footer a {
-            color: #ddd;
-            text-decoration: none;
-        }
-
-        footer a:hover {
-            color: white;
-        }
-
-        .footer-bottom {
-            border-top: 1px solid rgba(255, 255, 255, .2);
-            margin-top: 30px;
-            padding-top: 20px;
-            text-align: center;
-        }
-
-        /* RESPONSIVE */
-        @media(max-width:768px) {
-
-            .carousel-img {
-                height: 400px;
-            }
-
-            .carousel-caption {
-                left: 5%;
-                width: 90%;
-                bottom: 10%;
-            }
-
-            .carousel-caption h1 {
-                font-size: 28px;
-            }
-
-            .navbar-nav {
-                background: #0d6efd;
-                padding: 10px;
-                border-radius: 10px;
-            }
-        }
-    </style>
-
-</head>
-
-<body>
-
-    <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top custom-navbar">
-
-        <div class="container">
-           <a class="navbar-brand fw-bold d-flex align-items-center" href="/home">
-
-                <img
-                    src="{{ asset('logo_jdihn-toba.png') }}"
-                    alt="Logo JDIH Toba"
-                    style="height: 45px; width: auto; margin-right: 10px;">
-
-            </a>
-
-            <button class="navbar-toggler"
-                data-bs-toggle="collapse"
-                data-bs-target="#navbarMenu">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarMenu">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="/home">
-                            Home
-                        </a>
-                    </li>
-
-                    <!-- MENU 2 -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle"
-                            href="#"
-                            data-bs-toggle="dropdown">
-                            Profil
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="/sejarah">Sejarah</a></li>
-                            <li><a class="dropdown-item" href="/visi">Visi Misi</a></li>
-                            <li><a class="dropdown-item" href="/organisasi">Struktur Organisasi</a></li>
-                        </ul>
-                    </li>
-
-
-                    <!-- MENU 3 -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle"
-                            href="#"
-                            data-bs-toggle="dropdown">
-                            Produk Hukum
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="/peraturan-daerah">Peraturan Daerah</a></li>
-                            <li><a class="dropdown-item" href="/peraturan-bupati">Peraturan Bupati</a></li>
-                            <li><a class="dropdown-item" href="/keputusan-bupati">Keputusan Bupati</a></li>
-
-                        </ul>
-                    </li>
-
-                    <!-- MENU 4 -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle"
-                            href="#"
-                            data-bs-toggle="dropdown">
-                            Informasi
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="/berita">Berita</a></li>
-                            <li><a class="dropdown-item" href="/pengumuman"> Pengumuman </a> </li>
-                        </ul>
-                    </li>
-
-                    <!-- MENU 5 -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="/kontak">
-                            Kontak
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-    <!-- CAROUSEL -->
-    <div id="carouselExample"
-        class="carousel slide carousel-fade"
-        data-bs-ride="carousel">
-
-        <div class="carousel-inner">
-            @foreach($carousels as $key => $c)
-            <div class="carousel-item {{ $key == 0 ? 'active':'' }}">
-                <img src="/carousel/{{ $c->image }}"
-                    class="d-block w-100 carousel-img">
-                <div class="overlay"></div>
-                <div class="carousel-caption">
-                    <h1>
-                        {{ $c->title }}
-                    </h1>
-                </div>
-            </div>
-            @endforeach
-        </div>
-
-        <button class="carousel-control-prev"
-            type="button"
-            data-bs-target="#carouselExample"
-            data-bs-slide="prev">
-            <span class="carousel-control-prev-icon"></span>
-        </button>
-        <button class="carousel-control-next"
-            type="button"
-            data-bs-target="#carouselExample"
-            data-bs-slide="next">
-            <span class="carousel-control-next-icon"></span>
-        </button>
+@section('content')
+<div class="py-4 bg-light border-bottom">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-1 small">
+                <li class="breadcrumb-item"><a href="{{ route('home') }}">Beranda</a></li>
+                <li class="breadcrumb-item active">Kontak Kami</li>
+            </ol>
+        </nav>
+        <h2 class="fw-bold mb-0"><i class="bi bi-telephone text-primary me-2"></i> Kontak & Informasi Pelayanan</h2>
     </div>
+</div>
 
-    <!-- WELCOME -->
-    <section class="welcome py-5">
-        <div class="container text-center">
-            <h2>
-                Selamat Datang di JDIH Kabupaten Toba
-            </h2>
-            <p class="text-muted mt-3">
-                Portal resmi dokumentasi dan informasi hukum Kabupaten Toba
-            </p>
-        </div>
-    </section>
+<div class="container py-5">
+    <div class="row g-4 justify-content-center">
+        <!-- KARTU KONTAK -->
+        <div class="col-lg-5">
+            <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-white h-100">
+                <h4 class="fw-bold text-primary mb-4">Sekretariat JDIH Toba</h4>
 
-    <!-- KONTAK KAMI -->
-    <section class="contact-section py-5 mb-5">
-        <div class="container">
-            <div class="row justify-content-center">
+                <div class="d-flex align-items-start gap-3 mb-4">
+                    <div class="rounded-circle bg-primary bg-opacity-10 p-3 text-primary fs-4 flex-shrink-0">
+                        <i class="bi bi-geo-alt-fill"></i>
+                    </div>
+                    <div>
+                        <h6 class="fw-bold mb-1">Alamat Kantor</h6>
+                        <p class="text-muted small mb-0">
+                            Bagian Hukum Sekretariat Daerah Kabupaten Toba<br>
+                            Jl. Sutomo, Pagar Batu, Balige 22385<br>
+                            Kabupaten Toba, Provinsi Sumatera Utara
+                        </p>
+                    </div>
+                </div>
 
-                <div class="col-md-8">
-                    <h2 class="mb-4 text-center">Kontak Kami</h2>
+                <div class="d-flex align-items-start gap-3 mb-4">
+                    <div class="rounded-circle bg-success bg-opacity-10 p-3 text-success fs-4 flex-shrink-0">
+                        <i class="bi bi-telephone-fill"></i>
+                    </div>
+                    <div>
+                        <h6 class="fw-bold mb-1">Telepon / WhatsApp</h6>
+                        <p class="text-muted small mb-0">0813-6244-4195</p>
+                    </div>
+                </div>
 
-                    <div class="row g-3">
+                <div class="d-flex align-items-start gap-3 mb-4">
+                    <div class="rounded-circle bg-warning bg-opacity-10 p-3 text-warning fs-4 flex-shrink-0">
+                        <i class="bi bi-envelope-fill"></i>
+                    </div>
+                    <div>
+                        <h6 class="fw-bold mb-1">Email Resmi</h6>
+                        <p class="text-muted small mb-0">hukumtobasamosirkab@gmail.com</p>
+                    </div>
+                </div>
 
-                        <div class="col-12">
-                            <div class="contact-card-item p-3">
-                                <h6>Alamat</h6>
-                                <p>Jl. Sutomo, Pagar Batu, Balige 22385
-                        Kabupaten Toba, Provinsi Sumatera Utara</p>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="contact-card-item p-3">
-                                <h6>Telepon</h6>
-                                <p>0813-6244-4195</p>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="contact-card-item p-3">
-                                <h6>Email</h6>
-                                <p>hukumtobasamosirkab@gmail.com</p>
-                            </div>
-                        </div>
-
-                        <div class="col-12">
-                            <div class="contact-card-item p-3">
-                                <h6>Jam Operasional</h6>
-                                <p>Senin - Kamis (08.00 - 16.00)</p>
-                                <p>Jumat (08.00 - 16.30)</p>
-                            </div>
-                        </div>
-
+                <div class="d-flex align-items-start gap-3">
+                    <div class="rounded-circle bg-info bg-opacity-10 p-3 text-info fs-4 flex-shrink-0">
+                        <i class="bi bi-clock-fill"></i>
+                    </div>
+                    <div>
+                        <h6 class="fw-bold mb-1">Jam Pelayanan</h6>
+                        <p class="text-muted small mb-0">
+                            Senin - Kamis: 08.00 - 16.30 WIB<br>
+                            Jumat: 08.00 - 16.00 WIB
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
 
-     <!-- FOOTER -->
-    <footer>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4">
-                    <h5>JDIH Kabupaten Toba </h5>
-                    <p>JDIH (Jaringan Dokumentasi dan Informasi Hukum) Kabupaten Toba merupakan sistem pendokumentasian Produk Hukum yang ada pada lingkungan Pemerintah Kabupaten Toba</p>
+        <!-- PETA / INFO TAMBAHAN -->
+        <div class="col-lg-7">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100 bg-white">
+                <div class="card-header bg-white p-4 border-bottom">
+                    <h5 class="fw-bold text-dark mb-0"><i class="bi bi-map me-2 text-primary"></i> Lokasi Kantor Pemkab Toba</h5>
                 </div>
-
-                <div class="col-md-4">
-                    <h5>Menu Cepat </h5>
-                    <ul>
-                        <li><a href="/home">Home</a></li>
-                        <li> <a href="/peraturan-daerah">Peraturan Daerah</a> </li>
-                        <li><a href="/peraturan-bupati">Peraturan Bupati</a> </li>
-                        <li><a href="/keputusan-bupati">Keputusan Bupati</a> </li>
-                    </ul>
+                <div class="card-body p-0">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15944.38531776953!2d99.0558145!3d2.3364448!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x302e043f2115682d%3A0xe6bf448cf822e11a!2sKantor%20Bupati%20Toba!5e0!3m2!1sid!2sid!4v1700000000000!5m2!1sid!2sid"
+                        width="100%"
+                        height="420"
+                        style="border:0;"
+                        allowfullscreen=""
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
                 </div>
-
-                <div class="col-md-4">
-                    <h5>Kontak </h5>
-                    <p> 0813-6244-4195</p>
-                    <p>hukumtobasamosirkab@gmail.com</p>
-                    <p>Jl. Sutomo, Pagar Batu, Balige 22385
-                        Kabupaten Toba, Provinsi Sumatera Utara</p>
-                </div>
-            </div>
-
-            <div class="footer-bottom">
-                © 2026 JDIH Kabupaten Toba. All Rights Reserved.
             </div>
         </div>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script>
-        window.addEventListener("scroll", function() {
-            let nav = document.querySelector(".custom-navbar");
-            if (window.scrollY > 50) {
-                nav.classList.add("scrolled");
-            } else {
-                nav.classList.remove("scrolled");
-            }
-        });
-
-        const carousel = document.querySelector('#carouselExample');
-        if (carousel) {
-            new bootstrap.Carousel(carousel, {
-                interval: 5000,
-                pause: false
-            });
-        }
-    </script>
-</body>
-
-</html>
+    </div>
+</div>
+@endsection

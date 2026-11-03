@@ -1,0 +1,430 @@
+/* ==========================================================================
+   JDIH KABUPATEN TOBA - MODERN GOVERNMENT STYLING
+   Palet Warna: Official Navy (#0b2545), Royal Blue (#134074), Accent Gold (#d4a373)
+   ========================================================================== */
+
+:root {
+    --jdih-primary: #0b2545;
+    --jdih-primary-light: #134074;
+    --jdih-secondary: #8da9c4;
+    --jdih-accent: #d4a373;
+    --jdih-gold: #c59b27;
+    --jdih-bg: #f8fafc;
+    --jdih-card-bg: #ffffff;
+    --jdih-text: #1e293b;
+    --jdih-muted: #64748b;
+    --jdih-border: #e2e8f0;
+}
+
+body {
+    background-color: var(--jdih-bg);
+    color: var(--jdih-text);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ==========================================================================
+   HEADER & NAVBAR
+   ========================================================================== */
+.top-header {
+    background: #06172e;
+    color: #94a3b8;
+    font-size: 0.82rem;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.custom-navbar {
+    background: var(--jdih-primary) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+    padding: 12px 0;
+    transition: all 0.3s ease;
+}
+
+.custom-navbar .navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.custom-navbar .brand-text {
+    line-height: 1.2;
+}
+
+.custom-navbar .brand-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+}
+
+.custom-navbar .brand-subtitle {
+    font-size: 0.75rem;
+    color: var(--jdih-secondary);
+    display: block;
+}
+
+.custom-navbar .nav-link {
+    color: #e2e8f0 !important;
+    font-weight: 500;
+    font-size: 0.93rem;
+    padding: 8px 14px !important;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.custom-navbar .nav-link:hover,
+.custom-navbar .nav-link.active {
+    color: #ffffff !important;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.dropdown-menu {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    padding: 8px;
+    background: #ffffff;
+}
+
+.dropdown-item {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--jdih-text);
+    padding: 8px 14px;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+.dropdown-item:hover {
+    background: #f1f5f9;
+    color: var(--jdih-primary);
+    transform: translateX(4px);
+}
+
+/* ==========================================================================
+   HERO SEARCH BAR (Requirement #1)
+   ========================================================================== */
+.hero-search-wrapper {
+    background: linear-gradient(135deg, rgba(11, 37, 69, 0.95), rgba(19, 64, 116, 0.95)), url('/PROVINSI.jpg') center/cover;
+    padding: 50px 0 60px;
+    color: #ffffff;
+    border-bottom: 4px solid var(--jdih-accent);
+}
+
+.hero-search-card {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+    padding: 24px;
+    color: var(--jdih-text);
+}
+
+.hero-search-card .form-label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--jdih-muted);
+    margin-bottom: 6px;
+}
+
+.hero-search-card .form-control,
+.hero-search-card .form-select {
+    border-radius: 8px;
+    border: 1px solid var(--jdih-border);
+    padding: 10px 14px;
+    font-size: 0.92rem;
+    transition: all 0.2s;
+}
+
+.hero-search-card .form-control:focus,
+.hero-search-card .form-select:focus {
+    border-color: var(--jdih-primary-light);
+    box-shadow: 0 0 0 3px rgba(19, 64, 116, 0.15);
+}
+
+.btn-search-jdih {
+    background: #d90429;
+    color: #ffffff;
+    font-weight: 600;
+    padding: 12px 24px;
+    border-radius: 8px;
+    border: none;
+    transition: all 0.2s;
+}
+
+.btn-search-jdih:hover {
+    background: #ef233c;
+    color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(217, 4, 41, 0.35);
+}
+
+/* ==========================================================================
+   STATISTIK PRODUK HUKUM CARDS (Requirement #4)
+   ========================================================================== */
+.stat-card-legal {
+    background: #ffffff;
+    border-radius: 14px;
+    border: 1px solid var(--jdih-border);
+    padding: 24px;
+    transition: all 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+}
+
+.stat-card-legal:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(11, 37, 69, 0.1);
+    border-color: var(--jdih-primary-light);
+}
+
+.stat-card-legal .stat-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    background: rgba(19, 64, 116, 0.08);
+    color: var(--jdih-primary-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin-bottom: 16px;
+}
+
+.stat-card-legal .stat-count {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--jdih-primary);
+    line-height: 1;
+}
+
+.stat-card-legal .stat-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--jdih-text);
+    margin-top: 8px;
+}
+
+/* ==========================================================================
+   DOKUMEN ITEM CARD & TABLE
+   ========================================================================== */
+.doc-card {
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid var(--jdih-border);
+    padding: 20px;
+    transition: all 0.2s ease;
+}
+
+.doc-card:hover {
+    border-color: var(--jdih-primary-light);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+}
+
+.badge-status-berlaku {
+    background-color: #dcfce7;
+    color: #15803d;
+    font-weight: 600;
+    border: 1px solid #86efac;
+    padding: 4px 10px;
+    border-radius: 50px;
+    font-size: 0.78rem;
+}
+
+.badge-status-tidak {
+    background-color: #fee2e2;
+    color: #b91c1c;
+    font-weight: 600;
+    border: 1px solid #fca5a5;
+    padding: 4px 10px;
+    border-radius: 50px;
+    font-size: 0.78rem;
+}
+
+.badge-jenis {
+    background-color: #e0f2fe;
+    color: #0369a1;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.78rem;
+}
+
+/* ==========================================================================
+   FOOTER & VISITOR STATISTICS (Requirement #2)
+   ========================================================================== */
+footer {
+    background: #06172e;
+    color: #cbd5e1;
+    margin-top: auto;
+    padding-top: 50px;
+}
+
+footer a {
+    color: #94a3b8;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+footer a:hover {
+    color: #ffffff;
+    padding-left: 4px;
+}
+
+.footer-widget-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 20px;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.footer-widget-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 40px;
+    height: 3px;
+    background: var(--jdih-accent);
+    border-radius: 2px;
+}
+
+.visitor-stat-box {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 16px;
+}
+
+.visitor-stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 7px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    font-size: 0.88rem;
+}
+
+.visitor-stat-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.visitor-stat-row .stat-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #94a3b8;
+}
+
+.visitor-stat-row .stat-val {
+    font-weight: 700;
+    color: #ffffff;
+    font-family: monospace;
+    font-size: 0.95rem;
+}
+
+.footer-bottom {
+    background: #030d1b;
+    padding: 18px 0;
+    font-size: 0.85rem;
+    color: #64748b;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    margin-top: 40px;
+}
+
+/* ==========================================================================
+   ADMIN PANEL LAYOUT
+   ========================================================================== */
+.admin-wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+.admin-sidebar {
+    width: 260px;
+    background: #0b1e36;
+    color: #ffffff;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-sidebar .sidebar-brand {
+    padding: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.admin-sidebar .sidebar-menu {
+    padding: 16px 12px;
+    flex-grow: 1;
+}
+
+.admin-sidebar .menu-header {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #64748b;
+    font-weight: 700;
+    padding: 12px 14px 6px;
+}
+
+.admin-sidebar .nav-item-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    color: #cbd5e1;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: 8px;
+    margin-bottom: 4px;
+    transition: all 0.2s;
+}
+
+.admin-sidebar .nav-item-link:hover,
+.admin-sidebar .nav-item-link.active {
+    background: var(--jdih-primary-light);
+    color: #ffffff;
+}
+
+.admin-sidebar .nav-item-link i {
+    font-size: 1.1rem;
+    width: 22px;
+    text-align: center;
+}
+
+.admin-content-area {
+    flex-grow: 1;
+    background: #f1f5f9;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.admin-topbar {
+    background: #ffffff;
+    border-bottom: 1px solid var(--jdih-border);
+    padding: 14px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.admin-main-body {
+    padding: 28px;
+    flex-grow: 1;
+}

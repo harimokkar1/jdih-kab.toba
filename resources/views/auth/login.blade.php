@@ -1,140 +1,126 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login JDIH</title>
+    <title>Masuk Admin - JDIH Kabupaten Toba</title>
 
-    <!-- Bootstrap -->
+    <link rel="icon" type="image/png" href="{{ asset('logo.png') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
-    <!-- Custom CSS -->
     <style>
-    body {
-        background: url('/logo.png') no-repeat center center fixed;
-        background-size: 1000px;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
+        body {
+            background: linear-gradient(135deg, #06172e 0%, #0b2545 50%, #134074 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-    /* overlay biar tidak terlalu kontras */
-    body::before {
-        content: "";
-        position: fixed;
-        inset: 0;
-        background: rgba(13, 110, 253, 0.7); /* biru transparan */
-        z-index: -1;
-    }
+        .login-card {
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+            width: 100%;
+            max-width: 420px;
+        }
 
-    .login-card {
-        background: rgba(255, 255, 255, 0.15); /* transparan */
-        backdrop-filter: blur(10px); /* efek kaca */
-        -webkit-backdrop-filter: blur(10px);
-        border-radius: 15px;
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        color: #fff;
-    }
+        .login-header {
+            background: #0b2545;
+            padding: 30px 24px;
+            text-align: center;
+            color: #ffffff;
+            border-bottom: 3px solid #d4a373;
+        }
 
-    .login-card .card-body {
-        padding: 35px;
-    }
+        .form-control {
+            border-radius: 10px;
+            padding: 11px 14px;
+            border: 1px solid #cbd5e1;
+        }
 
-    .login-title {
-        font-weight: 600;
-        color: #fff;
-    }
+        .form-control:focus {
+            border-color: #134074;
+            box-shadow: 0 0 0 3px rgba(19, 64, 116, 0.15);
+        }
 
-    .logo-text {
-        color: #e0e0e0;
-    }
+        .btn-login {
+            background: #0b2545;
+            color: #ffffff;
+            font-weight: 600;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            transition: all 0.2s;
+        }
 
-    .form-control {
-        border-radius: 8px;
-        padding: 10px;
-        background: rgba(255,255,255,0.8);
-        border: none;
-    }
-
-    .form-control:focus {
-        box-shadow: none;
-        border: none;
-    }
-
-    .btn-login {
-        border-radius: 8px;
-        padding: 10px;
-        font-weight: 500;
-        background-color: #ffffff;
-        color: #0d6efd;
-        border: none;
-    }
-
-    .btn-login:hover {
-        background-color: #e2e6ea;
-    }
-
-    .footer-text {
-        font-size: 12px;
-        color: #ddd;
-    }
-
-    .alert {
-        background: rgba(255, 0, 0, 0.2);
-        border: none;
-        color: #fff;
-    }
-</style>
+        .btn-login:hover {
+            background: #134074;
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
+    </style>
 </head>
-
 <body>
 
-<div class="container">
-    <div class="row vh-100 justify-content-center align-items-center">
-
-        <div class="col-md-4">
-
-            <div class="card shadow login-card">
-                <div class="card-body">
-
-                    <div class="text-center mb-3">
-                        <h5 class="logo-text">Sistem Informasi</h5>
-                        <h4 class="login-title">JDIH Kabupaten TOBA</h4>
-                    </div>
-
-                    @if(session('error'))
-                        <div class="alert alert-danger">
-                            {{ session('error') }}
-                        </div>
-                    @endif
-
-                    <form method="POST" action="/login">
-                        @csrf
-
-                        <div class="mb-3">
-                            <label>Email</label>
-                            <input type="email" name="email" class="form-control" placeholder="Masukkan email" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label>Password</label>
-                            <input type="password" name="password" class="form-control" placeholder="Masukkan password" required>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary btn-login w-100">
-                            Login
-                        </button>
-                    </form>
-
-                    <div class="text-center mt-3 footer-text">
-                        © 2026 Kominfo
-                    </div>
-
-                </div>
-            </div>
-
+<div class="container p-3">
+    <div class="login-card mx-auto">
+        <div class="login-header">
+            <img src="{{ asset('logo.png') }}" alt="Logo Toba" height="56" class="mb-2">
+            <h5 class="fw-bold mb-0">JDIH KABUPATEN TOBA</h5>
+            <small class="text-light opacity-75">Sistem Informasi Dokumentasi Hukum</small>
         </div>
 
+        <div class="p-4">
+            @if(session('error'))
+                <div class="alert alert-danger alert-dismissible fade show small" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-1"></i> {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            @endif
+
+            <form method="POST" action="{{ route('login') }}">
+                @csrf
+
+                <div class="mb-3">
+                    <label class="form-label small fw-bold text-muted">Email Pengguna</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light text-muted"><i class="bi bi-envelope"></i></span>
+                        <input type="email" name="email" class="form-control" placeholder="admin@jdih.tobakab.go.id" value="{{ old('email') }}" required autofocus>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label small fw-bold text-muted">Kata Sandi</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light text-muted"><i class="bi bi-lock"></i></span>
+                        <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-login w-100 shadow-sm mb-3">
+                    <i class="bi bi-box-arrow-in-right me-1"></i> Masuk ke Panel Admin
+                </button>
+
+                <div class="text-center">
+                    <a href="{{ route('home') }}" class="small text-decoration-none text-muted">
+                        <i class="bi bi-arrow-left me-1"></i> Kembali ke Beranda Portal
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <div class="text-center py-3 bg-light border-top text-muted small" style="font-size: 11px;">
+            &copy; {{ date('Y') }} Bagian Hukum Setdakab Toba. All Rights Reserved.
+        </div>
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
