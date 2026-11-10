@@ -14,6 +14,10 @@ class StrukturController extends Controller
      */
     public function index()
     {
+        $allStruktur = StrukturOrganisasi::orderBy('tingkat')
+            ->orderBy('urutan')
+            ->get();
+
         $struktur = StrukturOrganisasi::whereNull('parent_id')
             ->with('children')
             ->orderBy('urutan')
@@ -21,7 +25,7 @@ class StrukturController extends Controller
 
         $carousels = Carousel::latest()->get();
 
-        return view('user.organisasi', compact('struktur', 'carousels'));
+        return view('user.organisasi', compact('struktur', 'allStruktur', 'carousels'));
     }
 
     /**

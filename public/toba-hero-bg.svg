@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 420" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" fill="none">
+  <!-- Subtle Gradient Mesh Background -->
+  <defs>
+    <radialGradient id="heroGlow" cx="50%" cy="30%" r="60%">
+      <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.04" />
+      <stop offset="60%" stop-color="#142239" stop-opacity="0.015" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+    </radialGradient>
+    <pattern id="tobaGrid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#0f172a" stroke-width="0.5" opacity="0.035" />
+      <circle cx="0" cy="0" r="1" fill="#0f172a" opacity="0.08" />
+    </pattern>
+  </defs>
+
+  <rect width="1440" height="420" fill="url(#heroGlow)" />
+  <rect width="1440" height="420" fill="url(#tobaGrid)" />
+
+  <!-- Subtle Lake Toba Water Ripple Waves & Batak Contour at Bottom -->
+  <path d="M-100,380 C300,340 600,410 900,360 C1200,310 1400,390 1600,370 L1600,420 L-100,420 Z" fill="#0f2442" opacity="0.02" />
+  <path d="M-50,395 C350,365 700,415 1050,380 C1300,355 1450,405 1600,390 L1600,420 L-50,420 Z" fill="#eab308" opacity="0.025" />
+</svg>
+

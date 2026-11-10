@@ -1,18 +1,34 @@
 @extends('layouts.app')
 
-@section('title', 'Berita Hukum - JDIH Kabupaten Toba')
+@section('title', 'Berita & Kegiatan Hukum - JDIH Kabupaten Toba')
 
 @section('content')
-<div class="py-4 bg-light border-bottom">
+
+<!-- ============================================================
+     EXECUTIVE HEADER BANNER
+     ============================================================ -->
+<div class="page-header-banner">
     <div class="container">
         <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-1 small">
+            <ol class="breadcrumb mb-2 small">
                 <li class="breadcrumb-item"><a href="{{ route('home') }}">Beranda</a></li>
+                <li class="breadcrumb-item text-white-50">Informasi</li>
                 <li class="breadcrumb-item active">Berita Hukum</li>
             </ol>
         </nav>
-        <h2 class="fw-bold mb-0"><i class="bi bi-newspaper text-primary me-2"></i> Berita & Kegiatan Hukum</h2>
-        <p class="text-muted small mb-0 mt-1">Publikasi informasi, sosialisasi peraturan daerah, dan agenda Bagian Hukum Kabupaten Toba</p>
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+            <div>
+                <h1 class="h3 fw-bold mb-1 text-white">
+                    <i class="bi bi-newspaper text-warning me-2"></i> Berita &amp; Kegiatan Hukum Daerah
+                </h1>
+                <p class="text-white-50 small mb-0">Publikasi informasi resmi, sosialisasi peraturan daerah, dan agenda Bagian Hukum Sekretariat Daerah Kabupaten Toba</p>
+            </div>
+            <div>
+                <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold fs-6 shadow-xs">
+                    <i class="bi bi-broadcast me-1"></i> Publikasi Resmi Pemkab Toba
+                </span>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -20,46 +36,75 @@
     <div class="row g-4">
         @forelse($beritas as $item)
             <div class="col-lg-4 col-md-6">
-                <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100 hover-shadow transition">
-                    @if($item->gambar)
-                        <img src="{{ asset('uploads/berita/' . $item->gambar) }}" class="card-img-top" style="height: 200px; object-fit: cover;" alt="{{ $item->judul }}">
-                    @else
-                        <div class="bg-light d-flex align-items-center justify-content-center text-muted" style="height: 200px;">
-                            <i class="bi bi-newspaper fs-1"></i>
-                        </div>
-                    @endif
-                    <div class="card-body p-4 d-flex flex-column justify-content-between">
-                        <div>
-                            <small class="text-muted d-block mb-2">
-                                <i class="bi bi-calendar3 me-1"></i> {{ $item->created_at ? $item->created_at->translatedFormat('d F Y') : '-' }}
-                            </small>
-                            <h5 class="fw-bold mb-2">
-                                <a href="{{ route('berita.detail', $item->id) }}" class="text-decoration-none text-dark hover-primary">
-                                    {{ Str::limit($item->judul, 75) }}
-                                </a>
-                            </h5>
-                            <p class="small text-muted mb-0" style="line-height: 1.6;">
-                                {{ Str::limit(strip_tags($item->isi), 110) }}
-                            </p>
-                        </div>
-                        <div class="pt-3 mt-3 border-top">
-                            <a href="{{ route('berita.detail', $item->id) }}" class="btn btn-outline-primary btn-sm rounded-pill w-100 fw-semibold">
-                                Baca Selengkapnya <i class="bi bi-arrow-right ms-1"></i>
-                            </a>
-                        </div>
+                <article class="berita-grid-card">
+                    <!-- THUMBNAIL WRAPPER -->
+                    <div class="berita-thumb-container">
+                        <span class="berita-badge-floating">
+                            <i class="bi bi-newspaper"></i> Warta JDIH
+                        </span>
+
+                        @if($item->gambar)
+                            <img src="{{ asset('uploads/berita/' . $item->gambar) }}" class="berita-thumb-img" alt="{{ $item->judul }}">
+                            <div class="berita-thumb-overlay"></div>
+                        @else
+                            <div class="news-thumb-placeholder">
+                                <i class="bi bi-newspaper display-4 text-white-50"></i>
+                            </div>
+                        @endif
                     </div>
-                </div>
+
+                    <!-- CARD BODY -->
+                    <div class="berita-card-body">
+                        <!-- META STRIP -->
+                        <div class="berita-meta-strip">
+                            <span>
+                                <i class="bi bi-calendar3"></i>
+                                {{ $item->created_at ? $item->created_at->translatedFormat('d F Y') : '-' }}
+                            </span>
+                            <span class="berita-meta-sep">&bull;</span>
+                            <span>
+                                <i class="bi bi-building text-primary"></i> Bagian Hukum
+                            </span>
+                        </div>
+
+                        <!-- TITLE -->
+                        <h2 class="berita-card-title">
+                            <a href="{{ route('berita.detail', $item->id) }}" title="{{ $item->judul }}">
+                                {{ Str::limit($item->judul, 72) }}
+                            </a>
+                        </h2>
+
+                        <!-- EXCERPT -->
+                        <p class="berita-card-excerpt">
+                            {{ Str::limit(strip_tags($item->isi), 115) ?: 'Informasi dan dokumentasi kegiatan sosialisasi hukum Pemerintah Kabupaten Toba.' }}
+                        </p>
+                    </div>
+
+                    <!-- CARD FOOTER -->
+                    <div class="berita-card-footer">
+                        <span class="small text-muted" style="font-size: 0.75rem;">
+                            <i class="bi bi-shield-check text-success me-1"></i> Rilis Resmi
+                        </span>
+                        <a href="{{ route('berita.detail', $item->id) }}" class="berita-action-btn">
+                            <span>Baca Selengkapnya</span>
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
             </div>
         @empty
-            <div class="col-12 text-center py-5 bg-white rounded-4 border text-muted">
-                <i class="bi bi-newspaper display-4 text-secondary mb-2 d-block"></i>
-                <h6 class="fw-bold">Belum ada berita yang dipublikasikan</h6>
+            <div class="col-12 text-center py-5 bg-white rounded-4 border text-muted shadow-xs">
+                <i class="bi bi-newspaper display-4 text-secondary mb-3 d-block"></i>
+                <h5 class="fw-bold text-dark">Belum ada berita yang dipublikasikan</h5>
+                <p class="small text-muted mb-0">Informasi terbaru mengenai kegiatan hukum daerah akan ditampilkan di sini.</p>
             </div>
         @endforelse
     </div>
 
-    <div class="mt-5 d-flex justify-content-center">
-        {{ $beritas->links() }}
-    </div>
+    @if($beritas->hasPages())
+        <div class="mt-5 d-flex justify-content-center">
+            {{ $beritas->links() }}
+        </div>
+    @endif
 </div>
 @endsection

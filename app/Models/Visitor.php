@@ -20,3 +20,4 @@ class Visitor extends Model
         'last_activity' => 'datetime',
     ];
 }
+

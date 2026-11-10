@@ -76,3 +76,4 @@ class MigrateLegacyProdukHukumSeeder extends Seeder
         }
     }
 }
+

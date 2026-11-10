@@ -33,6 +33,7 @@ Route::get('/cari', [SearchController::class, 'search'])->name('user.cari');
 // Produk Hukum Global (Requirement #4)
 Route::get('/produk-hukum', [ProdukHukumController::class, 'globalIndex'])->name('user.produk-hukum.global');
 Route::get('/produk-hukum/{id}', [ProdukHukumController::class, 'detail'])->name('user.produk-hukum.detail');
+Route::get('/produk-hukum/{id}/preview/{type?}', [ProdukHukumController::class, 'preview'])->name('user.produk-hukum.preview');
 Route::get('/produk-hukum/{id}/download/{type?}', [ProdukHukumController::class, 'download'])->name('user.produk-hukum.download');
 
 // Produk Hukum per Kategori/Jenis (Requirement #4)

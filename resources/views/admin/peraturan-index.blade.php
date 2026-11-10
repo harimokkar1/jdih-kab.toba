@@ -152,3 +152,4 @@
     {{ $peraturans->links() }}
 </div>
 @endsection
+

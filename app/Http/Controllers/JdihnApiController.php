@@ -122,3 +122,4 @@ class JdihnApiController extends Controller
         return response()->json($payload, 200, [], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
     }
 }
+

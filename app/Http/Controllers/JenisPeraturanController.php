@@ -94,3 +94,4 @@ class JenisPeraturanController extends Controller
             ->with('success', 'Jenis Peraturan berhasil dihapus.');
     }
 }
+

@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%" fill="none">
+  <defs>
+    <!-- Background Gradient (Midnight Sapphire) -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f2b48" />
+      <stop offset="50%" stop-color="#0b1e33" />
+      <stop offset="100%" stop-color="#071322" />
+    </linearGradient>
+
+    <!-- Warm Golden Ambient Radial Glow -->
+    <radialGradient id="goldAura" cx="50%" cy="40%" r="55%">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.30" />
+      <stop offset="60%" stop-color="#d97706" stop-opacity="0.08" />
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Golden Chain & Medal Gradient -->
+    <linearGradient id="goldChain" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#fcd34d" />
+      <stop offset="50%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#b45309" />
+    </linearGradient>
+  </defs>
+
+  <!-- Circular Base -->
+  <circle cx="200" cy="200" r="200" fill="url(#bgGrad)" />
+  <circle cx="200" cy="180" r="160" fill="url(#goldAura)" />
+
+  <!-- Delicate Concentric Seal Rings -->
+  <circle cx="200" cy="200" r="192" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.4" />
+  <circle cx="200" cy="200" r="182" stroke="#ffffff" stroke-width="0.8" opacity="0.18" />
+
+  <!-- Executive Mayoral Silhouette -->
+  <!-- Head & Hair Silhouette -->
+  <path d="M168,135 C168,95 182,75 200,75 C218,75 232,95 232,135 C232,154 222,168 200,168 C178,168 168,154 168,135 Z" fill="#cbd5e1" opacity="0.9" />
+
+  <!-- Collar & Neck -->
+  <path d="M190,165 L210,165 L215,188 L185,188 Z" fill="#94a3b8" opacity="0.75" />
+
+  <!-- White Formal Collar & Shirt -->
+  <polygon points="186,188 200,230 194,230 180,195" fill="#ffffff" opacity="0.95" />
+  <polygon points="214,188 200,230 206,230 220,195" fill="#ffffff" opacity="0.95" />
+
+  <!-- Formal Silk Tie -->
+  <path d="M196,188 L204,188 L207,245 L200,260 L193,245 Z" fill="url(#goldChain)" />
+
+  <!-- Official Mayoral Collar of Office (Kalung Jabatan Emas) -->
+  <path d="M152,225 C165,260 185,278 200,278 C215,278 235,260 248,225" stroke="url(#goldChain)" stroke-width="3.5" stroke-linecap="round" fill="none" opacity="0.95" />
+  <!-- Medal Medallion (Lambang Jabatan) -->
+  <circle cx="200" cy="284" r="10" fill="url(#goldChain)" />
+  <circle cx="200" cy="284" r="7" fill="#0f2b48" />
+  <circle cx="200" cy="284" r="4" fill="#f59e0b" />
+
+  <!-- Dark Executive Suit & Shoulders Filling Bottom Circle -->
+  <path d="M110,330 C110,230 150,192 184,188 L192,235 L200,250 L208,235 L216,188 C250,192 290,230 290,330 C290,375 260,395 200,398 C140,395 110,375 110,330 Z" fill="#1e293b" opacity="0.95" />
+
+  <!-- Suit Lapel Left & Right Highlights -->
+  <path d="M184,188 L170,265 L190,285 L194,235 Z" fill="#334155" opacity="0.6" />
+  <path d="M216,188 L230,265 L210,285 L206,235 Z" fill="#334155" opacity="0.6" />
+
+  <!-- Official Mayoral Badge Pin on Left Lapel -->
+  <circle cx="156,242" r="5" fill="#f59e0b" />
+  <circle cx="156,242" r="3" fill="#ffffff" opacity="0.8" />
+</svg>

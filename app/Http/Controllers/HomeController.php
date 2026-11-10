@@ -12,6 +12,8 @@ class HomeController extends Controller
 {
     public function index()
     {
+        $activeTab = request('tab', 'terbaru');
+
         // 1. CAROUSEL
         $carousels = Carousel::latest()->get();
 
@@ -27,11 +29,13 @@ class HomeController extends Controller
             ->orderBy('urutan')
             ->get();
 
-        // 5. PRODUK HUKUM TERBARU (4 items terbaru lintas seluruh jenis)
-        $produkHukumTerbaru = Peraturan::with('jenisPeraturan')
-            ->latest()
-            ->take(4)
-            ->get();
+        // 5. PRODUK HUKUM TERBARU / TERPOPULER SESUAI TAB PILIHAN
+        $docQuery = Peraturan::with('jenisPeraturan');
+        if ($activeTab === 'populer') {
+            $produkHukumTerbaru = $docQuery->orderByDesc('view_count')->orderByDesc('download_count')->take(6)->get();
+        } else {
+            $produkHukumTerbaru = $docQuery->latest()->take(6)->get();
+        }
 
         // 6. TOTAL STATISTIK DOKUMEN
         $totalDokumen = Peraturan::count();
@@ -49,7 +53,8 @@ class HomeController extends Controller
             'jenisPeraturans',
             'produkHukumTerbaru',
             'totalDokumen',
-            'tahunList'
+            'tahunList',
+            'activeTab'
         ));
     }
 }

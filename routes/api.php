@@ -11,3 +11,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/jdihn', [JdihnApiController::class, 'index'])->name('api.jdihn.index');
 Route::get('/jdihn/{id}', [JdihnApiController::class, 'show'])->name('api.jdihn.show');
+

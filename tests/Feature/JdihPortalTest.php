@@ -26,7 +26,7 @@ class JdihPortalTest extends TestCase
         $response = $this->get('/home');
         $response->assertStatus(200);
         $response->assertSee('JDIH Kabupaten Toba');
-        $response->assertSee('Statistik Pengunjung');
+        $response->assertSee('Bagian Hukum Setdakab');
     }
 
     /**
@@ -97,4 +97,28 @@ class JdihPortalTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Kelola Akun Administrator');
     }
+
+    /**
+     * Test All User Facing Pages Load Successfully (End-to-End).
+     */
+    public function test_all_public_pages_load_successfully(): void
+    {
+        $pages = [
+            '/home?tab=populer',
+            '/cari?sort=populer',
+            '/berita',
+            '/pengumuman',
+            '/visi',
+            '/sejarah',
+            '/organisasi',
+            '/kontak',
+            '/login',
+        ];
+
+        foreach ($pages as $page) {
+            $response = $this->get($page);
+            $response->assertStatus(200);
+        }
+    }
 }
+

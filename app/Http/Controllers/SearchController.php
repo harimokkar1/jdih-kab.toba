@@ -42,11 +42,24 @@ class SearchController extends Controller
             $query->where('status', $request->status);
         }
 
+        // 6. Sorting
+        $sort = $request->get('sort', 'terbaru');
+        if ($sort === 'terlama') {
+            $query->oldest();
+        } elseif ($sort === 'populer') {
+            $query->orderByDesc('view_count')->orderByDesc('download_count');
+        } else {
+            $query->latest();
+        }
+
         $peraturans = $query->paginate(12)->withQueryString();
 
         $jenisPeraturans = JenisPeraturan::where('is_active', true)
+            ->withCount('peraturans')
             ->orderBy('urutan')
             ->get();
+
+        $totalPeraturans = Peraturan::count();
 
         $tahunList = Peraturan::whereNotNull('tahun')
             ->distinct()
@@ -56,7 +69,10 @@ class SearchController extends Controller
         return view('user.pencarian', compact(
             'peraturans',
             'jenisPeraturans',
-            'tahunList'
+            'tahunList',
+            'totalPeraturans',
+            'sort'
         ));
     }
 }
+

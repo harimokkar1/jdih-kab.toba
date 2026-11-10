@@ -56,3 +56,4 @@ class JenisPeraturanSeeder extends Seeder
         }
     }
 }
+

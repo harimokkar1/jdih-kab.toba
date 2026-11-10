@@ -112,6 +112,49 @@ class ProdukHukumController extends Controller
     }
 
     /**
+     * Pratinjau Dokumen PDF secara Inline (Membuka di Modal / Tab Tanpa Mengunduh)
+     */
+    public function preview($id, $type = 'dokumen')
+    {
+        $peraturan = Peraturan::findOrFail($id);
+
+        $field = match ($type) {
+            'english' => 'english_version',
+            'braille' => 'braille',
+            'audio' => 'alih_suara',
+            default => 'file_dokumen',
+        };
+
+        $file = $peraturan->$field;
+
+        if (empty($file)) {
+            return response('<div style="font-family:sans-serif;text-align:center;padding:50px;color:#64748b;"><h3>File tidak tersedia</h3><p>Naskah digital untuk dokumen ini belum diunggah.</p></div>', 404, ['Content-Type' => 'text/html']);
+        }
+
+        $peraturan->increment('view_count');
+
+        $fullPath = public_path($file);
+        if (!File::exists($fullPath)) {
+            // Coba cari di subfolder uploads/produk-hukum
+            $altPath = public_path('uploads/produk-hukum/' . basename($file));
+            if (File::exists($altPath)) {
+                $fullPath = $altPath;
+            }
+        }
+
+        if (File::exists($fullPath)) {
+            $mime = File::mimeType($fullPath) ?: 'application/pdf';
+            return response()->file($fullPath, [
+                'Content-Type' => $mime,
+                'Content-Disposition' => 'inline; filename="' . basename($fullPath) . '"',
+                'Cache-Control' => 'no-cache, private'
+            ]);
+        }
+
+        return response('<div style="font-family:sans-serif;text-align:center;padding:50px;color:#dc2626;"><h3>Berkas fisik tidak ditemukan</h3><p>File dokumen tidak ditemukan di server.</p></div>', 404, ['Content-Type' => 'text/html']);
+    }
+
+    /**
      * Download Dokumen dan Increment Download Count
      */
     public function download($id, $type = 'dokumen')
@@ -409,3 +452,4 @@ class ProdukHukumController extends Controller
         }
     }
 }
+

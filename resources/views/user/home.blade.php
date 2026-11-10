@@ -5,203 +5,200 @@
 @section('content')
 
 <!-- ============================================================
-     CAROUSEL SLIDER BANNER
-     ============================================================ -->
-@if(isset($carousels) && $carousels->count() > 0)
-<div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
-    <div class="carousel-indicators">
-        @foreach($carousels as $index => $c)
-            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="{{ $index }}" class="{{ $index == 0 ? 'active' : '' }}"></button>
-        @endforeach
-    </div>
-    <div class="carousel-inner">
-        @foreach($carousels as $index => $c)
-            <div class="carousel-item {{ $index == 0 ? 'active' : '' }}" style="max-height: 480px; background: #000;">
-                <img src="{{ asset('carousel/' . $c->image) }}" class="d-block w-100" style="object-fit: cover; max-height: 480px; opacity: 0.85;" alt="{{ $c->title }}">
-                <div class="carousel-caption d-none d-md-block text-start pb-5">
-                    <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold mb-2">JDIH KABUPATEN TOBA</span>
-                    <h2 class="display-6 fw-bold text-white shadow-sm">{{ $c->title }}</h2>
-                </div>
-            </div>
-        @endforeach
-    </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon"></span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon"></span>
-    </button>
-</div>
-@endif
-
-<!-- ============================================================
-     HERO MULTI-PARAMETER SEARCH BAR (Requirement #1)
-     Ref: jdih.sumutprov.go.id
+     HERO SECTION (CLEAN TOBA HERITAGE & CITIZEN SMART SEARCH)
      ============================================================ -->
 <section class="hero-search-wrapper">
-    <div class="container">
-        <div class="text-center mb-4">
-            <span class="badge bg-light text-primary px-3 py-1 rounded-pill fw-bold mb-2 text-uppercase" style="letter-spacing: 1px;">Portal Dokumentasi Hukum</span>
-            <h1 class="fw-bold mb-2">Temukan Informasi Produk Hukum Kabupaten Toba</h1>
-            <p class="text-light opacity-75 mb-0">Cari Peraturan Daerah, Peraturan Bupati, Keputusan Bupati, dan produk hukum lainnya</p>
-        </div>
+    <div class="container position-relative">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-xl-9 text-center">
+                <!-- Large Title JDIH with Gold Accent -->
+                <h1 class="hero-main-title">JDI<span class="gold">H</span></h1>
+                <div class="hero-main-title-sub">KABUPATEN TOBA</div>
 
-        <div class="hero-search-card">
-            <form action="{{ route('user.cari') }}" method="GET">
-                <div class="row g-3">
-                    <!-- 1. Judul Peraturan -->
-                    <div class="col-lg-6 col-md-12">
-                        <label class="form-label"><i class="bi bi-file-earmark-font me-1"></i> Judul Peraturan</label>
-                        <input type="text" name="judul" class="form-control" placeholder="Masukkan kata kunci judul peraturan..." value="{{ request('judul') }}">
-                    </div>
+                <!-- Subtitle -->
+                <p class="hero-search-subtitle mx-auto">
+                    <strong>Satu Data</strong> dokumen hukum <strong>Kabupaten Toba</strong> &mdash; Akses naskah resmi peraturan perundang-undangan dan informasi hukum dalam satu platform terpercaya
+                </p>
 
-                    <!-- 2. Jenis Dokumen (Dropdown) -->
-                    <div class="col-lg-6 col-md-12">
-                        <label class="form-label"><i class="bi bi-tags me-1"></i> Jenis Dokumen</label>
-                        <select name="jenis_peraturan_id" class="form-select">
-                            <option value="">-- Semua Jenis Dokumen --</option>
-                            @foreach($jenisPeraturans as $jp)
-                                <option value="{{ $jp->id }}" {{ request('jenis_peraturan_id') == $jp->id ? 'selected' : '' }}>
-                                    {{ $jp->nama }} ({{ $jp->singkatan }})
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <!-- 3. Nomor Peraturan -->
-                    <div class="col-lg-4 col-md-4">
-                        <label class="form-label"><i class="bi bi-hash me-1"></i> Nomor Peraturan</label>
-                        <input type="text" name="nomor_peraturan" class="form-control" placeholder="Contoh: 12" value="{{ request('nomor_peraturan') }}">
-                    </div>
-
-                    <!-- 4. Tahun Penetapan -->
-                    <div class="col-lg-4 col-md-4">
-                        <label class="form-label"><i class="bi bi-calendar3 me-1"></i> Tahun</label>
-                        <select name="tahun" class="form-select">
-                            <option value="">-- Semua Tahun --</option>
-                            @foreach($tahunList as $th)
-                                <option value="{{ $th }}" {{ request('tahun') == $th ? 'selected' : '' }}>{{ $th }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <!-- 5. Status Peraturan -->
-                    <div class="col-lg-4 col-md-4">
-                        <label class="form-label"><i class="bi bi-check-circle me-1"></i> Status</label>
-                        <select name="status" class="form-select">
-                            <option value="">-- Semua Status --</option>
-                            <option value="BERLAKU" {{ request('status') == 'BERLAKU' ? 'selected' : '' }}>Berlaku</option>
-                            <option value="TIDAK BERLAKU" {{ request('status') == 'TIDAK BERLAKU' ? 'selected' : '' }}>Tidak Berlaku</option>
-                        </select>
-                    </div>
-
-                    <!-- Tombol Cari -->
-                    <div class="col-12 text-center pt-2">
-                        <button type="submit" class="btn btn-search-jdih btn-lg px-5 shadow-sm">
-                            <i class="bi bi-search me-2"></i> Cari Produk Hukum
-                        </button>
-                    </div>
+                <!-- Search Bar Pill -->
+                <div class="hero-smart-search-card mx-auto">
+                    <form action="{{ route('user.cari') }}" method="GET">
+                        <div class="smart-search-input-group">
+                            <input type="text" name="judul" class="smart-search-input" placeholder="Ketik judul, nomor, topik atau kata kunci peraturan..." value="{{ request('judul') }}" autocomplete="off">
+                            <button type="submit" class="btn-smart-search-submit" title="Cari Dokumen">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </form>
                 </div>
-            </form>
+
+                <!-- Quick Topic Tags -->
+                <div class="hero-quick-tags justify-content-center">
+                    <span class="hero-quick-tags-label"><i class="bi bi-fire text-danger me-1"></i>Topik Populer:</span>
+                    <a href="{{ route('user.cari', ['judul' => 'Pajak']) }}" class="hero-tag-link">#PajakDaerah</a>
+                    <a href="{{ route('user.cari', ['judul' => 'Pariwisata']) }}" class="hero-tag-link">#Pariwisata</a>
+                    <a href="{{ route('user.cari', ['judul' => 'APBD']) }}" class="hero-tag-link">#APBD</a>
+                    <a href="{{ route('user.cari', ['judul' => 'Tata Ruang']) }}" class="hero-tag-link">#TataRuang</a>
+                    <a href="{{ route('user.cari', ['judul' => 'Kesehatan']) }}" class="hero-tag-link">#Kesehatan</a>
+                    <a href="{{ route('user.cari', ['judul' => 'Desa']) }}" class="hero-tag-link">#PemerintahanDesa</a>
+                </div>
+            </div>
         </div>
     </div>
 </section>
 
 <!-- ============================================================
-     STATISTIK PRODUK HUKUM DINAMIS (Requirement #4)
-     Setiap jenis produk hukum yang ditambahkan admin otomatis tampil di sini
+     SEKSI PIMPINAN DAERAH (KOMITMEN TOBA MANTAP 2030 & REGULASI)
+     ============================================================ -->
+<section class="leadership-governance-section py-4 py-lg-5">
+    <div class="container">
+        <div class="leadership-executive-card">
+            <div class="row align-items-center g-4 g-xl-5">
+                <!-- SISI KIRI: FOTO RESMI LANDSCAPE BUPATI & WAKIL BUPATI -->
+                <div class="col-lg-6">
+                    <div class="leadership-photo-canvas">
+                        <div class="leadership-photo-halo"></div>
+                        <div class="leadership-photo-frame">
+                            <img src="{{ asset('pimpinan-toba.png') }}" 
+                                 alt="Bupati & Wakil Bupati Kabupaten Toba - Effendi S. P. Napitupulu, SE & Drs. Audi Murphy O. Sitorus, SH., M.Si" 
+                                 class="leadership-img">
+                            <div class="leadership-photo-glare"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SISI KANAN: NARASI & KOMITMEN HUKUM PEMKAB TOBA -->
+                <div class="col-lg-6">
+                    <div class="leadership-narrative ps-lg-2">
+                        <div class="leadership-badge-pill mb-3">
+                            <span>PEMERINTAH KABUPATEN TOBA</span>
+                        </div>
+
+                        <h2 class="leadership-title">
+                            Menuju <span class="text-gold">Toba Mantap 2030</span> Melalui Kepastian Hukum
+                        </h2>
+
+                        <blockquote class="leadership-quote mb-3">
+                            &ldquo;Maju Daerahnya, Sejahtera Rakyatnya, dan Berkelanjutan Pembangunannya.&rdquo;
+                        </blockquote>
+
+                        <p class="leadership-desc">
+                            Pemerintah Kabupaten Toba di bawah kepemimpinan Bupati <strong>Effendi S. P. Napitupulu, SE</strong> bersama Wakil Bupati <strong>Drs. Audi Murphy O. Sitorus, SH., M.Si</strong> berkomitmen mewujudkan tata kelola pemerintahan yang bersih, transparan, dan akuntabel melalui keterbukaan regulasi perundang-undangan daerah yang mudah diakses serta terintegrasi secara nasional demi kemajuan seluruh masyarakat Toba.
+                        </p>
+
+                        <!-- CTA Actions -->
+                        <div class="d-flex align-items-center gap-3 flex-wrap">
+                            <a href="{{ route('visi') }}" class="btn btn-navy rounded-pill px-4 py-2 fw-bold">
+                                Visi &amp; Misi Daerah
+                            </a>
+                            <a href="{{ route('struktur') }}" class="btn btn-outline-secondary rounded-pill px-4 py-2 fw-semibold">
+                                Struktur Tim JDIH
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     DOKUMEN TERBARU / TERPOPULER (PREMIUM SIGNATURE CARDS)
      ============================================================ -->
 <section class="py-5 bg-white">
     <div class="container">
-        <div class="text-center mb-5">
-            <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-1 rounded-pill fw-bold text-uppercase">Koleksi Peraturan</span>
-            <h2 class="fw-bold mt-2">Dokumentasi Produk Hukum Daerah</h2>
-            <p class="text-muted">Akses cepat ke seluruh jenis produk hukum Pemerintah Kabupaten Toba</p>
+        <!-- Section Header -->
+        <div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-3">
+            <div>
+                <span class="section-kicker-badge badge-blue">
+                    <i class="bi bi-clock-history"></i> ARSIP REGULASI RESMI
+                </span>
+                <h3 class="section-title mb-1">Dokumen <span class="text-gold">{{ ($activeTab ?? 'terbaru') === 'populer' ? 'Terpopuler' : 'Terbaru' }}</span></h3>
+                <p class="section-subtitle mb-0">Koleksi naskah hukum resmi yang baru diterbitkan atau paling banyak diakses masyarakat</p>
+            </div>
+            <a href="{{ route('user.produk-hukum.global') }}" class="bulletin-view-all-pill">
+                <span>Lihat semua arsip</span> <i class="bi bi-chevron-right ms-1"></i>
+            </a>
         </div>
 
-        <div class="row g-4 justify-content-center">
-            @forelse($jenisPeraturans as $item)
-                <div class="col-lg-4 col-md-6">
-                    <div class="stat-card-legal">
-                        <div>
-                            <div class="stat-icon">
-                                <i class="bi bi-journal-bookmark-fill"></i>
-                            </div>
-                            <div class="stat-count">{{ number_format($item->peraturans_count, 0, ',', '.') }}</div>
-                            <div class="stat-title">{{ $item->nama }}</div>
-                            <p class="small text-muted mt-2 mb-0" style="line-height: 1.5;">
-                                {{ Str::limit($item->deskripsi, 90, '...') ?: 'Koleksi resmi ' . $item->nama . ' Kabupaten Toba.' }}
-                            </p>
+        <!-- Document Cards List -->
+        <div class="d-flex flex-column gap-3">
+            @forelse($produkHukumTerbaru as $ph)
+                <div class="modern-doc-card">
+                    <!-- Card Top: Badges & Tanggal -->
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                            <span class="badge-doc-type">{{ $ph->jenisPeraturan->singkatan ?? 'REGULASI' }}</span>
+                            @if(($ph->status ?? 'BERLAKU') !== 'BERLAKU')
+                                <span class="badge-status-inactive">
+                                    <i class="bi bi-x-circle me-1"></i> {{ $ph->status }}
+                                </span>
+                            @endif
                         </div>
-                        <div class="pt-3 mt-3 border-top">
-                            <a href="{{ route('user.produk-hukum.jenis', $item->slug) }}" class="btn btn-outline-primary btn-sm rounded-pill w-100 fw-semibold">
-                                Lihat {{ $item->singkatan ?: $item->nama }} <i class="bi bi-arrow-right ms-1"></i>
+                        @if($ph->tanggal_penetapan)
+                            <span class="text-muted small">
+                                <i class="bi bi-calendar-check me-1"></i> Penetapan: {{ $ph->tanggal_penetapan->translatedFormat('d F Y') }}
+                            </span>
+                        @endif
+                    </div>
+
+                    <!-- Title -->
+                    <h5 class="doc-title mb-2">
+                        <a href="{{ route('user.produk-hukum.detail', $ph->id) }}">
+                            {{ strtoupper($ph->judul) }}
+                        </a>
+                    </h5>
+
+                    <!-- Meta Chips -->
+                    <div class="doc-meta-chips mb-2">
+                        <span class="doc-meta-chip">
+                            <i class="bi bi-file-earmark-text text-primary"></i>
+                            <span>{{ $ph->jenisPeraturan->nama ?? 'Peraturan' }} <strong>Nomor {{ $ph->nomor_peraturan ?: '-' }}</strong></span>
+                        </span>
+                        <span class="doc-meta-chip">
+                            <i class="bi bi-calendar3 text-warning"></i>
+                            <span>Tahun: <strong>{{ $ph->tahun ?: '-' }}</strong></span>
+                        </span>
+                        <span class="doc-meta-chip">
+                            <i class="bi bi-building text-secondary"></i>
+                            <span>Pemrakarsa: <strong>{{ $ph->teu_badan ?: 'Pemerintah Kabupaten Toba' }}</strong></span>
+                        </span>
+                    </div>
+
+                    <!-- Snippet / Abstrak -->
+                    <p class="doc-snippet-text">
+                        {{ Str::limit(strip_tags($ph->abstrak ?? $ph->subjek ?? ''), 220) ?: 'Dokumen resmi peraturan perundang-undangan Bagian Hukum Sekretariat Daerah Pemerintah Kabupaten Toba.' }}
+                    </p>
+
+                    <!-- Footer: Stats + Buttons -->
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 pt-3 border-top">
+                        <div class="d-flex align-items-center gap-3 text-muted small">
+                            <span title="Jumlah Kali Dilihat"><i class="bi bi-eye-fill me-1 text-primary"></i> {{ number_format($ph->view_count ?? 0, 0, ',', '.') }}x dilihat</span>
+                            <span title="Jumlah Unduhan"><i class="bi bi-download me-1 text-success"></i> {{ number_format($ph->download_count ?? 0, 0, ',', '.') }}x diunduh</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <a href="{{ route('user.produk-hukum.detail', $ph->id) }}" class="btn-doc-detail">
+                                <i class="bi bi-info-circle me-1"></i> Rincian
+                            </a>
+                            @if(!empty($ph->file_dokumen))
+                                <button type="button" class="btn-doc-preview" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#pdfPreviewModal" 
+                                    data-pdf-url="{{ route('user.produk-hukum.preview', $ph->id) }}" 
+                                    data-pdf-title="{{ $ph->judul }}"
+                                    data-pdf-download="{{ route('user.produk-hukum.download', $ph->id) }}">
+                                    <i class="bi bi-eye me-1"></i> Pratinjau
+                                </button>
+                            @endif
+                            <a href="{{ route('user.produk-hukum.download', $ph->id) }}" class="btn-doc-download">
+                                <i class="bi bi-download"></i> Unduh PDF
                             </a>
                         </div>
                     </div>
                 </div>
             @empty
-                <div class="col-12 text-center text-muted">
-                    <p>Belum ada kategori jenis produk hukum yang ditambahkan.</p>
-                </div>
-            @endforelse
-        </div>
-    </div>
-</section>
-
-<!-- ============================================================
-     PRODUK HUKUM TERBARU
-     ============================================================ -->
-<section class="py-5" style="background: #f8fafc;">
-    <div class="container">
-        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-2">
-            <div>
-                <span class="badge bg-danger bg-opacity-10 text-danger px-3 py-1 rounded-pill fw-bold text-uppercase">Terbaru</span>
-                <h3 class="fw-bold mt-2 mb-0">Produk Hukum Terbaru</h3>
-            </div>
-            <a href="{{ route('user.produk-hukum.global') }}" class="btn btn-outline-primary btn-sm rounded-pill px-3">
-                Lihat Semua Dokumen ({{ $totalDokumen }}) <i class="bi bi-arrow-right ms-1"></i>
-            </a>
-        </div>
-
-        <div class="row g-4">
-            @forelse($produkHukumTerbaru as $ph)
-                <div class="col-lg-6">
-                    <div class="doc-card h-100 d-flex flex-column justify-content-between">
-                        <div>
-                            <div class="d-flex justify-content-between align-items-start mb-2 gap-2">
-                                <span class="badge-jenis">{{ $ph->jenisPeraturan->nama ?? 'Peraturan' }}</span>
-                                <span class="{{ $ph->status === 'BERLAKU' ? 'badge-status-berlaku' : 'badge-status-tidak' }}">
-                                    {{ $ph->status }}
-                                </span>
-                            </div>
-                            <h5 class="fw-bold mb-2">
-                                <a href="{{ route('user.produk-hukum.detail', $ph->id) }}" class="text-decoration-none text-dark hover-primary">
-                                    {{ $ph->judul }}
-                                </a>
-                            </h5>
-                            <div class="small text-muted mb-3 d-flex flex-wrap gap-3">
-                                <span><i class="bi bi-hash text-primary"></i> No. {{ $ph->nomor_peraturan ?? '-' }}</span>
-                                <span><i class="bi bi-calendar-event text-primary"></i> Tahun {{ $ph->tahun ?? '-' }}</span>
-                                <span><i class="bi bi-building text-primary"></i> {{ $ph->tempat_penetapan ?? 'Balige' }}</span>
-                            </div>
-                        </div>
-
-                        <div class="d-flex justify-content-between align-items-center pt-3 border-top mt-2">
-                            <span class="small text-muted"><i class="bi bi-eye me-1"></i> {{ $ph->view_count }} kali dilihat</span>
-                            <div class="d-flex gap-2">
-                                <a href="{{ route('user.produk-hukum.detail', $ph->id) }}" class="btn btn-sm btn-primary rounded-pill px-3">
-                                    <i class="bi bi-eye me-1"></i> Detail
-                                </a>
-                                <a href="{{ route('user.produk-hukum.download', $ph->id) }}" class="btn btn-sm btn-outline-success rounded-pill px-3" title="Unduh PDF">
-                                    <i class="bi bi-download"></i> Unduh
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @empty
-                <div class="col-12 text-center text-muted py-4">
+                <div class="text-center text-muted py-5 border rounded-3 bg-light">
+                    <i class="bi bi-folder-x fs-1 d-block mb-2 text-secondary"></i>
                     Belum ada produk hukum yang diunggah.
                 </div>
             @endforelse
@@ -210,65 +207,187 @@
 </section>
 
 <!-- ============================================================
-     BERITA & PENGUMUMAN
+     KLASIFIKASI PRODUK HUKUM (THEMATIC DISTINCT ICONS & BORDERS)
      ============================================================ -->
-<section class="py-5 bg-white">
+<section class="py-5" style="background: #f8fafc;">
     <div class="container">
-        <div class="row g-5">
-            <!-- BERITA -->
+        <div class="text-center mb-4">
+            <h3 class="section-title mb-0">Klasifikasi Produk Hukum</h3>
+        </div>
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-3 justify-content-center">
+            @forelse($jenisPeraturans as $item)
+                @php
+                    $slug = Str::slug($item->nama);
+                    $iconClass = 'bi-envelope-paper-fill';
+                    $themeClass = 'theme-edaran';
+                    $tagText = $item->singkatan ?: 'SE';
+
+                    if (str_contains($slug, 'perda') || str_contains($slug, 'daerah')) {
+                        $iconClass = 'bi-bank2';
+                        $themeClass = 'theme-perda';
+                        $tagText = $item->singkatan ?: 'PERDA';
+                    } elseif (str_contains($slug, 'perbup') || str_contains($slug, 'peraturan-bupati')) {
+                        $iconClass = 'bi-award-fill';
+                        $themeClass = 'theme-perbup';
+                        $tagText = $item->singkatan ?: 'PERBUP';
+                    } elseif (str_contains($slug, 'kepbup') || str_contains($slug, 'keputusan')) {
+                        $iconClass = 'bi-file-earmark-check-fill';
+                        $themeClass = 'theme-kepbup';
+                        $tagText = $item->singkatan ?: 'KEPBUP';
+                    } elseif (str_contains($slug, 'inbup') || str_contains($slug, 'instruksi')) {
+                        $iconClass = 'bi-lightning-charge-fill';
+                        $themeClass = 'theme-inbup';
+                        $tagText = $item->singkatan ?: 'INBUP';
+                    }
+                @endphp
+                <div class="col">
+                    <a href="{{ route('user.produk-hukum.jenis', $item->slug) }}" class="legal-thematic-card {{ $themeClass }} text-decoration-none">
+                        <div class="legal-card-icon">
+                            <i class="bi {{ $iconClass }}"></i>
+                        </div>
+                        <h6 class="legal-card-title">{{ $item->nama }}</h6>
+                        <span class="legal-card-tag">{{ $tagText }}</span>
+                    </a>
+                </div>
+            @empty
+                <div class="col-12 text-center text-muted py-4">
+                    Belum ada kategori jenis produk hukum.
+                </div>
+            @endforelse
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     BERITA & PENGUMUMAN RESMI (KANVAS WARTA & MAKLUMAT HUKUM TOBA)
+     ============================================================ -->
+<section class="news-bulletin-section py-5">
+    <div class="container">
+        <div class="row g-4 g-lg-5">
+            <!-- BERITA HUKUM (col-lg-7) -->
             <div class="col-lg-7">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h4 class="fw-bold mb-0"><i class="bi bi-newspaper text-primary me-2"></i> Berita Hukum</h4>
-                    <a href="{{ route('berita') }}" class="small text-primary text-decoration-none fw-semibold">Semua Berita <i class="bi bi-arrow-right"></i></a>
+                <div class="bulletin-header">
+                    <div>
+                        <h4 class="section-title mb-1">Berita <span class="text-gold">Hukum</span></h4>
+                        <p class="section-subtitle mb-0">Sosialisasi peraturan, transparansi dan agenda hukum Kabupaten Toba</p>
+                    </div>
+                    <a href="{{ route('berita') }}" class="bulletin-view-all-pill">
+                        <span>Semua Berita</span> <i class="bi bi-arrow-right"></i>
+                    </a>
                 </div>
 
                 <div class="d-flex flex-column gap-3">
                     @forelse($beritas as $b)
-                        <div class="card border-0 shadow-sm rounded-3 overflow-hidden p-3 hover-shadow transition">
-                            <div class="row g-3 align-items-center">
-                                @if($b->gambar)
-                                    <div class="col-sm-4">
-                                        <img src="{{ asset('uploads/berita/' . $b->gambar) }}" class="img-fluid rounded-2 w-100" style="height: 120px; object-fit: cover;" alt="{{ $b->judul }}">
+                        <article class="news-modern-card">
+                            <div class="row g-0 align-items-stretch">
+                                <div class="col-sm-4">
+                                    <div class="news-thumb-wrapper">
+                                        @if($b->gambar)
+                                            <img src="{{ asset('uploads/berita/' . $b->gambar) }}" alt="{{ $b->judul }}" class="news-thumb-img">
+                                        @else
+                                            <div class="news-thumb-placeholder">
+                                                <i class="bi bi-newspaper"></i>
+                                            </div>
+                                        @endif
+                                        <span class="news-category-badge">Berita JDIH</span>
                                     </div>
-                                @endif
-                                <div class="{{ $b->gambar ? 'col-sm-8' : 'col-12' }}">
-                                    <small class="text-muted"><i class="bi bi-calendar3 me-1"></i> {{ $b->created_at ? $b->created_at->translatedFormat('d F Y') : '-' }}</small>
-                                    <h6 class="fw-bold mt-1 mb-2">
-                                        <a href="{{ route('berita.detail', $b->id) }}" class="text-decoration-none text-dark">
-                                            {{ Str::limit($b->judul, 70) }}
+                                </div>
+                                <div class="col-sm-8 d-flex flex-column justify-content-between">
+                                    <div class="news-body-content p-3 p-xl-4">
+                                        <div class="news-meta-row mb-2">
+                                            <span class="news-date">
+                                                <i class="bi bi-calendar3 me-1"></i>
+                                                {{ $b->created_at ? $b->created_at->translatedFormat('d F Y') : '-' }}
+                                            </span>
+                                            <span class="news-meta-sep">&bull;</span>
+                                            <span class="news-author">Bagian Hukum</span>
+                                        </div>
+                                        <h6 class="news-title mb-2">
+                                            <a href="{{ route('berita.detail', $b->id) }}">{{ Str::limit($b->judul, 75) }}</a>
+                                        </h6>
+                                        <p class="news-excerpt mb-0">
+                                            {{ Str::limit(strip_tags($b->isi), 105) ?: 'Informasi dan dokumentasi kegiatan sosialisasi hukum Pemerintah Kabupaten Toba.' }}
+                                        </p>
+                                    </div>
+                                    <div class="news-footer-action px-3 px-xl-4 pb-3">
+                                        <a href="{{ route('berita.detail', $b->id) }}" class="news-read-link">
+                                            <span>Baca Selengkapnya</span>
+                                            <i class="bi bi-arrow-right"></i>
                                         </a>
-                                    </h6>
-                                    <p class="small text-muted mb-0">{{ Str::limit(strip_tags($b->isi), 90) }}</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </article>
                     @empty
-                        <p class="text-muted small">Belum ada berita yang diterbitkan.</p>
+                        <div class="text-center text-muted p-4 bg-light rounded-3">
+                            Belum ada berita hukum yang diterbitkan.
+                        </div>
                     @endforelse
                 </div>
             </div>
 
-            <!-- PENGUMUMAN -->
+            <!-- PENGUMUMAN RESMI (col-lg-5) -->
             <div class="col-lg-5">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h4 class="fw-bold mb-0"><i class="bi bi-megaphone-fill text-danger me-2"></i> Pengumuman</h4>
-                    <a href="{{ route('pengumuman.index') }}" class="small text-primary text-decoration-none fw-semibold">Semua Pengumuman <i class="bi bi-arrow-right"></i></a>
+                <div class="bulletin-header header-announcement">
+                    <div>
+                        <h4 class="section-title mb-1">Pengumuman <span class="text-gold">Resmi</span></h4>
+                        <p class="section-subtitle mb-0">Pemberitahuan resmi Sekretariat Daerah Kabupaten Toba</p>
+                    </div>
+                    <a href="{{ route('pengumuman.index') }}" class="bulletin-view-all-pill">
+                        <span>Semua</span> <i class="bi bi-arrow-right"></i>
+                    </a>
                 </div>
 
                 <div class="d-flex flex-column gap-3">
                     @forelse($pengumumans as $p)
-                        <div class="p-3 bg-light rounded-3 border-start border-4 border-primary">
-                            <small class="text-muted"><i class="bi bi-calendar me-1"></i> {{ $p->tanggal_upload ? $p->tanggal_upload->translatedFormat('d F Y') : '-' }}</small>
-                            <h6 class="fw-bold mt-1 mb-1">
-                                <a href="{{ route('pengumuman.show', $p->id) }}" class="text-decoration-none text-dark">
-                                    {{ $p->judul }}
+                        <div class="announcement-modern-card">
+                            <div class="announcement-datebox">
+                                <span class="datebox-month">{{ $p->tanggal_upload ? $p->tanggal_upload->translatedFormat('M') : date('M') }}</span>
+                                <span class="datebox-day">{{ $p->tanggal_upload ? $p->tanggal_upload->format('d') : date('d') }}</span>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="announcement-top-meta mb-1">
+                                    <span class="announcement-badge"><i class="bi bi-megaphone-fill me-1"></i> Pengumuman</span>
+                                </div>
+                                <h6 class="announcement-title mb-2">
+                                    <a href="{{ route('pengumuman.show', $p->id) }}">{{ $p->judul }}</a>
+                                </h6>
+                                <a href="{{ route('pengumuman.show', $p->id) }}" class="announcement-link">
+                                    <span>Lihat Pengumuman</span>
+                                    <i class="bi bi-chevron-right"></i>
                                 </a>
-                            </h6>
-                            <a href="{{ route('pengumuman.show', $p->id) }}" class="small text-primary text-decoration-none">Lihat Pengumuman <i class="bi bi-chevron-right"></i></a>
+                            </div>
                         </div>
                     @empty
-                        <p class="text-muted small">Belum ada pengumuman.</p>
+                        <div class="text-center text-muted p-3 bg-light rounded-3">
+                            Belum ada pengumuman resmi.
+                        </div>
                     @endforelse
+
+                    <!-- Service Promo / Helpdesk Card (Balances the right column) -->
+                    <div class="jdih-service-promo-card mt-2">
+                        <div class="d-flex align-items-center gap-3 mb-2">
+                            <div class="service-promo-icon">
+                                <i class="bi bi-headset"></i>
+                            </div>
+                            <div>
+                                <h6 class="service-promo-title mb-0">Layanan Informasi &amp; Bantuan</h6>
+                                <small class="text-muted">Bagian Hukum Setdakab Toba</small>
+                            </div>
+                        </div>
+                        <p class="service-promo-desc mb-3">
+                            Butuh naskah fisik regulasi daerah atau konsultasi seputar JDIH Toba? Hubungi tim dokumentasi hukum kami.
+                        </p>
+                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                            <a href="{{ route('kontak') }}" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold">
+                                <i class="bi bi-envelope me-1"></i> Kontak
+                            </a>
+                            <a href="https://wa.me/6281362444195" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-success rounded-pill px-3 fw-bold">
+                                <i class="bi bi-whatsapp me-1"></i> WhatsApp
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -276,22 +395,103 @@
 </section>
 
 <!-- ============================================================
-     BANNER TENTANG JDIH
+     SINERGI ANTAR LEMBAGA (PORTAL MITRA STRATEGIS)
      ============================================================ -->
-<section class="py-5 bg-light border-top">
-    <div class="container text-center">
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <img src="{{ asset('logo.png') }}" alt="Logo Toba" height="70" class="mb-3">
-                <h3 class="fw-bold">Pemerintah Kabupaten Toba</h3>
-                <p class="text-muted leading-relaxed">
-                    Bagian Hukum Sekretariat Daerah Kabupaten Toba berkomitmen menyediakan kemudahan akses terhadap seluruh peraturan perundang-undangan dan produk hukum daerah bagi seluruh masyarakat dan instansi.
-                </p>
-                <div class="d-flex justify-content-center gap-3 mt-4">
-                    <a href="{{ route('visi') }}" class="btn btn-outline-primary rounded-pill px-4">Visi & Misi</a>
-                    <a href="{{ route('struktur') }}" class="btn btn-outline-primary rounded-pill px-4">Struktur Organisasi</a>
-                    <a href="{{ route('kontak') }}" class="btn btn-primary rounded-pill px-4">Hubungi Kami</a>
-                </div>
+<section class="py-5 synergy-section" style="background: #f8fafc;">
+    <div class="container">
+        <div class="text-center mb-4 pb-1">
+            <h3 class="section-title mb-1">Sinergi <span class="text-gold">Antar Lembaga</span></h3>
+            <p class="section-subtitle mx-auto mb-0" style="max-width: 580px;">
+                Jaringan dokumentasi hukum nasional dan keterhubungan portal layanan publik terintegrasi Pemerintah RI &amp; Daerah
+            </p>
+        </div>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3 g-xl-4">
+            <!-- JDIH NASIONAL -->
+            <div class="col">
+                <a href="https://jdihn.go.id" target="_blank" rel="noopener noreferrer" class="modern-link-card h-100">
+                    <div class="modern-link-top d-flex justify-content-between align-items-center mb-3">
+                        <div class="modern-link-logo-tile">
+                            <img src="{{ asset('logo-jdihn-circle.png') }}" alt="Logo JDIHN BPHN">
+                        </div>
+                        <div class="modern-link-ext-pill" title="Kunjungi Portal">
+                            <i class="bi bi-arrow-up-right"></i>
+                        </div>
+                    </div>
+                    <div class="modern-link-body">
+                        <h6 class="modern-link-title">JDIH Nasional</h6>
+                        <p class="modern-link-desc">Pusat JDIHN Badan Pembinaan Hukum Nasional Kementerian Hukum RI</p>
+                    </div>
+                    <div class="modern-link-footer">
+                        <span class="modern-link-domain"><i class="bi bi-globe2 me-1"></i>jdihn.go.id</span>
+                        <span class="modern-link-agency">BPHN RI</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- JDIH PROV SUMUT -->
+            <div class="col">
+                <a href="https://jdih.sumutprov.go.id" target="_blank" rel="noopener noreferrer" class="modern-link-card h-100">
+                    <div class="modern-link-top d-flex justify-content-between align-items-center mb-3">
+                        <div class="modern-link-logo-tile">
+                            <img src="{{ asset('PROVINSI.jpg') }}" alt="Logo JDIH Provinsi Sumatera Utara">
+                        </div>
+                        <div class="modern-link-ext-pill" title="Kunjungi Portal">
+                            <i class="bi bi-arrow-up-right"></i>
+                        </div>
+                    </div>
+                    <div class="modern-link-body">
+                        <h6 class="modern-link-title">JDIH Prov. Sumut</h6>
+                        <p class="modern-link-desc">Portal Jaringan Dokumentasi &amp; Informasi Hukum Provinsi Sumatera Utara</p>
+                    </div>
+                    <div class="modern-link-footer">
+                        <span class="modern-link-domain"><i class="bi bi-globe2 me-1"></i>jdih.sumutprov.go.id</span>
+                        <span class="modern-link-agency">Pemprov Sumut</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- PEMKAB TOBA -->
+            <div class="col">
+                <a href="https://tobakab.go.id" target="_blank" rel="noopener noreferrer" class="modern-link-card h-100">
+                    <div class="modern-link-top d-flex justify-content-between align-items-center mb-3">
+                        <div class="modern-link-logo-tile">
+                            <img src="{{ asset('logo.png') }}" alt="Logo Kabupaten Toba">
+                        </div>
+                        <div class="modern-link-ext-pill" title="Kunjungi Portal">
+                            <i class="bi bi-arrow-up-right"></i>
+                        </div>
+                    </div>
+                    <div class="modern-link-body">
+                        <h6 class="modern-link-title">Pemkab Toba</h6>
+                        <p class="modern-link-desc">Portal Resmi Pelayanan Informasi Pemerintah Daerah Kabupaten Toba</p>
+                    </div>
+                    <div class="modern-link-footer">
+                        <span class="modern-link-domain"><i class="bi bi-globe2 me-1"></i>tobakab.go.id</span>
+                        <span class="modern-link-agency">Pemkab Toba</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- SP4N LAPOR -->
+            <div class="col">
+                <a href="https://www.lapor.go.id" target="_blank" rel="noopener noreferrer" class="modern-link-card h-100">
+                    <div class="modern-link-top d-flex justify-content-between align-items-center mb-3">
+                        <div class="modern-link-logo-tile">
+                            <img src="{{ asset('lapor.png') }}" alt="Logo SP4N-LAPOR!">
+                        </div>
+                        <div class="modern-link-ext-pill" title="Kunjungi Portal">
+                            <i class="bi bi-arrow-up-right"></i>
+                        </div>
+                    </div>
+                    <div class="modern-link-body">
+                        <h6 class="modern-link-title">SP4N-LAPOR!</h6>
+                        <p class="modern-link-desc">Sistem Pengelolaan Pengaduan Pelayanan Publik Nasional Republik Indonesia</p>
+                    </div>
+                    <div class="modern-link-footer">
+                        <span class="modern-link-domain"><i class="bi bi-globe2 me-1"></i>lapor.go.id</span>
+                        <span class="modern-link-agency">KemenPAN-RB</span>
+                    </div>
+                </a>
             </div>
         </div>
     </div>

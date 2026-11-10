@@ -40,3 +40,4 @@ class JenisPeraturan extends Model
         return $this->hasMany(Peraturan::class, 'jenis_peraturan_id')->latest();
     }
 }
+

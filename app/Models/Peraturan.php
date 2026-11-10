@@ -94,3 +94,4 @@ class Peraturan extends Model
         return asset('uploads/produk-hukum/' . $this->file_dokumen);
     }
 }
+
