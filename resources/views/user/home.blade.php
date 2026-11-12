@@ -34,7 +34,7 @@
 
                 <!-- Quick Topic Tags -->
                 <div class="hero-quick-tags justify-content-center">
-                    <span class="hero-quick-tags-label"><i class="bi bi-fire text-danger me-1"></i>Topik Populer:</span>
+                    <span class="hero-quick-tags-label">Topik Populer:</span>
                     <a href="{{ route('user.cari', ['judul' => 'Pajak']) }}" class="hero-tag-link">#PajakDaerah</a>
                     <a href="{{ route('user.cari', ['judul' => 'Pariwisata']) }}" class="hero-tag-link">#Pariwisata</a>
                     <a href="{{ route('user.cari', ['judul' => 'APBD']) }}" class="hero-tag-link">#APBD</a>
@@ -110,9 +110,6 @@
         <!-- Section Header -->
         <div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-3">
             <div>
-                <span class="section-kicker-badge badge-blue">
-                    <i class="bi bi-clock-history"></i> ARSIP REGULASI RESMI
-                </span>
                 <h3 class="section-title mb-1">Dokumen <span class="text-gold">{{ ($activeTab ?? 'terbaru') === 'populer' ? 'Terpopuler' : 'Terbaru' }}</span></h3>
                 <p class="section-subtitle mb-0">Koleksi naskah hukum resmi yang baru diterbitkan atau paling banyak diakses masyarakat</p>
             </div>
@@ -123,21 +120,41 @@
 
         <!-- Document Cards List -->
         <div class="d-flex flex-column gap-3">
-            @forelse($produkHukumTerbaru as $ph)
-                <div class="modern-doc-card">
+            @forelse($produkHukumTerbaru->take(3) as $ph)
+                @php
+                    $jpHmSlug = Str::slug($ph->jenisPeraturan->nama ?? '');
+                    $themeClass = 'theme-default';
+
+                    if (str_contains($jpHmSlug, 'perda') || str_contains($jpHmSlug, 'daerah')) {
+                        $themeClass = 'theme-perda';
+                    } elseif (str_contains($jpHmSlug, 'perbup') || str_contains($jpHmSlug, 'peraturan-bupati')) {
+                        $themeClass = 'theme-perbup';
+                    } elseif (str_contains($jpHmSlug, 'kepbup') || str_contains($jpHmSlug, 'keputusan')) {
+                        $themeClass = 'theme-kepbup';
+                    } elseif (str_contains($jpHmSlug, 'inbup') || str_contains($jpHmSlug, 'instruksi')) {
+                        $themeClass = 'theme-inbup';
+                    } elseif (str_contains($jpHmSlug, 'edaran') || str_contains($jpHmSlug, 'surat')) {
+                        $themeClass = 'theme-edaran';
+                    }
+                @endphp
+                <div class="modern-doc-card {{ $themeClass }}">
                     <!-- Card Top: Badges & Tanggal -->
-                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2.5">
                         <div class="d-flex align-items-center gap-2 flex-wrap">
-                            <span class="badge-doc-type">{{ $ph->jenisPeraturan->singkatan ?? 'REGULASI' }}</span>
-                            @if(($ph->status ?? 'BERLAKU') !== 'BERLAKU')
+                            <span class="badge-doc-type {{ $themeClass }}">{{ $ph->jenisPeraturan->singkatan ?? 'REGULASI' }}</span>
+                            @if(($ph->status ?? 'BERLAKU') === 'BERLAKU')
+                                <span class="badge-status-active">
+                                    Berlaku
+                                </span>
+                            @else
                                 <span class="badge-status-inactive">
-                                    <i class="bi bi-x-circle me-1"></i> {{ $ph->status }}
+                                    {{ $ph->status }}
                                 </span>
                             @endif
                         </div>
                         @if($ph->tanggal_penetapan)
-                            <span class="text-muted small">
-                                <i class="bi bi-calendar-check me-1"></i> Penetapan: {{ $ph->tanggal_penetapan->translatedFormat('d F Y') }}
+                            <span class="doc-date-chip text-muted small">
+                                <i class="bi bi-calendar3 me-1.5 text-muted"></i> Penetapan: {{ $ph->tanggal_penetapan->translatedFormat('d F Y') }}
                             </span>
                         @endif
                     </div>
@@ -150,35 +167,35 @@
                     </h5>
 
                     <!-- Meta Chips -->
-                    <div class="doc-meta-chips mb-2">
+                    <div class="doc-meta-chips mb-2.5">
                         <span class="doc-meta-chip">
-                            <i class="bi bi-file-earmark-text text-primary"></i>
+                            <i class="bi bi-file-earmark-text text-muted me-1"></i>
                             <span>{{ $ph->jenisPeraturan->nama ?? 'Peraturan' }} <strong>Nomor {{ $ph->nomor_peraturan ?: '-' }}</strong></span>
                         </span>
                         <span class="doc-meta-chip">
-                            <i class="bi bi-calendar3 text-warning"></i>
+                            <i class="bi bi-calendar-event text-muted me-1"></i>
                             <span>Tahun: <strong>{{ $ph->tahun ?: '-' }}</strong></span>
                         </span>
                         <span class="doc-meta-chip">
-                            <i class="bi bi-building text-secondary"></i>
+                            <i class="bi bi-building text-muted me-1"></i>
                             <span>Pemrakarsa: <strong>{{ $ph->teu_badan ?: 'Pemerintah Kabupaten Toba' }}</strong></span>
                         </span>
                     </div>
 
                     <!-- Snippet / Abstrak -->
-                    <p class="doc-snippet-text">
+                    <p class="doc-snippet-text mb-3">
                         {{ Str::limit(strip_tags($ph->abstrak ?? $ph->subjek ?? ''), 220) ?: 'Dokumen resmi peraturan perundang-undangan Bagian Hukum Sekretariat Daerah Pemerintah Kabupaten Toba.' }}
                     </p>
 
                     <!-- Footer: Stats + Buttons -->
                     <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 pt-3 border-top">
                         <div class="d-flex align-items-center gap-3 text-muted small">
-                            <span title="Jumlah Kali Dilihat"><i class="bi bi-eye-fill me-1 text-primary"></i> {{ number_format($ph->view_count ?? 0, 0, ',', '.') }}x dilihat</span>
-                            <span title="Jumlah Unduhan"><i class="bi bi-download me-1 text-success"></i> {{ number_format($ph->download_count ?? 0, 0, ',', '.') }}x diunduh</span>
+                            <span title="Jumlah Kali Dilihat"><i class="bi bi-eye me-1 text-muted"></i> {{ number_format($ph->view_count ?? 0, 0, ',', '.') }}x dilihat</span>
+                            <span title="Jumlah Unduhan"><i class="bi bi-download me-1 text-muted"></i> {{ number_format($ph->download_count ?? 0, 0, ',', '.') }}x diunduh</span>
                         </div>
                         <div class="d-flex align-items-center gap-2">
                             <a href="{{ route('user.produk-hukum.detail', $ph->id) }}" class="btn-doc-detail">
-                                <i class="bi bi-info-circle me-1"></i> Rincian
+                                <i class="bi bi-info-circle text-muted"></i> Rincian
                             </a>
                             @if(!empty($ph->file_dokumen))
                                 <button type="button" class="btn-doc-preview" 
@@ -187,11 +204,11 @@
                                     data-pdf-url="{{ route('user.produk-hukum.preview', $ph->id) }}" 
                                     data-pdf-title="{{ $ph->judul }}"
                                     data-pdf-download="{{ route('user.produk-hukum.download', $ph->id) }}">
-                                    <i class="bi bi-eye me-1"></i> Pratinjau
+                                    <i class="bi bi-eye text-muted"></i> Pratinjau
                                 </button>
                             @endif
                             <a href="{{ route('user.produk-hukum.download', $ph->id) }}" class="btn-doc-download">
-                                <i class="bi bi-download"></i> Unduh PDF
+                                <i class="bi bi-download text-white-50"></i> Unduh PDF
                             </a>
                         </div>
                     </div>
@@ -207,12 +224,15 @@
 </section>
 
 <!-- ============================================================
-     KLASIFIKASI PRODUK HUKUM (THEMATIC DISTINCT ICONS & BORDERS)
+     KLASIFIKASI PRODUK HUKUM (EXECUTIVE CIVIC UNIFIED CARDS)
      ============================================================ -->
-<section class="py-5" style="background: #f8fafc;">
+<section class="py-5" style="background: #f8fafc; border-top: 1px solid rgba(226, 232, 240, 0.7); border-bottom: 1px solid rgba(226, 232, 240, 0.7);">
     <div class="container">
-        <div class="text-center mb-4">
-            <h3 class="section-title mb-0">Klasifikasi Produk Hukum</h3>
+        <div class="text-center mb-4 pb-2">
+            <h3 class="section-title mb-2">Klasifikasi <span class="text-gold">Produk Hukum</span></h3>
+            <p class="section-subtitle mx-auto mb-0" style="max-width: 620px;">
+                Akses dan telusuri naskah resmi peraturan perundang-undangan Pemerintah Kabupaten Toba berdasarkan klasifikasi hukum
+            </p>
         </div>
 
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-3 justify-content-center">
@@ -220,34 +240,34 @@
                 @php
                     $slug = Str::slug($item->nama);
                     $iconClass = 'bi-envelope-paper-fill';
-                    $themeClass = 'theme-edaran';
                     $tagText = $item->singkatan ?: 'SE';
 
                     if (str_contains($slug, 'perda') || str_contains($slug, 'daerah')) {
                         $iconClass = 'bi-bank2';
-                        $themeClass = 'theme-perda';
                         $tagText = $item->singkatan ?: 'PERDA';
                     } elseif (str_contains($slug, 'perbup') || str_contains($slug, 'peraturan-bupati')) {
                         $iconClass = 'bi-award-fill';
-                        $themeClass = 'theme-perbup';
                         $tagText = $item->singkatan ?: 'PERBUP';
                     } elseif (str_contains($slug, 'kepbup') || str_contains($slug, 'keputusan')) {
                         $iconClass = 'bi-file-earmark-check-fill';
-                        $themeClass = 'theme-kepbup';
                         $tagText = $item->singkatan ?: 'KEPBUP';
                     } elseif (str_contains($slug, 'inbup') || str_contains($slug, 'instruksi')) {
                         $iconClass = 'bi-lightning-charge-fill';
-                        $themeClass = 'theme-inbup';
                         $tagText = $item->singkatan ?: 'INBUP';
                     }
                 @endphp
                 <div class="col">
-                    <a href="{{ route('user.produk-hukum.jenis', $item->slug) }}" class="legal-thematic-card {{ $themeClass }} text-decoration-none">
+                    <a href="{{ route('user.produk-hukum.jenis', $item->slug) }}" class="legal-thematic-card text-decoration-none">
                         <div class="legal-card-icon">
                             <i class="bi {{ $iconClass }}"></i>
                         </div>
                         <h6 class="legal-card-title">{{ $item->nama }}</h6>
                         <span class="legal-card-tag">{{ $tagText }}</span>
+                        @if(isset($item->peraturans_count) && $item->peraturans_count > 0)
+                            <span class="legal-card-count">
+                                <strong>{{ number_format($item->peraturans_count, 0, ',', '.') }}</strong> Regulasi
+                            </span>
+                        @endif
                     </a>
                 </div>
             @empty
@@ -297,7 +317,6 @@
                                     <div class="news-body-content p-3 p-xl-4">
                                         <div class="news-meta-row mb-2">
                                             <span class="news-date">
-                                                <i class="bi bi-calendar3 me-1"></i>
                                                 {{ $b->created_at ? $b->created_at->translatedFormat('d F Y') : '-' }}
                                             </span>
                                             <span class="news-meta-sep">&bull;</span>
@@ -348,7 +367,7 @@
                             </div>
                             <div class="flex-grow-1">
                                 <div class="announcement-top-meta mb-1">
-                                    <span class="announcement-badge"><i class="bi bi-megaphone-fill me-1"></i> Pengumuman</span>
+                                    <span class="announcement-badge">Pengumuman</span>
                                 </div>
                                 <h6 class="announcement-title mb-2">
                                     <a href="{{ route('pengumuman.show', $p->id) }}">{{ $p->judul }}</a>
@@ -380,11 +399,13 @@
                             Butuh naskah fisik regulasi daerah atau konsultasi seputar JDIH Toba? Hubungi tim dokumentasi hukum kami.
                         </p>
                         <div class="d-flex align-items-center gap-2 flex-wrap">
-                            <a href="{{ route('kontak') }}" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold">
-                                <i class="bi bi-envelope me-1"></i> Kontak
+                            <a href="{{ route('kontak') }}" class="btn-service-promo-kontak">
+                                <i class="bi bi-envelope"></i>
+                                <span>Kontak</span>
                             </a>
-                            <a href="https://wa.me/6281362444195" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-success rounded-pill px-3 fw-bold">
-                                <i class="bi bi-whatsapp me-1"></i> WhatsApp
+                            <a href="https://wa.me/6281362444195" target="_blank" rel="noopener noreferrer" class="btn-service-promo-whatsapp">
+                                <i class="bi bi-whatsapp"></i>
+                                <span>WhatsApp</span>
                             </a>
                         </div>
                     </div>

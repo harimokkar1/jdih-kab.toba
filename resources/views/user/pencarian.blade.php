@@ -73,16 +73,92 @@
                     @if(request('judul'))
                         <input type="hidden" name="judul" value="{{ request('judul') }}">
                     @endif
+                    @if(request('sort'))
+                        <input type="hidden" name="sort" value="{{ request('sort') }}">
+                    @endif
 
                     <!-- INSTANSI / PEMRAKARSA -->
+                    @php
+                        $activeInstansi = request()->has('instansi') ? request('instansi') : 'Pemerintah Kabupaten Toba';
+                        $instansiOptions = [
+                            '' => [
+                                'label' => 'Semua Instansi',
+                                'sub' => 'Tampilkan seluruh pemrakarsa regulasi',
+                                'icon' => 'bi-collection',
+                                'color' => 'text-secondary',
+                                'badge' => 'bg-secondary-subtle',
+                            ],
+                            'Pemerintah Kabupaten Toba' => [
+                                'label' => 'Pemerintah Kab. Toba',
+                                'sub' => 'Pemerintah Kabupaten Toba',
+                                'icon' => 'bi-building',
+                                'color' => 'text-primary',
+                                'badge' => 'bg-primary-subtle',
+                            ],
+                            'DPRD Kabupaten Toba' => [
+                                'label' => 'DPRD Kab. Toba',
+                                'sub' => 'Dewan Perwakilan Rakyat Daerah',
+                                'icon' => 'bi-bank',
+                                'color' => 'text-success',
+                                'badge' => 'bg-success-subtle',
+                            ],
+                            'Sekretariat Daerah' => [
+                                'label' => 'Sekretariat Daerah',
+                                'sub' => 'Sekretariat Daerah Kab. Toba',
+                                'icon' => 'bi-shield-check',
+                                'color' => 'text-info',
+                                'badge' => 'bg-info-subtle',
+                            ],
+                        ];
+                        $currInstansi = $instansiOptions[$activeInstansi] ?? [
+                            'label' => $activeInstansi ?: 'Semua Instansi',
+                            'sub' => 'Instansi Pemrakarsa',
+                            'icon' => 'bi-building',
+                            'color' => 'text-primary',
+                            'badge' => 'bg-primary-subtle',
+                        ];
+                    @endphp
+
                     <div class="filter-group">
-                        <label class="filter-group-label">INSTANSI</label>
-                        <select name="instansi" class="form-select form-select-sm">
-                            <option value="">Pilih instansi...</option>
-                            <option value="Pemerintah Kabupaten Toba" selected>Pemerintah Kab. Toba</option>
-                            <option value="DPRD Kabupaten Toba">DPRD Kab. Toba</option>
-                            <option value="Sekretariat Daerah">Sekretariat Daerah</option>
-                        </select>
+                        <label class="filter-group-label d-flex justify-content-between align-items-center">
+                            <span>INSTANSI</span>
+                            @if(!empty($activeInstansi))
+                                <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-1.5 py-0.5" style="font-size: 10px; font-weight: 700;">Terpilih</span>
+                            @endif
+                        </label>
+                        <div class="modern-select-dropdown dropdown" id="instansiDropdownWrapper">
+                            <input type="hidden" name="instansi" id="inputFilterInstansi" value="{{ $activeInstansi }}">
+                            <button type="button" 
+                                    class="modern-select-btn dropdown-toggle" 
+                                    id="instansiDropdownBtn"
+                                    data-bs-toggle="dropdown" 
+                                    data-bs-offset="0,8"
+                                    data-bs-auto-close="true"
+                                    aria-expanded="false">
+                                <span class="d-flex align-items-center gap-2 text-truncate">
+                                    <i class="bi {{ $currInstansi['icon'] }} modern-select-prefix" id="instansiCurrentIcon"></i>
+                                    <span class="modern-select-label" id="instansiCurrentLabel">{{ $currInstansi['label'] }}</span>
+                                </span>
+                                <i class="bi bi-chevron-down modern-select-chevron"></i>
+                            </button>
+                            <ul class="dropdown-menu modern-select-menu shadow-lg w-100" aria-labelledby="instansiDropdownBtn">
+                                @foreach($instansiOptions as $val => $data)
+                                    @php $isSelected = ($activeInstansi === (string)$val); @endphp
+                                    <li>
+                                        <button type="button" 
+                                                class="dropdown-item modern-select-item {{ $isSelected ? 'active' : '' }}"
+                                                data-value="{{ $val }}"
+                                                data-label="{{ $data['label'] }}"
+                                                data-icon="{{ $data['icon'] }}">
+                                            <span class="d-flex align-items-center gap-2 text-truncate">
+                                                <i class="bi {{ $data['icon'] }} select-item-icon"></i>
+                                                <span class="text-truncate">{{ $data['label'] }}</span>
+                                            </span>
+                                        </button>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
                     </div>
 
                     <!-- TAHUN -->
@@ -157,32 +233,110 @@
                     <span class="text-muted small">Menampilkan <strong>{{ number_format($peraturans->total(), 0, ',', '.') }}</strong> hasil</span>
                 </div>
                 <div class="d-flex align-items-center gap-2">
-                    <label class="small text-muted mb-0 d-none d-sm-inline">Urutkan:</label>
-                    <select class="form-select form-select-sm rounded-pill" onchange="window.location.href=this.value" style="width: auto; min-width: 140px;">
-                        <option value="{{ route('user.cari', array_merge(request()->all(), ['sort' => 'terbaru'])) }}" {{ ($sort ?? 'terbaru') === 'terbaru' ? 'selected' : '' }}>Terbaru</option>
-                        <option value="{{ route('user.cari', array_merge(request()->all(), ['sort' => 'populer'])) }}" {{ ($sort ?? '') === 'populer' ? 'selected' : '' }}>Terpopuler</option>
-                        <option value="{{ route('user.cari', array_merge(request()->all(), ['sort' => 'terlama'])) }}" {{ ($sort ?? '') === 'terlama' ? 'selected' : '' }}>Terlama</option>
-                    </select>
+                    <label class="small text-muted mb-0 fw-semibold d-none d-sm-inline">Urutkan:</label>
+                    @php
+                        $sortCurrent = $sort ?? 'terbaru';
+                        $sortMap = [
+                            'terbaru' => [
+                                'label' => 'Terbaru',
+                                'desc' => 'Ditetapkan paling mutakhir',
+                                'icon' => 'bi-clock-history',
+                                'color' => 'text-primary',
+                                'badge' => 'bg-primary-subtle',
+                            ],
+                            'populer' => [
+                                'label' => 'Terpopuler',
+                                'desc' => 'Paling banyak dilihat & diunduh',
+                                'icon' => 'bi-fire',
+                                'color' => 'text-danger',
+                                'badge' => 'bg-danger-subtle',
+                            ],
+                            'terlama' => [
+                                'label' => 'Terlama',
+                                'desc' => 'Arsip regulasi awal',
+                                'icon' => 'bi-calendar-event',
+                                'color' => 'text-secondary',
+                                'badge' => 'bg-secondary-subtle',
+                            ],
+                        ];
+                        $currSort = $sortMap[$sortCurrent] ?? $sortMap['terbaru'];
+                    @endphp
+
+                    <div class="dropdown custom-sort-dropdown">
+                        <button type="button" 
+                                class="custom-sort-btn dropdown-toggle" 
+                                id="sortDropdownBtn" 
+                                data-bs-toggle="dropdown" 
+                                aria-expanded="false">
+                            <span class="custom-sort-icon-box {{ $currSort['badge'] }} {{ $currSort['color'] }}">
+                                <i class="bi {{ $currSort['icon'] }}"></i>
+                            </span>
+                            <span class="fw-semibold text-dark">{{ $currSort['label'] }}</span>
+                            <i class="bi bi-chevron-down custom-dropdown-caret ms-1"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end custom-dropdown-menu shadow-lg" aria-labelledby="sortDropdownBtn" style="min-width: 260px;">
+                            <li class="dropdown-header px-3 py-2 text-uppercase text-muted fw-bold" style="font-size: 10px; letter-spacing: 0.5px;">
+                                Urutkan Hasil Dokumen
+                            </li>
+                            @foreach($sortMap as $key => $opt)
+                                @php $isSortActive = ($sortCurrent === $key); @endphp
+                                <li>
+                                    <a class="dropdown-item custom-dropdown-item {{ $isSortActive ? 'active' : '' }}" 
+                                       href="{{ route('user.cari', array_merge(request()->all(), ['sort' => $key])) }}">
+                                        <span class="d-flex align-items-center gap-2.5">
+                                            <span class="custom-dropdown-icon-box {{ $opt['badge'] }} {{ $opt['color'] }}">
+                                                <i class="bi {{ $opt['icon'] }}"></i>
+                                            </span>
+                                            <span class="d-flex flex-column">
+                                                <span class="option-title">{{ $opt['label'] }}</span>
+                                                <span class="option-subtitle">{{ $opt['desc'] }}</span>
+                                            </span>
+                                        </span>
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
                 </div>
             </div>
 
             @if($peraturans->count() > 0)
                 <div class="d-flex flex-column gap-3">
                     @foreach($peraturans as $p)
-                        <div class="modern-doc-card">
+                        @php
+                            $jpSearchSlug = Str::slug($p->jenisPeraturan->nama ?? '');
+                            $themeClass = 'theme-default';
+
+                            if (str_contains($jpSearchSlug, 'perda') || str_contains($jpSearchSlug, 'daerah')) {
+                                $themeClass = 'theme-perda';
+                            } elseif (str_contains($jpSearchSlug, 'perbup') || str_contains($jpSearchSlug, 'peraturan-bupati')) {
+                                $themeClass = 'theme-perbup';
+                            } elseif (str_contains($jpSearchSlug, 'kepbup') || str_contains($jpSearchSlug, 'keputusan')) {
+                                $themeClass = 'theme-kepbup';
+                            } elseif (str_contains($jpSearchSlug, 'inbup') || str_contains($jpSearchSlug, 'instruksi')) {
+                                $themeClass = 'theme-inbup';
+                            } elseif (str_contains($jpSearchSlug, 'edaran') || str_contains($jpSearchSlug, 'surat')) {
+                                $themeClass = 'theme-edaran';
+                            }
+                        @endphp
+                        <div class="modern-doc-card {{ $themeClass }}">
                             <!-- Card Top: Badges & Tanggal -->
                             <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
                                 <div class="d-flex align-items-center gap-2 flex-wrap">
-                                    <span class="badge-doc-type">{{ $p->jenisPeraturan->singkatan ?? 'REGULASI' }}</span>
-                                    @if(($p->status ?? 'BERLAKU') !== 'BERLAKU')
+                                    <span class="badge-doc-type {{ $themeClass }}">{{ $p->jenisPeraturan->singkatan ?? 'REGULASI' }}</span>
+                                    @if(($p->status ?? 'BERLAKU') === 'BERLAKU')
+                                        <span class="badge-status-active">
+                                            Berlaku
+                                        </span>
+                                    @else
                                         <span class="badge-status-inactive">
-                                            <i class="bi bi-x-circle me-1"></i> {{ $p->status }}
+                                            {{ $p->status }}
                                         </span>
                                     @endif
                                 </div>
                                 @if($p->tanggal_penetapan)
-                                    <span class="text-muted small">
-                                        <i class="bi bi-calendar-check me-1"></i> Ditetapkan: {{ $p->tanggal_penetapan->translatedFormat('d F Y') }}
+                                    <span class="doc-date-chip text-muted small">
+                                        <i class="bi bi-calendar3 me-1.5 text-muted"></i> Penetapan: {{ $p->tanggal_penetapan->translatedFormat('d F Y') }}
                                     </span>
                                 @endif
                             </div>
@@ -195,35 +349,35 @@
                             </h5>
 
                             <!-- Meta Chips -->
-                            <div class="doc-meta-chips mb-2">
+                            <div class="doc-meta-chips mb-2.5">
                                 <span class="doc-meta-chip">
-                                    <i class="bi bi-file-earmark-text text-primary"></i>
+                                    <i class="bi bi-file-earmark-text text-muted me-1"></i>
                                     <span>{{ $p->jenisPeraturan->nama ?? 'Peraturan' }} <strong>Nomor {{ $p->nomor_peraturan ?: '-' }}</strong></span>
                                 </span>
                                 <span class="doc-meta-chip">
-                                    <i class="bi bi-calendar3 text-warning"></i>
+                                    <i class="bi bi-calendar-event text-muted me-1"></i>
                                     <span>Tahun: <strong>{{ $p->tahun ?: '-' }}</strong></span>
                                 </span>
                                 <span class="doc-meta-chip">
-                                    <i class="bi bi-building text-secondary"></i>
+                                    <i class="bi bi-building text-muted me-1"></i>
                                     <span>Pemrakarsa: <strong>{{ $p->teu_badan ?: 'Pemerintah Kabupaten Toba' }}</strong></span>
                                 </span>
                             </div>
 
                             <!-- Snippet -->
-                            <p class="doc-snippet-text">
+                            <p class="doc-snippet-text mb-3">
                                 {{ Str::limit(strip_tags($p->abstrak ?: $p->subjek), 220) ?: 'Dokumen resmi perundang-undangan Pemerintah Kabupaten Toba.' }}
                             </p>
 
                             <!-- Footer: Stats + Buttons -->
                             <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 pt-3 border-top">
                                 <div class="d-flex align-items-center gap-3 text-muted small">
-                                    <span title="Dilihat"><i class="bi bi-eye-fill me-1 text-primary"></i> {{ number_format($p->view_count, 0, ',', '.') }}x dilihat</span>
-                                    <span title="Diunduh"><i class="bi bi-download me-1 text-success"></i> {{ number_format($p->download_count ?? 0, 0, ',', '.') }}x diunduh</span>
+                                    <span title="Dilihat"><i class="bi bi-eye me-1 text-muted"></i> {{ number_format($p->view_count, 0, ',', '.') }}x dilihat</span>
+                                    <span title="Diunduh"><i class="bi bi-download me-1 text-muted"></i> {{ number_format($p->download_count ?? 0, 0, ',', '.') }}x diunduh</span>
                                 </div>
                                 <div class="d-flex align-items-center gap-2">
                                     <a href="{{ route('user.produk-hukum.detail', $p->id) }}" class="btn-doc-detail">
-                                        <i class="bi bi-info-circle me-1"></i> Rincian
+                                        <i class="bi bi-info-circle text-muted"></i> Rincian
                                     </a>
                                     @if(!empty($p->file_dokumen))
                                         <button type="button" class="btn-doc-preview" 
@@ -232,11 +386,11 @@
                                             data-pdf-url="{{ route('user.produk-hukum.preview', $p->id) }}" 
                                             data-pdf-title="{{ $p->judul }}"
                                             data-pdf-download="{{ route('user.produk-hukum.download', $p->id) }}">
-                                            <i class="bi bi-file-earmark-pdf text-danger"></i> Pratinjau
+                                            <i class="bi bi-eye text-muted"></i> Pratinjau
                                         </button>
                                     @endif
                                     <a href="{{ route('user.produk-hukum.download', $p->id) }}" class="btn-doc-download">
-                                        <i class="bi bi-download"></i> Unduh PDF
+                                        <i class="bi bi-download text-white-50"></i> Unduh PDF
                                     </a>
                                 </div>
                             </div>
@@ -245,7 +399,7 @@
                 </div>
 
                 <!-- Pagination -->
-                <div class="mt-4 d-flex justify-content-center">
+                <div class="mt-4 d-flex justify-content-end">
                     {{ $peraturans->links() }}
                 </div>
             @else

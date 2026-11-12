@@ -1,10 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'Sejarah JDIH - JDIH Kabupaten Toba')
+@section('title', 'Sejarah & Transformasi - JDIH Kabupaten Toba')
 
 @section('content')
 
-<!-- TOP CURVED BANNER -->
+<!-- ============================================================
+     EXECUTIVE HEADER BANNER
+     ============================================================ -->
 <div class="page-header-banner">
     <div class="container">
         <nav aria-label="breadcrumb">
@@ -14,171 +16,226 @@
                 <li class="breadcrumb-item active">Sejarah JDIH</li>
             </ol>
         </nav>
-        <h1 class="h3 fw-bold mb-1 text-white">Sejarah JDIH Kabupaten Toba</h1>
-        <p class="text-white-50 small mb-0">Perjalanan pembentukan, landasan regulasi, dan transformasi digital jaringan dokumentasi hukum daerah</p>
+        <div>
+            <h1 class="h3 fw-bold mb-1 text-white">
+                Sejarah &amp; Transformasi <span class="text-gold">JDIH Kabupaten Toba</span>
+            </h1>
+            <p class="text-white-50 small mb-0">Menelusuri jejak pembentukan, evolusi regulasi, dan transformasi digital keterbukaan hukum di Kabupaten Toba</p>
+        </div>
     </div>
 </div>
 
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-10 col-xl-9">
-            <div class="profile-executive-card p-4 p-md-5 mb-4">
-                <!-- DUAL CREST & OFFICIAL HEADER -->
-                <div class="text-center mb-5">
-                    <div class="profile-crest-capsule mb-3">
-                        <div class="profile-crest-item">
-                            <img src="{{ asset('logo.png') }}" alt="Logo Pemkab Toba" class="profile-crest-logo">
-                            <div class="profile-crest-name">
-                                PEMKAB TOBA
-                                <small>Sumatera Utara</small>
-                            </div>
-                        </div>
-                        <div class="profile-crest-divider"></div>
-                        <div class="profile-crest-item">
-                            <img src="{{ asset('logo-jdihn-circle.png') }}" alt="Logo JDIHN" class="profile-crest-logo">
-                            <div class="profile-crest-name">
-                                JDIHN NASIONAL
-                                <small>BPHN Kemenkumham RI</small>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-3 py-1.5 small fw-bold mb-2">
-                            <i class="bi bi-shield-check text-gold me-1"></i> DOKUMENTASI HUKUM RESMI PEMERINTAH KABUPATEN TOBA
-                        </span>
-                        <h2 class="h4 fw-bold text-dark mt-2 mb-1" style="letter-spacing: -0.3px;">
-                            Jaringan Dokumentasi dan Informasi Hukum
-                        </h2>
-                        <p class="text-muted small mb-0">
-                            Bagian Hukum Sekretariat Daerah Pemerintah Kabupaten Toba
-                        </p>
-                    </div>
+<div class="container py-4">
+    <!-- ============================================================
+         VERTICAL INTERACTIVE CHRONOLOGY TIMELINE
+         ============================================================ -->
+    <div class="sejarah-timeline-container">
+        <div class="sejarah-section-header">
+            <h3 class="sejarah-section-title">
+                Linimasa Perjalanan <span class="text-gold">&amp; Transformasi</span>
+            </h3>
+            <p class="sejarah-section-sub">
+                Rekam jejak tahapan perkembangan pengelolaan regulasi dari arsip konvensional menuju portal digital hukum terpadu
+            </p>
+        </div>
+
+        <div class="sejarah-timeline">
+            <!-- TIMELINE 1: 2012 -->
+            <div class="sejarah-timeline-item">
+                <div class="sejarah-timeline-node">
+                    <i class="bi bi-bank2"></i>
                 </div>
-
-                <!-- LEAD CALLOUT / EXECUTIVE QUOTE -->
-                <div class="profile-lead-callout mb-4">
-                    <div class="profile-lead-icon">
-                        <i class="bi bi-quote"></i>
+                <div class="sejarah-timeline-card">
+                    <div class="sejarah-badge-row">
+                        <span class="sejarah-year-chip">2012</span>
+                        <span class="sejarah-phase-pill">Fase Fondasi &amp; Pembentukan</span>
                     </div>
-                    <div>
-                        <span class="profile-lead-badge">Amanat Regulasi Nasional</span>
-                        <div class="profile-lead-text">
-                            Jaringan Dokumentasi dan Informasi Hukum (JDIH) Kabupaten Toba dibentuk berdasarkan amanat <strong>Peraturan Presiden Nomor 33 Tahun 2012</strong> tentang Jaringan Dokumentasi dan Informasi Hukum Nasional sebagai pusat rujukan regulasi daerah yang tertib, terpadu, dan berkesinambungan guna menjamin kepastian hukum bagi seluruh elemen masyarakat.
-                        </div>
-                    </div>
+                    <h4 class="sejarah-card-heading">Lahirnya Landasan Jaringan Dokumentasi Hukum Nasional</h4>
+                    <p class="sejarah-card-desc">
+                        Diterbitkannya Peraturan Presiden Nomor 33 Tahun 2012 tentang JDIHN menjadi dasar hukum pembentukan simpul jaringan dokumentasi hukum terintegrasi di seluruh Indonesia. Pemerintah Kabupaten Toba mengawali penataan naskah hukum daerah secara terpusat di bawah koordinasi Bagian Hukum Setdakab Toba.
+                    </p>
+                    <ul class="sejarah-key-points">
+                        <li class="sejarah-key-point"><i class="bi bi-check-circle-fill"></i> Pembentukan simpul jaringan dokumentasi hukum daerah</li>
+                        <li class="sejarah-key-point"><i class="bi bi-check-circle-fill"></i> Inventarisasi berkas lembaran peraturan daerah</li>
+                        <li class="sejarah-key-point"><i class="bi bi-check-circle-fill"></i> Penetapan standar kodifikasi naskah hukum resmi</li>
+                    </ul>
                 </div>
+            </div>
 
-                <!-- STRUCTURED STORY TILES -->
-                <div class="mb-4">
-                    <!-- TILE 1: PEMBENTUKAN -->
-                    <div class="profile-story-tile">
-                        <div class="profile-story-header">
-                            <div class="profile-story-icon-box icon-navy">
-                                <i class="bi bi-bank2"></i>
-                            </div>
-                            <h3 class="profile-story-title">Latar Belakang &amp; Pembentukan</h3>
-                        </div>
-                        <p class="profile-story-body">
-                            Keberadaan JDIH Kabupaten Toba lahir dari kebutuhan mendasar akan pengelolaan dokumentasi produk hukum daerah yang profesional, otentik, dan mudah diakses. Sebagai tindak lanjut penetapan Perpres No. 33 Tahun 2012, Pemerintah Kabupaten Toba membangun wadah terpusat dokumentasi hukum guna memastikan seluruh naskah peraturan tersimpan secara rapi, memiliki kepastian hukum, dan terlindungi integritas informasinya.
-                        </p>
-                    </div>
-
-                    <!-- TILE 2: TATA KELOLA & DIGITALISASI -->
-                    <div class="profile-story-tile">
-                        <div class="profile-story-header">
-                            <div class="profile-story-icon-box icon-gold">
-                                <i class="bi bi-file-earmark-lock2-fill"></i>
-                            </div>
-                            <h3 class="profile-story-title">Komitmen Tata Kelola &amp; Transparansi Publik</h3>
-                        </div>
-                        <p class="profile-story-body">
-                            Pemerintah Kabupaten Toba melalui <strong>Bagian Hukum Sekretariat Daerah</strong> terus berkomitmen meningkatkan tata kelola dokumentasi peraturan perundang-undangan—mulai dari <strong>Peraturan Daerah (PERDA)</strong>, <strong>Peraturan Bupati (PERBUP)</strong>, hingga <strong>Keputusan Bupati (KEPBUP)</strong>. Digitalisasi menyeluruh dihadirkan agar setiap regulasi dapat diakses secara terbuka, akuntabel, dan cepat tanpa hambatan jarak maupun batasan waktu.
-                        </p>
-                    </div>
-
-                    <!-- TILE 3: INTEGRASI SATU DATA -->
-                    <div class="profile-story-tile">
-                        <div class="profile-story-header">
-                            <div class="profile-story-icon-box icon-teal">
-                                <i class="bi bi-diagram-3-fill"></i>
-                            </div>
-                            <h3 class="profile-story-title">Transformasi Digital &amp; Integrasi Satu Data JDIHN</h3>
-                        </div>
-                        <p class="profile-story-body">
-                            Seiring laju transformasi digital tata kelola pemerintahan berbasis elektronik (SPBE), portal JDIH Kabupaten Toba telah <strong>terintegrasi secara penuh dengan portal JDIHN Nasional</strong> yang dikelola oleh <strong>Badan Pembinaan Hukum Nasional (BPHN) Kementerian Hukum Republik Indonesia</strong>. Integrasi melalui pertukaran data API v2.0 memastikan standardisasi metadata naskah hukum, validitas data terverifikasi, serta kepastian hukum yang kokoh bagi publik.
-                        </p>
-                    </div>
+            <!-- TIMELINE 2: 2016-2020 -->
+            <div class="sejarah-timeline-item">
+                <div class="sejarah-timeline-node">
+                    <i class="bi bi-file-earmark-lock2-fill"></i>
                 </div>
-
-                <!-- THREE FEATURE PILLARS -->
-                <div class="row g-3 pt-3 mb-4 border-top">
-                    <div class="col-md-4">
-                        <div class="profile-pillar-card">
-                            <div class="profile-pillar-icon-pedestal pedestal-blue">
-                                <i class="bi bi-shield-check"></i>
-                            </div>
-                            <h4 class="profile-pillar-title">Legalitas Sah</h4>
-                            <p class="profile-pillar-text">
-                                Berlandaskan Perpres No. 33 Tahun 2012 dan Peraturan Bupati tentang Pengelolaan JDIH Kabupaten Toba.
-                            </p>
-                            <span class="profile-pillar-badge badge-pillar-blue">
-                                <i class="bi bi-check2-circle"></i> Payung Hukum Sah
-                            </span>
-                        </div>
+                <div class="sejarah-timeline-card">
+                    <div class="sejarah-badge-row">
+                        <span class="sejarah-year-chip">2016 &ndash; 2020</span>
+                        <span class="sejarah-phase-pill">Fase Standardisasi &amp; Arsip Digital</span>
                     </div>
-                    <div class="col-md-4">
-                        <div class="profile-pillar-card">
-                            <div class="profile-pillar-icon-pedestal pedestal-amber">
-                                <i class="bi bi-cloud-arrow-up-fill"></i>
-                            </div>
-                            <h4 class="profile-pillar-title">Terintegrasi Nasional</h4>
-                            <p class="profile-pillar-text">
-                                Terkoneksi secara otomatis via API v2.0 ke basis data JDIHN Badan Pembinaan Hukum Nasional RI.
-                            </p>
-                            <span class="profile-pillar-badge badge-pillar-amber">
-                                <i class="bi bi-cpu"></i> Satu Data JDIHN
-                            </span>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="profile-pillar-card">
-                            <div class="profile-pillar-icon-pedestal pedestal-emerald">
-                                <i class="bi bi-globe2"></i>
-                            </div>
-                            <h4 class="profile-pillar-title">Akses Terbuka</h4>
-                            <p class="profile-pillar-text">
-                                Pelayanan informasi regulasi daerah dan unduh naskah digital publik aktif 24/7 tanpa dipungut biaya.
-                            </p>
-                            <span class="profile-pillar-badge badge-pillar-emerald">
-                                <i class="bi bi-unlock-fill"></i> Layanan 24/7 Gratis
-                            </span>
-                        </div>
-                    </div>
+                    <h4 class="sejarah-card-heading">Modernisasi Kearsipan &amp; Digitalisasi Naskah Hukum</h4>
+                    <p class="sejarah-card-desc">
+                        Menjawab tuntutan keterbukaan informasi publik dan akuntabilitas tata kelola pemerintahan, Bagian Hukum Setdakab Toba mengalihkan penyimpanan arsip lembaran cetak ke format digital beresolusi tinggi, merapikan klasifikasi Peraturan Daerah (PERDA), Peraturan Bupati (PERBUP), dan Keputusan Bupati (KEPBUP).
+                    </p>
+                    <ul class="sejarah-key-points">
+                        <li class="sejarah-key-point"><i class="bi bi-check-circle-fill"></i> Digitalisasi naskah hukum ke format PDF terverifikasi</li>
+                        <li class="sejarah-key-point"><i class="bi bi-check-circle-fill"></i> Penerapan SOP uji keabsahan &amp; status keberlakuan regulasi</li>
+                        <li class="sejarah-key-point"><i class="bi bi-check-circle-fill"></i> Rintisan layanan penyebarluasan informasi hukum bagi masyarakat</li>
+                    </ul>
                 </div>
+            </div>
 
-                <!-- QUICK NAVIGATION PILL FOOTER -->
-                <div class="profile-quick-nav">
-                    <div class="d-flex align-items-center gap-2">
-                        <i class="bi bi-compass text-gold fs-5"></i>
-                        <span class="small fw-bold text-dark">Informasi Profil Lainnya:</span>
-                    </div>
-                    <div class="d-flex align-items-center gap-2 flex-wrap">
-                        <a href="{{ route('visi') }}" class="profile-nav-pill-btn">
-                            <i class="bi bi-eye-fill text-primary"></i> Visi &amp; Misi
-                        </a>
-                        <a href="{{ route('struktur') }}" class="profile-nav-pill-btn">
-                            <i class="bi bi-diagram-3-fill text-warning"></i> Struktur Organisasi
-                        </a>
-                        <a href="{{ route('kontak') }}" class="profile-nav-pill-btn">
-                            <i class="bi bi-telephone-fill text-success"></i> Kontak &amp; Lokasi
-                        </a>
-                        <a href="{{ route('user.produk-hukum.jenis', 'peraturan-daerah') }}" class="profile-nav-pill-btn">
-                            <i class="bi bi-collection-fill text-secondary"></i> Produk Hukum
-                        </a>
-                    </div>
+            <!-- TIMELINE 3: 2021-2024 -->
+            <div class="sejarah-timeline-item">
+                <div class="sejarah-timeline-node">
+                    <i class="bi bi-diagram-3-fill"></i>
                 </div>
+                <div class="sejarah-timeline-card">
+                    <div class="sejarah-badge-row">
+                        <span class="sejarah-year-chip">2021 &ndash; 2024</span>
+                        <span class="sejarah-phase-pill">Fase Integrasi Satu Data JDIHN</span>
+                    </div>
+                    <h4 class="sejarah-card-heading">Integrasi Penuh API v2.0 ke BPHN Kementerian Hukum RI</h4>
+                    <p class="sejarah-card-desc">
+                        Portal JDIH Kabupaten Toba terhubung secara otomatis ke sistem basis data JDIHN Nasional (jdihn.go.id) di bawah Badan Pembinaan Hukum Nasional (BPHN). Standardisasi metadata nasional dan validasi otomatis memastikan keterpaduan naskah regulasi Kabupaten Toba dalam satu data hukum Indonesia.
+                    </p>
+                    <ul class="sejarah-key-points">
+                        <li class="sejarah-key-point"><i class="bi bi-check-circle-fill"></i> Pertukaran data otomatis API v2.0 nasional secara real-time</li>
+                        <li class="sejarah-key-point"><i class="bi bi-check-circle-fill"></i> Pratinjau digital interaktif (Instant PDF Preview)</li>
+                        <li class="sejarah-key-point"><i class="bi bi-check-circle-fill"></i> Standardisasi metadata TEU Badan, Subjek, dan Sumber Hukum</li>
+                    </ul>
+                </div>
+            </div>
 
+            <!-- TIMELINE 4: MENUJU 2030 -->
+            <div class="sejarah-timeline-item">
+                <div class="sejarah-timeline-node">
+                    <i class="bi bi-rocket-takeoff-fill"></i>
+                </div>
+                <div class="sejarah-timeline-card">
+                    <div class="sejarah-badge-row">
+                        <span class="sejarah-year-chip">Visi 2030</span>
+                        <span class="sejarah-phase-pill">Fase Transformasi Ekosistem Cerdas</span>
+                    </div>
+                    <h4 class="sejarah-card-heading">Mewujudkan Ekosistem Regulasi Toba Mantap 2030</h4>
+                    <p class="sejarah-card-desc">
+                        Menghadirkan portal dokumentasi hukum cerdas berbasis *Citizen-Centric UI/UX* dengan pencarian pintar, tata kelola ramah disabilitas, dan keterhubungan layanan publik multi-kanal guna menyukseskan visi Pemerintah Kabupaten Toba menuju kepastian hukum yang adil dan berkeadaban.
+                    </p>
+                    <ul class="sejarah-key-points">
+                        <li class="sejarah-key-point"><i class="bi bi-check-circle-fill"></i> Antarmuka modern, cepat, dan responsif lintas perangkat</li>
+                        <li class="sejarah-key-point"><i class="bi bi-check-circle-fill"></i> Konsultasi dan bantuan informasi regulasi terintegrasi</li>
+                        <li class="sejarah-key-point"><i class="bi bi-check-circle-fill"></i> Menopang fondasi hukum terpercaya Menuju Toba Mantap 2030</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         LEGAL FOUNDATION FRAMEWORK (3-COLUMN CARDS)
+         ============================================================ -->
+    <div class="mb-5">
+        <div class="sejarah-section-header">
+            <h3 class="sejarah-section-title">
+                Landasan Yuridis <span class="text-gold">&amp; Payung Hukum</span>
+            </h3>
+            <p class="sejarah-section-sub">
+                Regulasi resmi yang mendasari eksistensi, tata kelola, dan operasional JDIH Kabupaten Toba
+            </p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6">
+                <div class="sejarah-framework-card">
+                    <div class="sejarah-framework-icon">
+                        <i class="bi bi-shield-check"></i>
+                    </div>
+                    <div class="sejarah-framework-sub">Regulasi Tingkat Nasional</div>
+                    <h4 class="sejarah-framework-title">Perpres No. 33 Tahun 2012</h4>
+                    <p class="sejarah-framework-text">
+                        Tentang Jaringan Dokumentasi dan Informasi Hukum Nasional sebagai payung hukum utama integrasi basis data regulasi antar lembaga pemerintah di Indonesia.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="sejarah-framework-card">
+                    <div class="sejarah-framework-icon">
+                        <i class="bi bi-journal-check"></i>
+                    </div>
+                    <div class="sejarah-framework-sub">Standar Pengelolaan Teknis</div>
+                    <h4 class="sejarah-framework-title">Permenkumham No. 8 Tahun 2019</h4>
+                    <p class="sejarah-framework-text">
+                        Pedoman standar pengelolaan naskah, verifikasi otentisitas, standardisasi format metadata, serta pengoperasian sistem informasi hukum daerah.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-12">
+                <div class="sejarah-framework-card">
+                    <div class="sejarah-framework-icon">
+                        <i class="bi bi-building-check"></i>
+                    </div>
+                    <div class="sejarah-framework-sub">Pemerintah Kabupaten Toba</div>
+                    <h4 class="sejarah-framework-title">Regulasi Kelembagaan Daerah</h4>
+                    <p class="sejarah-framework-text">
+                        Peraturan Bupati dan Keputusan Bupati Toba yang menetapkan Bagian Hukum Sekretariat Daerah sebagai pengelola tunggal simpul jaringan JDIH Kabupaten Toba.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         PORTAL DISCOVERY HUB (CLEAN SPACIOUS NAVIGATION)
+         ============================================================ -->
+    <div class="mb-4">
+        <div class="sejarah-section-header mb-4">
+            <h4 class="sejarah-section-title" style="font-size: 1.25rem;">
+                Eksplorasi Informasi <span class="text-gold">Terkait</span>
+            </h4>
+            <p class="sejarah-section-sub">
+                Kenali lebih dekat landasan strategis, susunan kelembagaan, dan koleksi regulasi Pemerintah Kabupaten Toba
+            </p>
+        </div>
+
+        <div class="row g-3">
+            <div class="col-lg-4 col-md-6">
+                <a href="{{ route('visi') }}" class="sejarah-hub-card">
+                    <div class="sejarah-hub-icon">
+                        <i class="bi bi-compass-fill"></i>
+                    </div>
+                    <div class="sejarah-hub-info">
+                        <div class="sejarah-hub-title">Visi &amp; Misi Daerah</div>
+                        <p class="sejarah-hub-desc">Arah kebijakan strategis Kabupaten Toba</p>
+                    </div>
+                    <i class="bi bi-arrow-right sejarah-hub-arrow"></i>
+                </a>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <a href="{{ route('struktur') }}" class="sejarah-hub-card">
+                    <div class="sejarah-hub-icon">
+                        <i class="bi bi-diagram-3-fill"></i>
+                    </div>
+                    <div class="sejarah-hub-info">
+                        <div class="sejarah-hub-title">Struktur Organisasi</div>
+                        <p class="sejarah-hub-desc">Bagan tim pengelola JDIH Setdakab Toba</p>
+                    </div>
+                    <i class="bi bi-arrow-right sejarah-hub-arrow"></i>
+                </a>
+            </div>
+
+            <div class="col-lg-4 col-md-12">
+                <a href="{{ route('user.produk-hukum.global') }}" class="sejarah-hub-card">
+                    <div class="sejarah-hub-icon">
+                        <i class="bi bi-folder2-open"></i>
+                    </div>
+                    <div class="sejarah-hub-info">
+                        <div class="sejarah-hub-title">Katalog Produk Hukum</div>
+                        <p class="sejarah-hub-desc">Akses ribuan naskah regulasi resmi daerah</p>
+                    </div>
+                    <i class="bi bi-arrow-right sejarah-hub-arrow"></i>
+                </a>
             </div>
         </div>
     </div>

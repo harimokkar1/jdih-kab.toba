@@ -59,15 +59,12 @@ class VisitorService
         // Total
         $totalPengunjung = Visitor::count();
 
-        // Base visual counter agar tampilan portal resmi instansi tidak tampak kosong saat baru di-deploy
-        $baseOffset = 1250;
-
         return [
-            'online' => max(1, $online),
-            'hari_ini' => $hariIni + 42,
-            'kemarin' => $kemarin + 128,
-            'minggu_ini' => $mingguIni + 685,
-            'total' => $totalPengunjung + $baseOffset,
+            'online' => $online > 0 ? $online : 1,
+            'hari_ini' => $hariIni,
+            'kemarin' => $kemarin,
+            'minggu_ini' => $mingguIni,
+            'total' => $totalPengunjung,
         ];
     }
 }

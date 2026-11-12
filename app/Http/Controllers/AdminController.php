@@ -11,6 +11,7 @@ use App\Models\StrukturOrganisasi;
 use App\Models\User;
 use App\Models\Visitor;
 use App\Services\VisitorService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -33,11 +34,69 @@ class AdminController extends Controller
         // Kunjungan
         $visitorStats = $visitorService->getStats();
 
-        // Data Terbaru
-        $peraturanTerbaru = Peraturan::with('jenisPeraturan')->latest()->take(5)->get();
-        $beritaTerbaru = Berita::latest()->take(5)->get();
+        // Status Peraturan
+        $totalBerlaku = Peraturan::where('status', 'BERLAKU')->count();
+        $totalTidakBerlaku = Peraturan::where('status', '!=', 'BERLAKU')->count();
+        $rasioBerlaku = $totalPeraturan > 0 ? round(($totalBerlaku / $totalPeraturan) * 100) : 100;
+
+        // Salam dinamis waktu Indonesia Barat (WIB / Asia/Jakarta)
+        $nowWib = Carbon::now('Asia/Jakarta');
+        $hour = (int) $nowWib->format('H');
+        if ($hour >= 4 && $hour < 11) {
+            $greeting = 'Selamat Pagi';
+        } elseif ($hour >= 11 && $hour < 15) {
+            $greeting = 'Selamat Siang';
+        } elseif ($hour >= 15 && $hour < 18) {
+            $greeting = 'Selamat Sore';
+        } else {
+            $greeting = 'Selamat Malam';
+        }
+        $formattedTimeWib = $nowWib->format('H:i') . ' WIB';
+
+        // Sebaran Kategori Regulasi Terbanyak
+        $jenisDistribution = JenisPeraturan::withCount('peraturans')
+            ->orderBy('peraturans_count', 'desc')
+            ->take(6)
+            ->get();
+
+        // Ringkasan Kategori Teratas Dinamis
+        $topJenisSummary = $jenisDistribution->pluck('singkatan')->filter()->take(3)->implode(', ');
+        if (!$topJenisSummary) {
+            $topJenisSummary = $jenisDistribution->pluck('nama')->take(2)->implode(', ');
+        }
+
+        // Data Grafik Kunjungan 7 Hari Terakhir (Real dari Database Visitor)
+        $chartDays = [];
+        $chartVisitors = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $d = Carbon::today()->subDays($i);
+            $chartDays[] = $d->translatedFormat('d M');
+            $chartVisitors[] = Visitor::whereDate('visited_date', $d->toDateString())->count();
+        }
+
+        $avgVisitors = count($chartVisitors) > 0 ? round(array_sum($chartVisitors) / count($chartVisitors)) : 0;
+        $maxVisitorVal = count($chartVisitors) > 0 ? max($chartVisitors) : 0;
+        $maxVisitorDay = $chartDays[array_search($maxVisitorVal, $chartVisitors)] ?? '-';
+
+        // Statistik Perangkat Pengunjung (Real dari Database Visitor)
+        $totalVisitorRecords = Visitor::count();
+        $mobileVisitors = Visitor::where(function ($q) {
+            $q->where('user_agent', 'LIKE', '%Mobile%')
+              ->orWhere('user_agent', 'LIKE', '%Android%')
+              ->orWhere('user_agent', 'LIKE', '%iPhone%')
+              ->orWhere('user_agent', 'LIKE', '%iPad%');
+        })->count();
+        $desktopVisitors = max(0, $totalVisitorRecords - $mobileVisitors);
+        $mobilePct = $totalVisitorRecords > 0 ? round(($mobileVisitors / $totalVisitorRecords) * 100, 1) : 0;
+        $desktopPct = $totalVisitorRecords > 0 ? round(100 - $mobilePct, 1) : 100;
+
+        // Data Grafik Kategori Regulasi
+        $chartCatLabels = $jenisDistribution->pluck('nama')->toArray();
+        $chartCatCounts = $jenisDistribution->pluck('peraturans_count')->toArray();
 
         return view('admin.dashboard', compact(
+            'greeting',
+            'formattedTimeWib',
             'totalJenis',
             'totalPeraturan',
             'totalBerita',
@@ -45,9 +104,24 @@ class AdminController extends Controller
             'totalStruktur',
             'totalCarousel',
             'totalAdmin',
+            'totalBerlaku',
+            'totalTidakBerlaku',
+            'rasioBerlaku',
+            'jenisDistribution',
             'visitorStats',
-            'peraturanTerbaru',
-            'beritaTerbaru'
+            'chartDays',
+            'chartVisitors',
+            'avgVisitors',
+            'maxVisitorVal',
+            'maxVisitorDay',
+            'chartCatLabels',
+            'chartCatCounts',
+            'topJenisSummary',
+            'totalVisitorRecords',
+            'mobileVisitors',
+            'desktopVisitors',
+            'mobilePct',
+            'desktopPct'
         ));
     }
 
@@ -57,7 +131,14 @@ class AdminController extends Controller
     public function superAdmin()
     {
         $admins = User::latest()->get();
-        return view('super-admin.dashboard', compact('admins'));
+        $totalSuperAdmin = User::where('role', 'super_admin')->count();
+        $totalRegularAdmin = User::where('role', '!=', 'super_admin')->count();
+
+        return view('super-admin.dashboard', compact(
+            'admins',
+            'totalSuperAdmin',
+            'totalRegularAdmin'
+        ));
     }
 
     /**

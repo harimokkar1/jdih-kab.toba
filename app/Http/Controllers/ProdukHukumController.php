@@ -27,25 +27,56 @@ class ProdukHukumController extends Controller
             ->orderBy('urutan')
             ->get();
 
-        $query = Peraturan::with('jenisPeraturan')->latest();
+        $query = Peraturan::with('jenisPeraturan');
 
+        // Pencarian Teks / Judul
         if ($request->filled('search')) {
             $query->search($request->search);
+        } elseif ($request->filled('judul')) {
+            $query->where('judul', 'like', '%' . $request->judul . '%');
+        } elseif ($request->filled('q')) {
+            $query->search($request->q);
         }
 
+        // Filter Instansi / Pemrakarsa (teu_badan)
+        if ($request->filled('instansi')) {
+            $query->where('teu_badan', 'like', '%' . $request->instansi . '%');
+        }
+
+        // Filter Jenis Peraturan (mendukung jenis_id atau jenis_peraturan_id)
         if ($request->filled('jenis_id')) {
             $query->where('jenis_peraturan_id', $request->jenis_id);
+        } elseif ($request->filled('jenis_peraturan_id')) {
+            $query->where('jenis_peraturan_id', $request->jenis_peraturan_id);
         }
 
+        // Filter Nomor Peraturan
+        if ($request->filled('nomor_peraturan')) {
+            $query->where('nomor_peraturan', 'like', '%' . $request->nomor_peraturan . '%');
+        }
+
+        // Filter Tahun
         if ($request->filled('tahun')) {
             $query->where('tahun', $request->tahun);
         }
 
+        // Filter Status Keberlakuan
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
 
-        $peraturans = $query->paginate(12)->withQueryString();
+        // Pengurutan (Sorting)
+        $sort = $request->get('sort', 'terbaru');
+        if ($sort === 'terlama') {
+            $query->orderBy('tanggal_penetapan', 'asc')->orderBy('tahun', 'asc')->orderBy('created_at', 'asc');
+        } elseif ($sort === 'populer') {
+            $query->orderByDesc('view_count')->orderByDesc('download_count');
+        } else {
+            $query->orderByDesc('tanggal_penetapan')->orderByDesc('tahun')->orderByDesc('created_at');
+        }
+
+        $peraturans = $query->paginate(10)->withQueryString();
+        $totalPeraturans = Peraturan::count();
 
         $tahunList = Peraturan::whereNotNull('tahun')
             ->distinct()
@@ -55,7 +86,9 @@ class ProdukHukumController extends Controller
         return view('user.produk-hukum-global', compact(
             'jenisPeraturans',
             'peraturans',
-            'tahunList'
+            'tahunList',
+            'totalPeraturans',
+            'sort'
         ));
     }
 
@@ -147,7 +180,9 @@ class ProdukHukumController extends Controller
             return response()->file($fullPath, [
                 'Content-Type' => $mime,
                 'Content-Disposition' => 'inline; filename="' . basename($fullPath) . '"',
-                'Cache-Control' => 'no-cache, private'
+                'Accept-Ranges' => 'bytes',
+                'Access-Control-Allow-Origin' => '*',
+                'Cache-Control' => 'public, max-age=3600'
             ]);
         }
 

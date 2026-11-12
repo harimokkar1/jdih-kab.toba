@@ -10,7 +10,9 @@
     $tingkatKeys = $grouped->keys()->sort()->values();
 @endphp
 
-<!-- TOP CURVED BANNER -->
+<!-- ============================================================
+     EXECUTIVE HEADER BANNER
+     ============================================================ -->
 <div class="page-header-banner">
     <div class="container">
         <nav aria-label="breadcrumb">
@@ -20,178 +22,172 @@
                 <li class="breadcrumb-item active">Struktur Organisasi</li>
             </ol>
         </nav>
-        <h1 class="h3 fw-bold mb-1 text-white">Struktur Organisasi Pengelola JDIH</h1>
-        <p class="text-white-50 small mb-0">Bagan kelembagaan dan susunan tim pengelola Jaringan Dokumentasi dan Informasi Hukum Kabupaten Toba</p>
+        <div>
+            <h1 class="h3 fw-bold mb-1 text-white">
+                Struktur Organisasi <span class="text-gold">Pengelola JDIH</span>
+            </h1>
+            <p class="text-white-50 small mb-0">Bagan kelembagaan dan susunan tim pengelola Jaringan Dokumentasi dan Informasi Hukum Kabupaten Toba</p>
+        </div>
     </div>
 </div>
 
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-11 col-xl-10">
-            <div class="profile-executive-card p-4 p-md-5 mb-4">
-                
-                <!-- DUAL CREST & OFFICIAL HEADER -->
-                <div class="text-center mb-5">
-                    <div class="profile-crest-capsule mb-3">
-                        <div class="profile-crest-item">
-                            <img src="{{ asset('logo.png') }}" alt="Logo Pemkab Toba" class="profile-crest-logo">
-                            <div class="profile-crest-name">
-                                PEMKAB TOBA
-                                <small>Sumatera Utara</small>
-                            </div>
-                        </div>
-                        <div class="profile-crest-divider"></div>
-                        <div class="profile-crest-item">
-                            <img src="{{ asset('logo-jdihn-circle.png') }}" alt="Logo JDIHN" class="profile-crest-logo">
-                            <div class="profile-crest-name">
-                                JDIHN NASIONAL
-                                <small>BPHN Kemenkumham RI</small>
-                            </div>
-                        </div>
-                    </div>
+<div class="container py-4">
+    <!-- ============================================================
+         HIERARCHICAL ORG TIERS
+         ============================================================ -->
+    <div class="mb-5">
+        <div class="sejarah-section-header text-start mb-4">
+            <h3 class="sejarah-section-title">
+                Bagan Hierarki <span class="text-gold">Tim JDIH</span>
+            </h3>
+            <p class="sejarah-section-sub mx-0">
+                Susunan struktural dan fungsional pejabat serta operator pengelola dokumentasi informasi hukum Pemerintah Kabupaten Toba
+            </p>
+        </div>
+
+        @if($items->count() > 0)
+            @foreach($tingkatKeys as $tingkatIndex => $tingkat)
+                @php
+                    $members = $grouped->get($tingkat);
                     
-                    <div>
-                        <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-3 py-1.5 small fw-bold mb-2">
-                            <i class="bi bi-diagram-3-fill text-gold me-1"></i> TATA KELOLA &amp; KELEMBAGAAN JDIH
-                        </span>
-                        <h2 class="h4 fw-bold text-dark mt-2 mb-1" style="letter-spacing: -0.3px;">
-                            Bagan Susunan Tim Pengelola JDIH
-                        </h2>
-                        <p class="text-muted small mb-0">
-                            Bagian Hukum Sekretariat Daerah Pemerintah Kabupaten Toba
-                        </p>
-                    </div>
-                </div>
+                    // Konfigurasi per tingkat hierarki
+                    if ($tingkat == 1) {
+                        $tierBadge = 'tier-gold';
+                        $tierPillText = 'Pimpinan Utama & Penanggung Jawab';
+                        $tierHeading = 'Pembina & Pengarah Kelembagaan';
+                        $tierSubtitle = 'Menetapkan arah kebijakan strategis dan pengawasan umum penyelenggaraan JDIH';
+                        $cardClass = 'card-leader';
+                        $roleClass = 'role-gold';
+                        $iconRole = 'bi-patch-check-fill';
+                    } elseif ($tingkat == 2) {
+                        $tierBadge = 'tier-navy';
+                        $tierPillText = 'Koordinator & Pengawas Teknis';
+                        $tierHeading = 'Sub Koordinator / Verifikator Hukum';
+                        $tierSubtitle = 'Mengkoordinasikan verifikasi yuridis naskah dan validasi keabsahan dokumen hukum daerah';
+                        $cardClass = 'card-subleader';
+                        $roleClass = 'role-navy';
+                        $iconRole = 'bi-shield-check';
+                    } else {
+                        $tierBadge = 'tier-slate';
+                        $tierPillText = 'Tim Pelaksana & Pengelola Data';
+                        $tierHeading = 'Operator, Analis, & Pengolah Data JDIH';
+                        $tierSubtitle = 'Menyelenggarakan digitalisasi dokumen, pemeliharaan metadata, dan keterbukaan akses publik';
+                        $cardClass = 'card-staff';
+                        $roleClass = 'role-emerald';
+                        $iconRole = 'bi-check-circle-fill';
+                    }
 
-                <!-- INSTITUTIONAL PREAMBLE CALLOUT -->
-                <div class="profile-lead-callout mb-5">
-                    <div class="profile-lead-icon">
-                        <i class="bi bi-building-fill-gear"></i>
-                    </div>
-                    <div>
-                        <span class="profile-lead-badge">Tata Kelola Kelembagaan</span>
-                        <div class="profile-lead-text">
-                            Pengelolaan JDIH Kabupaten Toba diselenggarakan secara terpusat oleh <strong>Bagian Hukum Sekretariat Daerah Kabupaten Toba</strong> dengan pembagian fungsi pengumpulan, verifikasi, standardisasi metadata, digitalisasi naskah, dan pelayanan regulasi publik sesuai amanat <strong>Perpres No. 33 Tahun 2012</strong> dan standar integrasi BPHN RI.
+                    $colClass = $members->count() === 1 ? 'col-lg-4 col-md-6' : ($members->count() === 2 ? 'col-lg-5 col-md-6' : 'col-lg-4 col-md-6');
+                @endphp
+
+                @if($tingkatIndex > 0)
+                    <div class="org-tree-connector">
+                        <div class="org-tree-stem"></div>
+                        <div class="org-tree-node">
+                            <i class="bi bi-chevron-down"></i>
                         </div>
-                    </div>
-                </div>
-
-                <!-- HIERARCHICAL ORG TIERS -->
-                @if($items->count() > 0)
-                    @foreach($tingkatKeys as $tingkatIndex => $tingkat)
-                        @php
-                            $members = $grouped->get($tingkat);
-                            
-                            // Styling konfigurasi per tingkat
-                            if ($tingkat == 1) {
-                                $tierBadge = 'tier-gold';
-                                $tierIcon = 'bi-star-fill text-gold';
-                                $tierPillText = 'Pimpinan Utama & Penanggung Jawab';
-                                $tierHeading = 'Pembina & Pengarah Kelembagaan';
-                                $cardClass = 'card-leader';
-                                $roleClass = 'role-gold';
-                                $iconRole = 'bi-patch-check-fill text-gold';
-                                $colClass = $members->count() === 1 ? 'col-lg-6 col-md-8 mx-auto' : ($members->count() === 2 ? 'col-lg-5 col-md-6' : 'col-lg-4 col-md-6');
-                            } elseif ($tingkat == 2) {
-                                $tierBadge = 'tier-navy';
-                                $tierIcon = 'bi-diagram-2-fill text-primary';
-                                $tierPillText = 'Koordinator & Pengawas Teknis';
-                                $tierHeading = 'Sub Koordinator / Verifikator Hukum';
-                                $cardClass = 'card-subleader';
-                                $roleClass = 'role-navy';
-                                $iconRole = 'bi-shield-check text-primary';
-                                $colClass = 'col-lg-4 col-md-6';
-                            } else {
-                                $tierBadge = 'tier-emerald';
-                                $tierIcon = 'bi-people-fill text-success';
-                                $tierPillText = 'Tim Pelaksana & Pengelola Data';
-                                $tierHeading = 'Operator, Analis, & Pengolah Data JDIH';
-                                $cardClass = 'card-staff';
-                                $roleClass = 'role-emerald';
-                                $iconRole = 'bi-cpu-fill text-success';
-                                $colClass = 'col-lg-4 col-md-6';
-                            }
-                        @endphp
-
-                        @if($tingkatIndex > 0)
-                            <div class="org-connector-line"></div>
-                        @endif
-
-                        <div class="org-tier-wrapper">
-                            <div class="org-tier-header">
-                                <span class="org-tier-pill {{ $tierBadge }}">
-                                    <i class="bi {{ $tierIcon }} me-1"></i> {{ $tierPillText }}
-                                </span>
-                                <h3 class="h5 fw-bold text-dark mt-2 mb-1">{{ $tierHeading }}</h3>
-                                <p class="text-muted small mb-0">Tingkat Hierarki {{ $tingkat }}</p>
-                            </div>
-
-                            <div class="row g-4 justify-content-center">
-                                @foreach($members as $person)
-                                    <div class="{{ $colClass }}">
-                                        <div class="org-member-card {{ $cardClass }}">
-                                            <!-- AVATAR -->
-                                            <div class="org-avatar-ring">
-                                                @if($person->foto)
-                                                    <img src="{{ asset('storage/' . $person->foto) }}" alt="{{ $person->nama }}" class="org-avatar-img">
-                                                @else
-                                                    <div class="org-avatar-placeholder {{ $tingkat > 2 ? 'placeholder-staff' : '' }}">
-                                                        <i class="bi bi-person-fill"></i>
-                                                    </div>
-                                                @endif
-                                            </div>
-
-                                            <!-- ROLE BADGE (SLIM & ELEGANT) -->
-                                            <span class="org-role-capsule {{ $roleClass }}">
-                                                <i class="bi {{ $iconRole }}"></i> {{ $person->jabatan }}
-                                            </span>
-
-                                            <!-- NAMA -->
-                                            <h4 class="org-member-name">{{ $person->nama }}</h4>
-
-                                            <!-- UNIT INSTANSI -->
-                                            <div class="org-institution-tag">
-                                                <i class="bi bi-building text-gold"></i> Bagian Hukum Setdakab Toba
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div>
-                    @endforeach
-                @else
-                    <div class="text-center py-5 bg-light rounded-4 border text-muted">
-                        <i class="bi bi-diagram-3 display-4 text-secondary mb-3 d-block"></i>
-                        <h5 class="fw-bold text-dark">Data struktur organisasi belum ditambahkan</h5>
-                        <p class="small text-muted mb-0">Bagan susunan tim pengelola JDIH akan segera diperbarui oleh administrator.</p>
                     </div>
                 @endif
 
-                <!-- QUICK NAVIGATION PILL FOOTER -->
-                <div class="profile-quick-nav mt-5">
-                    <div class="d-flex align-items-center gap-2">
-                        <i class="bi bi-compass text-gold fs-5"></i>
-                        <span class="small fw-bold text-dark">Informasi Profil Lainnya:</span>
+                <div class="org-tier-wrapper">
+                    <div class="org-tier-header">
+                        <h3 class="org-tier-title">{{ $tierHeading }}</h3>
+                        <p class="org-tier-subtitle">{{ $tierSubtitle }}</p>
                     </div>
-                    <div class="d-flex align-items-center gap-2 flex-wrap">
-                        <a href="{{ route('sejarah') }}" class="profile-nav-pill-btn">
-                            <i class="bi bi-hourglass-split text-primary"></i> Sejarah JDIH
-                        </a>
-                        <a href="{{ route('visi') }}" class="profile-nav-pill-btn">
-                            <i class="bi bi-eye-fill text-primary"></i> Visi &amp; Misi
-                        </a>
-                        <a href="{{ route('struktur') }}" class="profile-nav-pill-btn active">
-                            <i class="bi bi-diagram-3-fill text-gold"></i> Struktur Organisasi
-                        </a>
-                        <a href="{{ route('kontak') }}" class="profile-nav-pill-btn">
-                            <i class="bi bi-telephone-fill text-success"></i> Kontak &amp; Lokasi
-                        </a>
-                        <a href="{{ route('user.produk-hukum.jenis', 'peraturan-daerah') }}" class="profile-nav-pill-btn">
-                            <i class="bi bi-collection-fill text-secondary"></i> Produk Hukum
-                        </a>
+
+                    <div class="row g-4 justify-content-center">
+                        @foreach($members as $person)
+                            <div class="{{ $colClass }}">
+                                <div class="org-member-card {{ $cardClass }}">
+                                    <!-- AVATAR -->
+                                    <div class="org-avatar-ring">
+                                        @if($person->foto)
+                                            <img src="{{ asset('storage/' . $person->foto) }}" alt="{{ $person->nama }}" class="org-avatar-img">
+                                        @else
+                                            <div class="org-avatar-placeholder {{ $tingkat > 2 ? 'placeholder-staff' : '' }}">
+                                                <i class="bi bi-person-fill"></i>
+                                            </div>
+                                        @endif
+                                    </div>
+
+                                    <!-- NAMA -->
+                                    <h4 class="org-member-name">{{ $person->nama }}</h4>
+
+                                    <!-- JABATAN / ROLE -->
+                                    <span class="org-role-capsule {{ $roleClass }}">
+                                        {{ $person->jabatan }}
+                                    </span>
+
+                                    <!-- UNIT INSTANSI -->
+                                    <div class="org-institution-tag">
+                                        Bagian Hukum Setdakab Toba
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
+            @endforeach
+        @else
+            <div class="text-center py-5 bg-white rounded-4 border p-4 shadow-sm text-muted">
+                <i class="bi bi-diagram-3 display-4 text-secondary mb-3 d-block"></i>
+                <h5 class="fw-bold text-dark">Data struktur organisasi belum ditambahkan</h5>
+                <p class="small text-muted mb-0">Bagan susunan tim pengelola JDIH akan segera diperbarui oleh administrator.</p>
+            </div>
+        @endif
+    </div>
 
+    <!-- ============================================================
+         SECTION 3: PORTAL DISCOVERY HUB
+         ============================================================ -->
+    <div class="mb-4">
+        <div class="sejarah-section-header mb-4">
+            <h4 class="sejarah-section-title" style="font-size: 1.25rem;">
+                Eksplorasi Informasi <span class="text-gold">Terkait</span>
+            </h4>
+            <p class="sejarah-section-sub">
+                Pelajari rekam jejak linimasa, landasan visi misi, serta saluran permohonan informasi resmi JDIH Kabupaten Toba
+            </p>
+        </div>
+
+        <div class="row g-3">
+            <div class="col-lg-4 col-md-6">
+                <a href="{{ route('sejarah') }}" class="sejarah-hub-card">
+                    <div class="sejarah-hub-icon">
+                        <i class="bi bi-clock-history"></i>
+                    </div>
+                    <div class="sejarah-hub-info">
+                        <div class="sejarah-hub-title">Sejarah JDIH</div>
+                        <p class="sejarah-hub-desc">Linimasa pembentukan &amp; integrasi hukum</p>
+                    </div>
+                    <i class="bi bi-arrow-right sejarah-hub-arrow"></i>
+                </a>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <a href="{{ route('visi') }}" class="sejarah-hub-card">
+                    <div class="sejarah-hub-icon">
+                        <i class="bi bi-eye-fill"></i>
+                    </div>
+                    <div class="sejarah-hub-info">
+                        <div class="sejarah-hub-title">Visi &amp; Misi</div>
+                        <p class="sejarah-hub-desc">Arah kebijakan &amp; agenda aksi pembangunan</p>
+                    </div>
+                    <i class="bi bi-arrow-right sejarah-hub-arrow"></i>
+                </a>
+            </div>
+
+            <div class="col-lg-4 col-md-12">
+                <a href="{{ route('kontak') }}" class="sejarah-hub-card">
+                    <div class="sejarah-hub-icon">
+                        <i class="bi bi-telephone-fill"></i>
+                    </div>
+                    <div class="sejarah-hub-info">
+                        <div class="sejarah-hub-title">Kontak &amp; Pelayanan</div>
+                        <p class="sejarah-hub-desc">Pusat konsultasi &amp; permohonan salinan fisik</p>
+                    </div>
+                    <i class="bi bi-arrow-right sejarah-hub-arrow"></i>
+                </a>
             </div>
         </div>
     </div>

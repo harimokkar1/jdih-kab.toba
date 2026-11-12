@@ -22,6 +22,11 @@ class SearchController extends Controller
             $query->search($request->q);
         }
 
+        // Instansi / Pemrakarsa (teu_badan)
+        if ($request->filled('instansi')) {
+            $query->where('teu_badan', 'like', '%' . $request->instansi . '%');
+        }
+
         // 2. Jenis Dokumen / Peraturan
         if ($request->filled('jenis_peraturan_id')) {
             $query->where('jenis_peraturan_id', $request->jenis_peraturan_id);

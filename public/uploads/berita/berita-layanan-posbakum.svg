@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500">
+  <defs>
+    <linearGradient id="bg7" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e3a8a" />
+      <stop offset="50%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#1d4ed8" />
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg7)"/>
+  <circle cx="700" cy="110" r="160" fill="#60a5fa" opacity="0.12"/>
+  <rect x="50" y="45" width="220" height="34" rx="17" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.2)"/>
+  <circle cx="68" cy="62" r="6" fill="#60a5fa"/>
+  <text x="84" y="67" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="700" fill="#e2e8f0" letter-spacing="1">BANTUAN HUKUM GRATIS</text>
+  <!-- Hand / Shield icon -->
+  <g transform="translate(630, 220)" stroke="#60a5fa" stroke-width="4" fill="none">
+    <path d="M0,-45 L40,-25 V15 C40,40 0,60 0,60 C0,60 -40,40 -40,15 V-25 Z" fill="rgba(96,165,250,0.15)"/>
+    <path d="M-15,5 H15 M0,-10 V20" stroke-linecap="round"/>
+  </g>
+  <text x="50" y="190" font-family="system-ui, -apple-system, sans-serif" font-size="28" font-weight="800" fill="#ffffff">
+    <tspan x="50" dy="0">Pos Bantuan Hukum Setdakab:</tspan>
+    <tspan x="50" dy="38">Layanan Advokasi &amp; Konsultasi</tspan>
+  </text>
+  <text x="50" y="285" font-family="system-ui, -apple-system, sans-serif" font-size="15" fill="#bfdbfe">
+    <tspan x="50" dy="0">Membuka akses keadilan seluas-luasnya bagi masyarakat</tspan>
+    <tspan x="50" dy="24">kurang mampu untuk konsultasi hukum perdata dan pidana</tspan>
+  </text>
+  <rect x="50" y="380" width="165" height="42" rx="21" fill="#2563eb"/>
+  <text x="132" y="406" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="700" fill="#ffffff" text-anchor="middle">LAYANAN PUBLIK</text>
+</svg>

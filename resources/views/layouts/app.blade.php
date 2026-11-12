@@ -23,7 +23,7 @@
 
     @stack('styles')
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
 
     <!-- OFFICIAL GOV UTILITY TOPBAR -->
     <div class="gov-utility-topbar d-none d-lg-block">
@@ -87,7 +87,7 @@
 
                 <!-- NAV MENU -->
                 <div class="collapse navbar-collapse" id="navbarPillContent">
-                    <ul class="navbar-nav ms-auto align-items-lg-center gap-1 my-2 my-lg-0">
+                    <ul class="navbar-nav ms-auto align-items-lg-center gap-1 gap-lg-2 my-2 my-lg-0">
                         <!-- BERANDA -->
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">
@@ -97,13 +97,12 @@
 
                         <!-- DOKUMEN / PRODUK HUKUM DROPDOWN -->
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle {{ request()->is('produk-hukum*', 'kategori*') ? 'active' : '' }}" href="{{ route('user.produk-hukum.global') }}" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle {{ request()->is('produk-hukum*', 'kategori*') ? 'active' : '' }}" href="{{ route('user.produk-hukum.global') }}" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
                                 Dokumen
                             </a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a class="dropdown-item dropdown-item-featured" href="{{ route('user.produk-hukum.global') }}">
-                                        <i class="bi bi-grid-fill"></i>
+                                    <a class="dropdown-item dropdown-item-featured {{ request()->routeIs('user.produk-hukum.global') ? 'active' : '' }}" href="{{ route('user.produk-hukum.global') }}">
                                         <span>Semua Produk Hukum</span>
                                     </a>
                                 </li>
@@ -111,48 +110,43 @@
                                 @if(isset($navJenisPeraturan) && $navJenisPeraturan->count() > 0)
                                     @foreach($navJenisPeraturan as $itemJenis)
                                         <li>
-                                            <a class="dropdown-item" href="{{ route('user.produk-hukum.jenis', $itemJenis->slug) }}">
-                                                <i class="bi bi-file-earmark-text"></i>
+                                            <a class="dropdown-item {{ (request()->routeIs('user.produk-hukum.jenis') && request()->route('slug') == $itemJenis->slug) ? 'active' : '' }}" href="{{ route('user.produk-hukum.jenis', $itemJenis->slug) }}">
                                                 <span>{{ $itemJenis->nama }}</span>
                                             </a>
                                         </li>
                                     @endforeach
                                 @else
-                                    <li><a class="dropdown-item" href="{{ route('user.produk-hukum.global') }}"><i class="bi bi-file-earmark-text"></i> <span>Peraturan Daerah</span></a></li>
-                                    <li><a class="dropdown-item" href="{{ route('user.produk-hukum.global') }}"><i class="bi bi-file-earmark-text"></i> <span>Peraturan Bupati</span></a></li>
-                                    <li><a class="dropdown-item" href="{{ route('user.produk-hukum.global') }}"><i class="bi bi-file-earmark-text"></i> <span>Keputusan Bupati</span></a></li>
+                                    <li><a class="dropdown-item" href="{{ route('user.produk-hukum.global') }}"><span>Peraturan Daerah</span></a></li>
+                                    <li><a class="dropdown-item" href="{{ route('user.produk-hukum.global') }}"><span>Peraturan Bupati</span></a></li>
+                                    <li><a class="dropdown-item" href="{{ route('user.produk-hukum.global') }}"><span>Keputusan Bupati</span></a></li>
                                 @endif
                             </ul>
                         </li>
 
                         <!-- PROFIL DROPDOWN -->
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle {{ request()->is('sejarah', 'visi', 'organisasi', 'kontak') ? 'active' : '' }}" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle {{ request()->is('sejarah', 'visi', 'organisasi', 'kontak') ? 'active' : '' }}" href="#" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
                                 Profil
                             </a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a class="dropdown-item" href="{{ route('sejarah') }}">
-                                        <i class="bi bi-clock-history"></i>
+                                    <a class="dropdown-item {{ request()->routeIs('sejarah') ? 'active' : '' }}" href="{{ route('sejarah') }}">
                                         <span>Sejarah JDIH</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" href="{{ route('visi') }}">
-                                        <i class="bi bi-compass"></i>
+                                    <a class="dropdown-item {{ request()->routeIs('visi') ? 'active' : '' }}" href="{{ route('visi') }}">
                                         <span>Visi &amp; Misi</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" href="{{ route('struktur') }}">
-                                        <i class="bi bi-diagram-3"></i>
+                                    <a class="dropdown-item {{ request()->routeIs('struktur') ? 'active' : '' }}" href="{{ route('struktur') }}">
                                         <span>Struktur Organisasi</span>
                                     </a>
                                 </li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
-                                    <a class="dropdown-item" href="{{ route('kontak') }}">
-                                        <i class="bi bi-telephone"></i>
+                                    <a class="dropdown-item {{ request()->routeIs('kontak') ? 'active' : '' }}" href="{{ route('kontak') }}">
                                         <span>Kontak Kami</span>
                                     </a>
                                 </li>
@@ -161,19 +155,17 @@
 
                         <!-- INFORMASI DROPDOWN -->
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle {{ request()->is('berita*', 'pengumuman*') ? 'active' : '' }}" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle {{ request()->is('berita*', 'pengumuman*') ? 'active' : '' }}" href="#" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
                                 Informasi
                             </a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a class="dropdown-item" href="{{ route('berita') }}">
-                                        <i class="bi bi-newspaper"></i>
+                                    <a class="dropdown-item {{ request()->is('berita*') ? 'active' : '' }}" href="{{ route('berita') }}">
                                         <span>Berita Hukum</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" href="{{ route('pengumuman.index') }}">
-                                        <i class="bi bi-megaphone"></i>
+                                    <a class="dropdown-item {{ request()->is('pengumuman*') ? 'active' : '' }}" href="{{ route('pengumuman.index') }}">
                                         <span>Pengumuman</span>
                                     </a>
                                 </li>
@@ -215,14 +207,14 @@
     @endif
 
     <!-- MAIN BODY -->
-    <main class="flex-grow-1">
+    <main class="flex-grow-1 d-flex flex-column">
         @yield('content')
     </main>
 
     <!-- ============================================================
          OFFICIAL EXECUTIVE FOOTER (CLEAN, PROFESSIONAL & ESSENTIAL)
          ============================================================ -->
-    <footer class="footer-modern">
+    <footer class="footer-modern mt-auto">
         <!-- Top Gradient Hairline Accent -->
         <div class="footer-accent-bar"></div>
 
@@ -309,31 +301,70 @@
         </div>
     </footer>
 
-    <!-- MODAL PRATINJAU PDF CEPAT (MODERN QUICK PREVIEW MODAL) -->
+    <!-- MODAL PRATINJAU PDF CEPAT (MODERN PDF.JS CANVAS PREVIEW - ANTI AUTO DOWNLOAD) -->
     <div class="modal fade" id="pdfPreviewModal" tabindex="-1" aria-labelledby="pdfPreviewModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content rounded-4 border-0 shadow-lg overflow-hidden">
-                <div class="modal-header bg-dark text-white py-3 px-4" style="background-color: var(--navy-primary) !important;">
-                    <div class="d-flex align-items-center gap-2 text-truncate me-3">
+                <div class="modal-header text-white py-3 px-3 px-md-4" style="background: linear-gradient(135deg, #0e223d 0%, #173860 100%) !important;">
+                    <div class="d-flex align-items-center gap-2 text-truncate me-2 me-md-3">
                         <i class="bi bi-file-earmark-pdf-fill text-danger fs-5"></i>
                         <h6 class="modal-title mb-0 text-truncate fw-bold text-white" id="pdfPreviewModalLabel">Pratinjau Dokumen</h6>
                     </div>
-                    <div class="d-flex align-items-center gap-2 flex-shrink-0">
-                        <a href="#" id="modalPdfOpenTabBtn" target="_blank" class="btn btn-sm btn-outline-light rounded-pill px-3 py-1" title="Buka di Tab Baru">
-                            <i class="bi bi-box-arrow-up-right me-1"></i> Tab Baru
+                    
+                    <div class="d-flex align-items-center gap-2 flex-shrink-0 ms-auto">
+                        <!-- Page Navigator Controls -->
+                        <div class="d-flex align-items-center gap-1 bg-white bg-opacity-10 px-2 py-1 rounded-pill border border-white border-opacity-10">
+                            <button type="button" id="modalPdfPrev" class="btn btn-sm text-white p-0 px-1 border-0" title="Halaman Sebelumnya" disabled>
+                                <i class="bi bi-chevron-left"></i>
+                            </button>
+                            <span class="small text-white px-1 user-select-none" style="font-size: 0.76rem;">
+                                Hal <span id="modalPdfPageNum" class="fw-bold">1</span> / <span id="modalPdfTotalPages" class="fw-bold">--</span>
+                            </span>
+                            <button type="button" id="modalPdfNext" class="btn btn-sm text-white p-0 px-1 border-0" title="Halaman Berikutnya" disabled>
+                                <i class="bi bi-chevron-right"></i>
+                            </button>
+                        </div>
+
+                        <!-- Zoom Controls -->
+                        <div class="d-none d-sm-flex align-items-center gap-1 bg-white bg-opacity-10 px-2 py-1 rounded-pill border border-white border-opacity-10">
+                            <button type="button" id="modalPdfZoomOut" class="btn btn-sm text-white p-0 px-1 border-0" title="Perkecil">
+                                <i class="bi bi-dash-lg"></i>
+                            </button>
+                            <span id="modalPdfZoomLevel" class="small text-white px-1 user-select-none" style="font-size: 0.76rem;">100%</span>
+                            <button type="button" id="modalPdfZoomIn" class="btn btn-sm text-white p-0 px-1 border-0" title="Perbesar">
+                                <i class="bi bi-plus-lg"></i>
+                            </button>
+                        </div>
+
+                        <!-- Only THIS button downloads the file -->
+                        <a href="#" id="modalPdfDownloadBtn" class="btn btn-sm btn-warning text-dark rounded-pill px-3 py-1 fw-bold shadow-sm" title="Unduh Berkas PDF">
+                            <i class="bi bi-download me-1"></i> Unduh PDF
                         </a>
-                        <a href="#" id="modalPdfDownloadBtn" class="btn btn-sm btn-warning text-dark rounded-pill px-3 py-1 fw-bold" title="Unduh Berkas">
-                            <i class="bi bi-download me-1"></i> Unduh
-                        </a>
-                        <button type="button" class="btn-close btn-close-white ms-2" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                        <button type="button" class="btn-close btn-close-white ms-1" data-bs-dismiss="modal" aria-label="Tutup"></button>
                     </div>
                 </div>
-                <div class="modal-body p-0 bg-light position-relative" style="min-height: 520px;">
-                    <div id="modalPdfLoading" class="position-absolute top-50 start-50 translate-middle text-center">
-                        <div class="spinner-border text-primary mb-2" role="status"></div>
-                        <p class="small text-muted mb-0">Sedang memuat naskah dokumen...</p>
+                
+                <div class="modal-body p-0 position-relative text-center overflow-auto" id="modalPdfContainer" style="height: 75vh; min-height: 520px; background: #323639;">
+                    <!-- Loading state -->
+                    <div id="modalPdfLoading" class="position-absolute top-50 start-50 translate-middle text-center text-white">
+                        <div class="spinner-border text-light mb-2" role="status"></div>
+                        <p class="small text-white-50 mb-0">Sedang memuat pratinjau naskah...</p>
                     </div>
-                    <iframe id="modalPdfFrame" src="" class="w-100 border-0" style="height: 75vh; min-height: 520px; display: block;" onload="document.getElementById('modalPdfLoading').style.display='none';"></iframe>
+
+                    <!-- Error state -->
+                    <div id="modalPdfError" class="py-5 text-center text-white" style="display: none; padding-top: 100px !important;">
+                        <i class="bi bi-file-earmark-x fs-1 text-warning mb-2 d-block"></i>
+                        <h6 class="text-white mb-2">Pratinjau Naskah Tidak Tersedia</h6>
+                        <p class="small text-white-50 mb-3">Naskah digital belum diunggah atau tidak dapat ditampilkan langsung.</p>
+                        <a href="#" id="modalPdfFallbackDownload" class="btn btn-sm btn-primary rounded-pill px-4">
+                            <i class="bi bi-download me-1"></i> Coba Unduh Berkas
+                        </a>
+                    </div>
+
+                    <!-- Canvas where PDF is rendered -->
+                    <div class="p-3 d-flex justify-content-center">
+                        <canvas id="modalPdfCanvas" class="shadow-lg mx-auto" style="display: none; max-width: 100%; height: auto; border-radius: 4px;"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
@@ -341,6 +372,14 @@
 
     <!-- Bootstrap 5.3.3 JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- PDF.js Mozilla Local Engine (Anti Auto-Download Canvas Viewer) -->
+    <script src="{{ asset('vendor/pdfjs/pdf.min.js') }}"></script>
+    <script>
+        if (window.pdfjsLib) {
+            pdfjsLib.GlobalWorkerOptions.workerSrc = "{{ asset('vendor/pdfjs/pdf.worker.min.js') }}";
+        }
+    </script>
     <script>
         // Ctrl+K Shortcut for Search
         document.addEventListener('keydown', function(e) {
@@ -425,9 +464,7 @@
                     if (toggle) {
                         toggle.classList.remove('show');
                         toggle.setAttribute('aria-expanded', 'false');
-                        toggle.blur(); // Pastikan fokus browser segera lepas
-                        const bsInstance = bootstrap.Dropdown.getInstance(toggle);
-                        if (bsInstance) bsInstance.hide();
+                        toggle.blur();
                     }
                     if (menu) {
                         menu.classList.remove('show');
@@ -442,8 +479,6 @@
                     if (toggle) {
                         toggle.classList.add('show');
                         toggle.setAttribute('aria-expanded', 'true');
-                        const bsInstance = bootstrap.Dropdown.getOrCreateInstance(toggle);
-                        bsInstance.show();
                     }
                     if (menu) {
                         menu.classList.add('show');
@@ -522,33 +557,268 @@
             window.addEventListener('resize', initDropdownHover);
         })();
 
-        // Handler Pratinjau PDF Modal
+        // ============================================================
+        // GLOBAL HANDLER UNTUK SEMUA MODERN & CUSTOM SELECT DROPDOWNS
+        // ============================================================
+        function initCustomFilterDropdowns() {
+            document.querySelectorAll('.modern-select-dropdown, .custom-filter-dropdown').forEach(function(wrapper) {
+                if (wrapper.dataset.customFilterInit) return;
+                wrapper.dataset.customFilterInit = 'true';
+
+                const input = wrapper.querySelector('input[type="hidden"]');
+                const triggerBtn = wrapper.querySelector('.modern-select-btn, .custom-dropdown-btn');
+                const currentIcon = wrapper.querySelector('.modern-select-prefix, .selected-icon-box');
+                const currentLabel = wrapper.querySelector('.modern-select-label, .selected-label');
+                const options = wrapper.querySelectorAll('.modern-select-item, .custom-dropdown-item');
+
+                if (!options.length) return;
+
+                options.forEach(function(opt) {
+                    opt.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const val = this.getAttribute('data-value') ?? '';
+                        const label = this.getAttribute('data-label') ?? '';
+                        const icon = this.getAttribute('data-icon') ?? '';
+
+                        // 1. Update hidden input
+                        if (input) input.value = val;
+
+                        // 2. Update trigger button display
+                        if (currentLabel) currentLabel.textContent = label;
+                        if (currentIcon && icon) {
+                            currentIcon.className = 'bi ' + icon + ' modern-select-prefix';
+                        }
+
+                        // 3. Update active states
+                        options.forEach(function(o) {
+                            o.classList.remove('active');
+                        });
+                        this.classList.add('active');
+
+                        // 4. Close bootstrap dropdown cleanly
+                        if (triggerBtn && window.bootstrap && bootstrap.Dropdown) {
+                            const bsDropdown = bootstrap.Dropdown.getInstance(triggerBtn);
+                            if (bsDropdown) {
+                                bsDropdown.hide();
+                            }
+                        }
+                    });
+                });
+            });
+        }
+        document.addEventListener('DOMContentLoaded', initCustomFilterDropdowns);
+        initCustomFilterDropdowns();
+
+        // ============================================================
+        // HANDLER PRATINJAU PDF MODAL (PDF.JS CANVAS - ANTI AUTO DOWNLOAD)
+        // ============================================================
         const pdfModal = document.getElementById('pdfPreviewModal');
+        let modalPdfDoc = null;
+        let modalPdfPageNum = 1;
+        let modalPdfScale = 1.25;
+        let modalPdfPageRendering = false;
+        let modalPdfPageNumPending = null;
+
         if (pdfModal) {
+            const canvas = document.getElementById('modalPdfCanvas');
+            const ctx = canvas ? canvas.getContext('2d') : null;
+            const loading = document.getElementById('modalPdfLoading');
+            const errorBox = document.getElementById('modalPdfError');
+            const pageNumEl = document.getElementById('modalPdfPageNum');
+            const totalPagesEl = document.getElementById('modalPdfTotalPages');
+            const prevBtn = document.getElementById('modalPdfPrev');
+            const nextBtn = document.getElementById('modalPdfNext');
+            const zoomInBtn = document.getElementById('modalPdfZoomIn');
+            const zoomOutBtn = document.getElementById('modalPdfZoomOut');
+            const zoomLevelEl = document.getElementById('modalPdfZoomLevel');
+            const downloadBtn = document.getElementById('modalPdfDownloadBtn');
+            const modalTitle = document.getElementById('pdfPreviewModalLabel');
+            const fallbackDownload = document.getElementById('modalPdfFallbackDownload');
+
+            function renderModalPage(num) {
+                if (!modalPdfDoc || !canvas || !ctx) return;
+                modalPdfPageRendering = true;
+
+                modalPdfDoc.getPage(num).then(function(page) {
+                    const viewport = page.getViewport({ scale: modalPdfScale });
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+
+                    const renderContext = {
+                        canvasContext: ctx,
+                        viewport: viewport
+                    };
+                    const renderTask = page.render(renderContext);
+
+                    renderTask.promise.then(function() {
+                        modalPdfPageRendering = false;
+                        if (loading) loading.style.display = 'none';
+                        canvas.style.display = 'block';
+
+                        if (modalPdfPageNumPending !== null) {
+                            renderModalPage(modalPdfPageNumPending);
+                            modalPdfPageNumPending = null;
+                        }
+                    }).catch(function() {
+                        modalPdfPageRendering = false;
+                    });
+                }).catch(function() {
+                    modalPdfPageRendering = false;
+                    if (loading) loading.style.display = 'none';
+                    if (errorBox) errorBox.style.display = 'block';
+                });
+
+                if (pageNumEl) pageNumEl.textContent = num;
+                if (prevBtn) prevBtn.disabled = (num <= 1);
+                if (nextBtn) nextBtn.disabled = (num >= (modalPdfDoc ? modalPdfDoc.numPages : 1));
+            }
+
+            function queueRenderModalPage(num) {
+                if (modalPdfPageRendering) {
+                    modalPdfPageNumPending = num;
+                } else {
+                    renderModalPage(num);
+                }
+            }
+
+            if (prevBtn) {
+                prevBtn.addEventListener('click', function() {
+                    if (modalPdfPageNum <= 1) return;
+                    modalPdfPageNum--;
+                    queueRenderModalPage(modalPdfPageNum);
+                });
+            }
+
+            if (nextBtn) {
+                nextBtn.addEventListener('click', function() {
+                    if (!modalPdfDoc || modalPdfPageNum >= modalPdfDoc.numPages) return;
+                    modalPdfPageNum++;
+                    queueRenderModalPage(modalPdfPageNum);
+                });
+            }
+
+            if (zoomInBtn) {
+                zoomInBtn.addEventListener('click', function() {
+                    if (modalPdfScale >= 2.5) return;
+                    modalPdfScale += 0.2;
+                    if (zoomLevelEl) zoomLevelEl.textContent = Math.round(modalPdfScale * 100) + '%';
+                    queueRenderModalPage(modalPdfPageNum);
+                });
+            }
+
+            if (zoomOutBtn) {
+                zoomOutBtn.addEventListener('click', function() {
+                    if (modalPdfScale <= 0.6) return;
+                    modalPdfScale -= 0.2;
+                    if (zoomLevelEl) zoomLevelEl.textContent = Math.round(modalPdfScale * 100) + '%';
+                    queueRenderModalPage(modalPdfPageNum);
+                });
+            }
+
             pdfModal.addEventListener('show.bs.modal', function (event) {
                 const button = event.relatedTarget;
+                if (!button) return;
+
                 const pdfUrl = button.getAttribute('data-pdf-url');
                 const title = button.getAttribute('data-pdf-title') || 'Pratinjau Dokumen';
                 const downloadUrl = button.getAttribute('data-pdf-download') || pdfUrl;
 
-                const modalTitle = pdfModal.querySelector('#pdfPreviewModalLabel');
-                const iframe = pdfModal.querySelector('#modalPdfFrame');
-                const openTabBtn = pdfModal.querySelector('#modalPdfOpenTabBtn');
-                const downloadBtn = pdfModal.querySelector('#modalPdfDownloadBtn');
-                const loading = pdfModal.querySelector('#modalPdfLoading');
-
                 if (modalTitle) modalTitle.textContent = title;
-                if (loading) loading.style.display = 'block';
-                if (iframe) iframe.src = pdfUrl;
-                if (openTabBtn) openTabBtn.href = pdfUrl;
                 if (downloadBtn) downloadBtn.href = downloadUrl;
+                if (fallbackDownload) fallbackDownload.href = downloadUrl;
+
+                if (loading) loading.style.display = 'block';
+                if (errorBox) errorBox.style.display = 'none';
+                if (canvas) canvas.style.display = 'none';
+
+                modalPdfPageNum = 1;
+                modalPdfScale = 1.25;
+                if (zoomLevelEl) zoomLevelEl.textContent = '125%';
+                if (pageNumEl) pageNumEl.textContent = '1';
+                if (totalPagesEl) totalPagesEl.textContent = '--';
+                if (prevBtn) prevBtn.disabled = true;
+                if (nextBtn) nextBtn.disabled = true;
+
+                if (window.pdfjsLib && pdfUrl) {
+                    const loadingTask = pdfjsLib.getDocument({
+                        url: pdfUrl,
+                        cMapUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/cmaps/',
+                        cMapPacked: true,
+                    });
+
+                    loadingTask.promise.then(function(pdfDoc) {
+                        modalPdfDoc = pdfDoc;
+                        if (totalPagesEl) totalPagesEl.textContent = pdfDoc.numPages;
+                        renderModalPage(modalPdfPageNum);
+                    }).catch(function(err) {
+                        console.warn('PDF.js render warning:', err);
+                        if (loading) loading.style.display = 'none';
+                        if (errorBox) errorBox.style.display = 'block';
+                    });
+                } else {
+                    if (loading) loading.style.display = 'none';
+                    if (errorBox) errorBox.style.display = 'block';
+                }
             });
 
             pdfModal.addEventListener('hidden.bs.modal', function () {
-                const iframe = pdfModal.querySelector('#modalPdfFrame');
-                if (iframe) iframe.src = '';
+                if (modalPdfDoc) {
+                    try { modalPdfDoc.destroy(); } catch(e) {}
+                    modalPdfDoc = null;
+                }
+                if (canvas && ctx) {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    canvas.style.display = 'none';
+                }
+                if (loading) loading.style.display = 'block';
+                if (errorBox) errorBox.style.display = 'none';
             });
         }
+
+        // ============================================================
+        // PERHITUNGAN DINAMIS TINGGI LAYAR (ANTI-FOOTER MENEMPEL JIKA ITEM SEDIKIT)
+        // Menjaga bagian putih (konten) tetap lega, dinamis, profesional & modern
+        // Banner header gelap tidak diubah, bagian putih yang dinamis!
+        // ============================================================
+        function adjustDynamicContentHeight() {
+            // Targetkan semua halaman dengan banner (Dokumen, Profil, Informasi)
+            const banners = document.querySelectorAll('.inner-header-banner, .page-header-banner');
+            if (!banners.length) return;
+
+            const windowHeight = window.innerHeight;
+
+            banners.forEach(function(banner) {
+                // Elemen berikutnya adalah container bagian putih (konten)
+                let contentSection = banner.nextElementSibling;
+                while (contentSection && !contentSection.classList.contains('container') && !contentSection.classList.contains('page-content-dynamic')) {
+                    contentSection = contentSection.nextElementSibling;
+                }
+
+                if (!contentSection) return;
+
+                // Hitung posisi batas bawah banner terhadap halaman
+                const bannerRect = banner.getBoundingClientRect();
+                const scrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
+                const bannerBottomFromTop = bannerRect.bottom + scrollY;
+
+                // Hitung tinggi dinamis agar bagian putih mengisi layar dengan elegan:
+                // Footer terdorong ke bawah layar (tidak nampak menempel langsung pada baris data sedikit)
+                // Buffer 60px memberi jarak proporsional dan profesional
+                const visibleRemaining = windowHeight - bannerBottomFromTop;
+                const dynamicMinHeight = Math.max(560, visibleRemaining + 60);
+
+                contentSection.style.minHeight = dynamicMinHeight + 'px';
+                contentSection.style.display = 'flex';
+                contentSection.style.flexDirection = 'column';
+                contentSection.style.paddingBottom = '4.5rem';
+            });
+        }
+
+        window.addEventListener('resize', adjustDynamicContentHeight);
+        window.addEventListener('orientationchange', adjustDynamicContentHeight);
+        document.addEventListener('DOMContentLoaded', adjustDynamicContentHeight);
+        setTimeout(adjustDynamicContentHeight, 100);
+        setTimeout(adjustDynamicContentHeight, 500);
     </script>
     @stack('scripts')
 </body>

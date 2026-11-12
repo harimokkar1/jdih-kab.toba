@@ -164,10 +164,19 @@ class BeritaController extends Controller
     /**
      * Menampilkan daftar berita untuk user
      */
-    public function userIndex()
+    public function userIndex(Request $request)
     {
-        // 6 berita per halaman
-        $beritas = Berita::latest()->paginate(6);
+        $search = $request->query('search');
+
+        // 6 berita per halaman dengan pencarian opsional
+        $beritas = Berita::query()
+            ->when($search, function ($query) use ($search) {
+                $query->where('judul', 'like', '%' . $search . '%')
+                    ->orWhere('isi', 'like', '%' . $search . '%');
+            })
+            ->latest()
+            ->paginate(6)
+            ->withQueryString();
 
         return view('user.berita', compact('beritas'));
     }

@@ -18,8 +18,9 @@
         </nav>
         <h1 class="h3 fw-bold text-white mb-2" style="line-height: 1.45;">{{ $berita->judul }}</h1>
         <div class="small text-white-50 d-flex align-items-center gap-3 flex-wrap">
-            <span><i class="bi bi-calendar3 text-warning me-1"></i> {{ $berita->created_at ? $berita->created_at->translatedFormat('l, d F Y - H:i') : '-' }} WIB</span>
-            <span><i class="bi bi-person-circle text-warning me-1"></i> Bagian Hukum Setdakab Toba</span>
+            <span>{{ $berita->created_at ? $berita->created_at->translatedFormat('l, d F Y - H:i') : '-' }} WIB</span>
+            <span class="opacity-50">&bull;</span>
+            <span>Bagian Hukum Setdakab Toba</span>
         </div>
     </div>
 </div>
@@ -35,14 +36,18 @@
                 @endif
 
                 <div class="article-body text-secondary" style="font-size: 1.05rem; line-height: 1.95;">
-                    {!! nl2br(e($berita->isi)) !!}
+                    @if(strip_tags($berita->isi) !== $berita->isi)
+                        {!! strip_tags($berita->isi, '<p><br><strong><b><em><i><u><ul><ol><li><a><blockquote><h1><h2><h3><h4><h5><h6>') !!}
+                    @else
+                        {!! nl2br(e($berita->isi)) !!}
+                    @endif
                 </div>
 
                 <hr class="my-4">
 
                 <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3">
-                    <a href="{{ route('berita') }}" class="btn btn-outline-secondary btn-sm rounded-pill px-4 fw-bold">
-                        <i class="bi bi-arrow-left me-1"></i> Kembali ke Indeks Berita
+                    <a href="{{ route('berita') }}" class="btn-executive-back">
+                        Kembali ke Indeks Berita
                     </a>
 
                     <!-- SHARE BUTTONS -->

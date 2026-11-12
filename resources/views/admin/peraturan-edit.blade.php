@@ -1,13 +1,27 @@
 @extends('layouts.admin')
 
 @section('title', 'Edit Dokumen Peraturan')
+@section('breadcrumb', 'Edit Peraturan')
 @section('page-title', 'Edit Dokumen Produk Hukum')
 
 @section('content')
-<div class="mb-4">
-    <a href="{{ route('admin.peraturan.index') }}" class="btn btn-outline-secondary btn-sm rounded-pill px-3">
-        <i class="bi bi-arrow-left me-1"></i> Kembali ke Daftar
-    </a>
+<div class="admin-page-header">
+    <div>
+        <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
+            <h4 class="admin-page-title mb-0">Edit Dokumen Produk Hukum</h4>
+            <span class="admin-header-badge">
+                <span class="badge-dot"></span>
+                Metadata Standar BPHN
+            </span>
+        </div>
+        <p class="admin-page-subtitle">Perbarui data peraturan, nomor ketetapan, dan berkas lampiran naskah hukum daerah</p>
+    </div>
+    <div class="mt-3 mt-md-0 d-flex align-items-center gap-2">
+        <a href="{{ route('admin.peraturan.index') }}" class="btn btn-sm btn-light border px-3">
+            <i class="bi bi-arrow-left me-1"></i>
+            <span>Kembali ke Daftar</span>
+        </a>
+    </div>
 </div>
 
 <form action="{{ route('admin.peraturan.update', $peraturan->id) }}" method="POST" enctype="multipart/form-data">
@@ -18,7 +32,7 @@
         <!-- METADATA UTAMA -->
         <div class="col-lg-8">
             <!-- 1. INFORMASI DASAR -->
-            <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+            <div class="admin-card p-4 mb-4">
                 <h5 class="fw-bold text-primary mb-3"><i class="bi bi-info-circle me-2"></i> 1. Informasi Utama</h5>
 
                 <div class="row g-3">
@@ -58,7 +72,7 @@
             </div>
 
             <!-- 2. DETAIL PENETAPAN -->
-            <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+            <div class="admin-card p-4 mb-4">
                 <h5 class="fw-bold text-primary mb-3"><i class="bi bi-calendar3 me-2"></i> 2. Penomoran & Tanggal</h5>
 
                 <div class="row g-3">
@@ -97,7 +111,7 @@
             </div>
 
             <!-- 3. DESKRIPSI & ABSTRAK -->
-            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+            <div class="admin-card p-4">
                 <h5 class="fw-bold text-primary mb-3"><i class="bi bi-file-text me-2"></i> 3. Abstrak & Deskripsi</h5>
 
                 <div class="row g-3">
@@ -132,7 +146,7 @@
         <!-- STATUS & FILE -->
         <div class="col-lg-4">
             <!-- STATUS -->
-            <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+            <div class="admin-card p-4 mb-4">
                 <h6 class="fw-bold text-dark mb-3">Status Keberlakuan</h6>
                 <div class="mb-3">
                     <div class="form-check mb-2">
@@ -151,7 +165,7 @@
             </div>
 
             <!-- UNGGAH FILE -->
-            <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+            <div class="admin-card p-4 mb-4">
                 <h6 class="fw-bold text-dark mb-3"><i class="bi bi-paperclip me-1"></i> Berkas Lampiran</h6>
 
                 <!-- FILE UTAMA -->
@@ -199,11 +213,11 @@
             </div>
 
             <!-- SUBMIT -->
-            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
-                <button type="submit" class="btn btn-primary rounded-pill w-100 py-2 fw-bold shadow-sm mb-2">
+            <div class="admin-card p-4">
+                <button type="submit" class="btn btn-admin-primary w-100 justify-content-center py-2 mb-2">
                     <i class="bi bi-check-lg me-1"></i> Simpan Perubahan
                 </button>
-                <a href="{{ route('admin.peraturan.index') }}" class="btn btn-light rounded-pill w-100">Batal</a>
+                <a href="{{ route('admin.peraturan.index') }}" class="btn btn-sm btn-light border w-100">Batal</a>
             </div>
         </div>
     </div>

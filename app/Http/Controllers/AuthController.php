@@ -21,7 +21,9 @@ class AuthController extends Controller
             'password' => 'required'
         ]);
 
-        if (Auth::attempt($request->only('email', 'password'))) {
+        $remember = $request->boolean('remember');
+
+        if (Auth::attempt($request->only('email', 'password'), $remember)) {
             $request->session()->regenerate();
 
             if (auth()->user()->role === 'super_admin') {
@@ -30,7 +32,7 @@ class AuthController extends Controller
             return redirect('/admin');
         }
 
-        return back()->with('error', 'Email atau password salah');
+        return back()->withInput($request->only('email', 'remember'))->with('error', 'Email atau kata sandi yang Anda masukkan tidak sesuai.');
     }
 
     // logout

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500">
+  <defs>
+    <linearGradient id="bg5" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#831843" />
+      <stop offset="50%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#9d174d" />
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg5)"/>
+  <circle cx="700" cy="110" r="160" fill="#f472b6" opacity="0.12"/>
+  <rect x="50" y="45" width="220" height="34" rx="17" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.2)"/>
+  <circle cx="68" cy="62" r="6" fill="#f472b6"/>
+  <text x="84" y="67" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="700" fill="#e2e8f0" letter-spacing="1">PRESTASI &amp; INTEGRASI</text>
+  <!-- Trophy icon -->
+  <g transform="translate(630, 220)" stroke="#fbbf24" stroke-width="4" fill="none">
+    <path d="M-35,-40 H35 V-10 C35,20 15,35 0,35 C-15,35 -35,20 -35,-10 Z" fill="rgba(251,191,36,0.15)"/>
+    <path d="M-35,-25 C-55,-25 -55,0 -35,5" />
+    <path d="M35,-25 C55,-25 55,0 35,5" />
+    <path d="M0,35 V50 M-20,50 H20" stroke-linecap="round"/>
+  </g>
+  <text x="50" y="190" font-family="system-ui, -apple-system, sans-serif" font-size="28" font-weight="800" fill="#ffffff">
+    <tspan x="50" dy="0">JDIH Pemkab Toba Raih Apresiasi</tspan>
+    <tspan x="50" dy="38">Anggota Terintegrasi Nasional BPHN</tspan>
+  </text>
+  <text x="50" y="285" font-family="system-ui, -apple-system, sans-serif" font-size="15" fill="#fbcfe8">
+    <tspan x="50" dy="0">Penghargaan atas komitmen keterbukaan informasi hukum</tspan>
+    <tspan x="50" dy="24">dan akurasi metadata regulasi daerah secara berkesinambungan</tspan>
+  </text>
+  <rect x="50" y="380" width="165" height="42" rx="21" fill="#db2777"/>
+  <text x="132" y="406" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="700" fill="#ffffff" text-anchor="middle">APRESIASI JDIHN</text>
+</svg>

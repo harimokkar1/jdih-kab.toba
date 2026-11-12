@@ -36,7 +36,7 @@ class JdihPortalTest extends TestCase
     {
         $response = $this->get('/produk-hukum');
         $response->assertStatus(200);
-        $response->assertSee('Rekapitulasi Jenis Produk Hukum');
+        $response->assertSee('Katalog Regulasi Produk Hukum');
         $response->assertSee('Peraturan Daerah');
     }
 
@@ -99,6 +99,21 @@ class JdihPortalTest extends TestCase
     }
 
     /**
+     * Test Admin Dashboard loads successfully for authenticated admin.
+     */
+    public function test_admin_dashboard_loads_for_authenticated_admin(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        $response = $this->actingAs($admin)->get('/admin');
+        $response->assertStatus(200);
+        $response->assertSee('Dasbor Utama');
+        $response->assertSee('Total Produk Hukum');
+        $response->assertSee('liveGreetingPill');
+        $response->assertSee('liveClockText');
+    }
+
+    /**
      * Test All User Facing Pages Load Successfully (End-to-End).
      */
     public function test_all_public_pages_load_successfully(): void
@@ -108,6 +123,10 @@ class JdihPortalTest extends TestCase
             '/cari?sort=populer',
             '/berita',
             '/pengumuman',
+            '/pengumuman?kategori=uji-publik',
+            '/pengumuman?tahun=2026',
+            '/pengumuman?pdf=1',
+            '/pengumuman?sort=terlama',
             '/visi',
             '/sejarah',
             '/organisasi',

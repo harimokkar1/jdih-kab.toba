@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="50%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#0284c7" />
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24" />
+      <stop offset="100%" stop-color="#d97706" />
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg)"/>
+  <circle cx="700" cy="100" r="180" fill="#38bdf8" opacity="0.12"/>
+  <circle cx="100" cy="450" r="140" fill="#fbbf24" opacity="0.08"/>
+  <g opacity="0.06">
+    <path d="M0,50 H800 M0,100 H800 M0,150 H800 M0,200 H800 M0,250 H800 M0,300 H800 M0,350 H800 M0,400 H800 M0,450 H800" stroke="#fff" stroke-width="1"/>
+    <path d="M100,0 V500 M200,0 V500 M300,0 V500 M400,0 V500 M500,0 V500 M600,0 V500 M700,0 V500" stroke="#fff" stroke-width="1"/>
+  </g>
+  <!-- Decorative Badge -->
+  <rect x="50" y="45" width="220" height="34" rx="17" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.2)"/>
+  <circle cx="68" cy="62" r="6" fill="#38bdf8"/>
+  <text x="84" y="67" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="700" fill="#e2e8f0" letter-spacing="1">BAGIAN HUKUM SETDAKAB</text>
+  <!-- Icon: Timbangan Keadilan / Harmonisasi -->
+  <g transform="translate(620, 220)" stroke="url(#goldGrad)" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M0, -50 V60" />
+    <path d="M-60, -25 H60" />
+    <path d="M-60, -25 L-85, 20 H-35 Z" fill="rgba(251,191,36,0.15)"/>
+    <path d="M60, -25 L35, 20 H85 Z" fill="rgba(251,191,36,0.15)"/>
+    <path d="M-25, 60 H25" />
+    <circle cx="0" cy="-55" r="7" fill="url(#goldGrad)"/>
+  </g>
+  <!-- Content -->
+  <text x="50" y="190" font-family="system-ui, -apple-system, sans-serif" font-size="28" font-weight="800" fill="#ffffff">
+    <tspan x="50" dy="0">Harmonisasi &amp; Penyelarasan</tspan>
+    <tspan x="50" dy="38">Rancangan Peraturan Daerah</tspan>
+  </text>
+  <text x="50" y="285" font-family="system-ui, -apple-system, sans-serif" font-size="15" fill="#94a3b8">
+    <tspan x="50" dy="0">Pemerintah Kabupaten Toba bersama Kantor Wilayah</tspan>
+    <tspan x="50" dy="24">Kementerian Hukum dan HAM Sumatera Utara di Balige</tspan>
+  </text>
+  <rect x="50" y="380" width="165" height="42" rx="21" fill="url(#goldGrad)"/>
+  <text x="132" y="406" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="700" fill="#0f172a" text-anchor="middle">LIPUTAN RESMI</text>
+</svg>

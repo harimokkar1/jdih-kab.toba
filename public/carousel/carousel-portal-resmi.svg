@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 600" width="1600" height="600">
+  <defs>
+    <linearGradient id="cbg1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a192f" />
+      <stop offset="60%" stop-color="#112240" />
+      <stop offset="100%" stop-color="#1e3a8a" />
+    </linearGradient>
+    <linearGradient id="goldAcc" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#d97706" />
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="600" fill="url(#cbg1)"/>
+  <!-- Decorative Circles & Grid -->
+  <circle cx="1400" cy="180" r="320" fill="#3b82f6" opacity="0.12"/>
+  <circle cx="1450" cy="400" r="220" fill="#f59e0b" opacity="0.08"/>
+  <g opacity="0.04">
+    <path d="M0,100 H1600 M0,200 H1600 M0,300 H1600 M0,400 H1600 M0,500 H1600" stroke="#fff" stroke-width="1.5"/>
+    <path d="M200,0 V600 M400,0 V600 M600,0 V600 M800,0 V600 M1000,0 V600 M1200,0 V600 M1400,0 V600" stroke="#fff" stroke-width="1.5"/>
+  </g>
+  <!-- Content -->
+  <rect x="120" y="90" width="310" height="40" rx="20" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.2)"/>
+  <circle cx="144" cy="110" r="7" fill="#f59e0b"/>
+  <text x="165" y="116" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="700" fill="#f8fafc" letter-spacing="1.5">PORTAL RESMI JDIH KABUPATEN TOBA</text>
+  <text x="120" y="210" font-family="system-ui, -apple-system, sans-serif" font-size="44" font-weight="900" fill="#ffffff">
+    <tspan x="120" dy="0">Pusat Dokumentasi &amp; Informasi Hukum</tspan>
+    <tspan x="120" dy="56" fill="#fbbf24">Terpercaya, Terbuka, &amp; Terintegrasi</tspan>
+  </text>
+  <text x="120" y="360" font-family="system-ui, -apple-system, sans-serif" font-size="20" fill="#94a3b8" font-weight="400">
+    <tspan x="120" dy="0">Menyediakan akses lengkap seluruh produk hukum daerah Kabupaten Toba mulai dari</tspan>
+    <tspan x="120" dy="32">Peraturan Daerah, Peraturan Bupati, hingga Keputusan Bupati secara akurat dan transparan.</tspan>
+  </text>
+  <!-- Feature Pills -->
+  <g transform="translate(120, 460)">
+    <rect x="0" y="0" width="220" height="48" rx="24" fill="rgba(245,158,11,0.2)" stroke="#f59e0b"/>
+    <text x="110" y="30" font-family="system-ui, sans-serif" font-size="14" font-weight="700" fill="#fbbf24" text-anchor="middle">✓ BPHN Nasional Terpadu</text>
+    <rect x="240" y="0" width="220" height="48" rx="24" fill="rgba(59,130,246,0.2)" stroke="#3b82f6"/>
+    <text x="350" y="30" font-family="system-ui, sans-serif" font-size="14" font-weight="700" fill="#93c5fd" text-anchor="middle">✓ Aksesibilitas Disabilitas</text>
+    <rect x="480" y="0" width="220" height="48" rx="24" fill="rgba(16,185,129,0.2)" stroke="#10b981"/>
+    <text x="590" y="30" font-family="system-ui, sans-serif" font-size="14" font-weight="700" fill="#6ee7b7" text-anchor="middle">✓ Pencarian Cerdas &amp; Cepat</text>
+  </g>
+</svg>
