@@ -473,29 +473,29 @@
                 </a>
             </div>
 
-            <!-- 5. CAROUSEL -->
+            <!-- 5. STRUKTUR ORGANISASI -->
             <div class="col-lg-4 col-md-6">
-                <a href="{{ route('admin.carousel') }}" class="admin-action-tile tile-purple">
-                    <div class="tile-icon-box">
-                        <i class="bi bi-images"></i>
-                    </div>
-                    <div class="tile-content">
-                        <span class="tile-title">Carousel Banner</span>
-                        <span class="tile-desc">Slider visual beranda portal</span>
-                    </div>
-                    <span class="tile-badge">{{ $totalCarousel }} Slider</span>
-                </a>
-            </div>
-
-            <!-- 6. STRUKTUR & VISI -->
-            <div class="col-lg-4 col-md-6">
-                <a href="{{ route('admin.struktur') }}" class="admin-action-tile tile-rose">
+                <a href="{{ route('admin.struktur') }}" class="admin-action-tile tile-purple">
                     <div class="tile-icon-box">
                         <i class="bi bi-diagram-3"></i>
                     </div>
                     <div class="tile-content">
-                        <span class="tile-title">Struktur &amp; Visi</span>
-                        <span class="tile-desc">Bagan organisasi &amp; profil</span>
+                        <span class="tile-title">Struktur Organisasi</span>
+                        <span class="tile-desc">Bagan tata kelola Bagian Hukum</span>
+                    </div>
+                    <span class="tile-badge">Bagan</span>
+                </a>
+            </div>
+
+            <!-- 6. VISI & MISI -->
+            <div class="col-lg-4 col-md-6">
+                <a href="{{ route('admin.visi') }}" class="admin-action-tile tile-rose">
+                    <div class="tile-icon-box">
+                        <i class="bi bi-compass"></i>
+                    </div>
+                    <div class="tile-content">
+                        <span class="tile-title">Visi &amp; Misi</span>
+                        <span class="tile-desc">Arah kebijakan &amp; komitmen Toba</span>
                     </div>
                     <span class="tile-badge">Profil</span>
                 </a>

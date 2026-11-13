@@ -3,7 +3,6 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BeritaController;
-use App\Http\Controllers\CarouselController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JenisPeraturanController;
 use App\Http\Controllers\PengumumanController;
@@ -65,10 +64,10 @@ Route::get('/keputusan-bupati/{id}', function ($id) {
 })->name('user.keputusan-bupati.detail');
 
 // Profil
-Route::get('/sejarah', [CarouselController::class, 'sejarah'])->name('sejarah');
+Route::get('/sejarah', [HomeController::class, 'sejarah'])->name('sejarah');
 Route::get('/visi', [VisiMisiController::class, 'show'])->name('visi');
 Route::get('/organisasi', [StrukturController::class, 'index'])->name('struktur');
-Route::get('/kontak', [CarouselController::class, 'kontak'])->name('kontak');
+Route::get('/kontak', [HomeController::class, 'kontak'])->name('kontak');
 
 // Informasi
 Route::get('/berita', [BeritaController::class, 'userIndex'])->name('berita');
@@ -122,12 +121,6 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::put('/pengumuman/{id}', [PengumumanController::class, 'update'])->name('admin.pengumuman.update');
     Route::delete('/pengumuman/{id}', [PengumumanController::class, 'destroy'])->name('admin.pengumuman.destroy');
 
-    // Carousel
-    Route::get('/carousel', [CarouselController::class, 'index'])->name('admin.carousel');
-    Route::post('/carousel', [CarouselController::class, 'store'])->name('admin.carousel.store');
-    Route::put('/carousel/{id}', [CarouselController::class, 'update'])->name('admin.carousel.update');
-    Route::delete('/carousel/{id}', [CarouselController::class, 'delete'])->name('admin.carousel.destroy');
-
     // Struktur Organisasi
     Route::get('/struktur', [StrukturController::class, 'admin'])->name('admin.struktur');
     Route::post('/struktur', [StrukturController::class, 'store'])->name('admin.struktur.store');
@@ -137,13 +130,6 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     // Visi & Misi
     Route::get('/visi', [VisiMisiController::class, 'index'])->name('admin.visi');
     Route::post('/visi', [VisiMisiController::class, 'save'])->name('admin.visi.save');
-});
-
-// Alias rute lama carousel agar kompatibel
-Route::middleware(['auth'])->group(function () {
-    Route::post('/carousel/store', [CarouselController::class, 'store'])->name('carousel.store');
-    Route::put('/carousel/update/{id}', [CarouselController::class, 'update'])->name('carousel.update');
-    Route::post('/carousel/delete/{id}', [CarouselController::class, 'delete'])->name('carousel.delete');
 });
 
 /*

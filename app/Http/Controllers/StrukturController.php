@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Carousel;
 use App\Models\StrukturOrganisasi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -23,9 +22,7 @@ class StrukturController extends Controller
             ->orderBy('urutan')
             ->get();
 
-        $carousels = Carousel::latest()->get();
-
-        return view('user.organisasi', compact('struktur', 'allStruktur', 'carousels'));
+        return view('user.organisasi', compact('struktur', 'allStruktur'));
     }
 
     /**

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Carousel;
 use App\Models\VisiMisi;
 use Illuminate\Http\Request;
 
@@ -48,8 +47,7 @@ class VisiMisiController extends Controller
     public function show()
     {
         $data = VisiMisi::first();
-        $carousels = Carousel::latest()->get();
 
-        return view('user.visi', compact('data', 'carousels'));
+        return view('user.visi', compact('data'));
     }
 }

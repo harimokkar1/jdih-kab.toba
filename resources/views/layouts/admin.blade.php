@@ -73,10 +73,6 @@
                     <i class="bi bi-megaphone"></i>
                     <span>Pengumuman</span>
                 </a>
-                <a href="{{ route('admin.carousel') }}" class="nav-item-link {{ request()->routeIs('admin.carousel*') ? 'active' : '' }}">
-                    <i class="bi bi-images"></i>
-                    <span>Kelola Carousel</span>
-                </a>
                 <a href="{{ route('admin.struktur') }}" class="nav-item-link {{ request()->routeIs('admin.struktur*') ? 'active' : '' }}">
                     <i class="bi bi-diagram-3"></i>
                     <span>Struktur Organisasi</span>

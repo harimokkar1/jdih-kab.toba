@@ -15,7 +15,6 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             JenisPeraturanSeeder::class,
             VisiMisiSeeder::class,
-            CarouselSeeder::class,
             StrukturOrganisasiSeeder::class,
             PeraturanSeeder::class,
             BeritaSeeder::class,

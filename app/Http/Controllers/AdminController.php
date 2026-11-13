@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Berita;
-use App\Models\Carousel;
 use App\Models\JenisPeraturan;
 use App\Models\Pengumuman;
 use App\Models\Peraturan;
@@ -28,7 +27,6 @@ class AdminController extends Controller
         $totalBerita = Berita::count();
         $totalPengumuman = Pengumuman::count();
         $totalStruktur = StrukturOrganisasi::count();
-        $totalCarousel = Carousel::count();
         $totalAdmin = User::count();
 
         // Kunjungan
@@ -102,7 +100,6 @@ class AdminController extends Controller
             'totalBerita',
             'totalPengumuman',
             'totalStruktur',
-            'totalCarousel',
             'totalAdmin',
             'totalBerlaku',
             'totalTidakBerlaku',
