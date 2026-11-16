@@ -16,10 +16,15 @@
                 <li class="breadcrumb-item active text-truncate" style="max-width: 320px;">{{ $pengumuman->judul }}</li>
             </ol>
         </nav>
-        <div class="d-flex align-items-center gap-2 mb-2">
+        <div class="d-flex align-items-center gap-2 mb-2 flex-wrap">
             <span class="badge bg-gold-subtle text-gold px-2.5 py-1 rounded-pill small fw-bold">
                 Pengumuman Resmi
             </span>
+            @if($pengumuman->kategori)
+                <span class="badge bg-white bg-opacity-20 text-white border border-white border-opacity-25 px-2.5 py-1 rounded-pill small fw-semibold">
+                    {{ $pengumuman->kategori->nama }}
+                </span>
+            @endif
         </div>
         <h1 class="h3 fw-bold text-white mb-2" style="line-height: 1.45;">{{ $pengumuman->judul }}</h1>
         <div class="small text-white-50 d-flex align-items-center gap-3">

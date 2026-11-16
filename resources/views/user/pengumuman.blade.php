@@ -30,73 +30,31 @@
          MAIN TWO-COLUMN LAYOUT
          ============================================================ -->
     <div class="row g-4">
-        <!-- LEFT SIDEBAR: FILTER KATEGORI, TAHUN & DOKUMEN -->
+        <!-- LEFT SIDEBAR: FILTER KATEGORI DINAMIS -->
         <div class="col-lg-3 col-md-4">
             <div class="filter-sidebar">
                 <form action="{{ route('pengumuman.index') }}" method="GET" id="filterSidebarForm">
                     @if(request('search'))
                         <input type="hidden" name="search" value="{{ request('search') }}">
                     @endif
-                    @if(request('kategori'))
-                        <input type="hidden" name="kategori" value="{{ request('kategori') }}">
-                    @endif
                     @if(request('sort'))
                         <input type="hidden" name="sort" value="{{ request('sort') }}">
                     @endif
 
-                    <!-- GROUP 1: KATEGORI PENGUMUMAN -->
-                    <div class="filter-group mb-4">
+                    <!-- GROUP 1: KATEGORI PENGUMUMAN (DINAMIS DARI DATABASE) -->
+                    <div class="filter-group mb-0">
                         <label class="filter-group-label">Kategori Pengumuman</label>
                         <div class="d-flex flex-column gap-1">
                             <a href="{{ route('pengumuman.index', array_merge(request()->except(['kategori', 'page']))) }}" class="filter-category-link {{ empty(request('kategori')) ? 'active' : '' }}">
                                 <span>Semua Kategori</span>
                                 <span class="filter-count-badge">{{ $totalAll }}</span>
                             </a>
-                            <a href="{{ route('pengumuman.index', array_merge(request()->except('page'), ['kategori' => 'uji-publik'])) }}" class="filter-category-link {{ request('kategori') === 'uji-publik' ? 'active' : '' }}">
-                                <span>Uji Publik &amp; Konsultasi</span>
-                                <span class="filter-count-badge">{{ $countUjiPublik }}</span>
-                            </a>
-                            <a href="{{ route('pengumuman.index', array_merge(request()->except('page'), ['kategori' => 'jadwal-pelayanan'])) }}" class="filter-category-link {{ request('kategori') === 'jadwal-pelayanan' ? 'active' : '' }}">
-                                <span>Jadwal &amp; Pelayanan</span>
-                                <span class="filter-count-badge">{{ $countJadwal }}</span>
-                            </a>
-                            <a href="{{ route('pengumuman.index', array_merge(request()->except('page'), ['kategori' => 'maklumat-edaran'])) }}" class="filter-category-link {{ request('kategori') === 'maklumat-edaran' ? 'active' : '' }}">
-                                <span>Maklumat &amp; Edaran</span>
-                                <span class="filter-count-badge">{{ $countMaklumat }}</span>
-                            </a>
-                            <a href="{{ route('pengumuman.index', array_merge(request()->except('page'), ['kategori' => 'sosialisasi'])) }}" class="filter-category-link {{ request('kategori') === 'sosialisasi' ? 'active' : '' }}">
-                                <span>Sosialisasi Hukum</span>
-                                <span class="filter-count-badge">{{ $countSosialisasi }}</span>
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- GROUP 2: TAHUN PENERBITAN -->
-                    <div class="filter-group mb-4">
-                        <label class="filter-group-label">Tahun Penerbitan</label>
-                        <div class="d-flex flex-column gap-1">
-                            <a href="{{ route('pengumuman.index', array_merge(request()->except(['tahun', 'page']))) }}" class="filter-category-link {{ empty(request('tahun')) ? 'active' : '' }}">
-                                <span>Semua Tahun</span>
-                                <span class="filter-count-badge">{{ $totalAll }}</span>
-                            </a>
-                            @foreach($availableYears as $yr => $cnt)
-                                <a href="{{ route('pengumuman.index', array_merge(request()->except('page'), ['tahun' => $yr])) }}" class="filter-category-link {{ request('tahun') == $yr ? 'active' : '' }}">
-                                    <span>Tahun {{ $yr }}</span>
-                                    <span class="filter-count-badge">{{ $cnt }}</span>
+                            @foreach($kategoriList as $kat)
+                                <a href="{{ route('pengumuman.index', array_merge(request()->except('page'), ['kategori' => $kat->slug])) }}" class="filter-category-link {{ request('kategori') === $kat->slug ? 'active' : '' }}">
+                                    <span>{{ $kat->nama }}</span>
+                                    <span class="filter-count-badge">{{ $kat->pengumumans_count }}</span>
                                 </a>
                             @endforeach
-                        </div>
-                    </div>
-
-                    <!-- GROUP 3: BERKAS LAMPIRAN -->
-                    <div class="filter-group mb-0">
-                        <label class="filter-group-label">Berkas Lampiran</label>
-                        <div class="filter-checkbox-item">
-                            <input class="form-check-input filter-checkbox-control" type="checkbox" name="pdf" value="1" id="filterPdfCheck" {{ request('pdf') === '1' ? 'checked' : '' }} onchange="document.getElementById('filterSidebarForm').submit()">
-                            <label class="filter-checkbox-label" for="filterPdfCheck">
-                                <span>Hanya dengan PDF</span>
-                                <span class="filter-count-badge">{{ $countWithPdf }}</span>
-                            </label>
                         </div>
                     </div>
                 </form>
@@ -106,18 +64,12 @@
         <!-- RIGHT COLUMN: RESULTS LIST -->
         <div class="col-lg-9 col-md-8">
             <!-- ============================================================
-                 SEARCH & FILTER CONSOLE (TEPAT DI ATAS GAMBAR 4)
+                 SEARCH & FILTER CONSOLE
                  ============================================================ -->
             <div class="berita-search-wrapper mb-3">
                 <form action="{{ route('pengumuman.index') }}" method="GET" id="searchPengumumanForm">
                     @if(request('kategori'))
                         <input type="hidden" name="kategori" value="{{ request('kategori') }}">
-                    @endif
-                    @if(request('tahun'))
-                        <input type="hidden" name="tahun" value="{{ request('tahun') }}">
-                    @endif
-                    @if(request('pdf'))
-                        <input type="hidden" name="pdf" value="{{ request('pdf') }}">
                     @endif
                     @if(request('sort'))
                         <input type="hidden" name="sort" value="{{ request('sort') }}">
@@ -151,14 +103,8 @@
                 @endif
             </div>
 
-            <!-- RESULT META STRIP: COUNTER, ACTIVE TAGS & SORTING (GAMBAR 4) -->
+            <!-- RESULT META STRIP: COUNTER, ACTIVE TAGS & SORTING -->
             @php
-                $catLabels = [
-                    'uji-publik' => 'Uji Publik & Konsultasi',
-                    'jadwal-pelayanan' => 'Jadwal & Pelayanan',
-                    'maklumat-edaran' => 'Maklumat & Edaran',
-                    'sosialisasi' => 'Sosialisasi Hukum',
-                ];
                 $sortMap = [
                     'terbaru' => 'Terbaru',
                     'terlama' => 'Terlama',
@@ -172,22 +118,10 @@
                     <span class="text-muted small">
                         Menampilkan <strong>{{ number_format($pengumumans->total(), 0, ',', '.') }}</strong> pengumuman
                     </span>
-                    @if(request('kategori') && isset($catLabels[request('kategori')]))
+                    @if($activeKategori)
                         <span class="badge bg-light text-dark border fw-normal small d-inline-flex align-items-center gap-1" style="font-size: 0.76rem;">
-                            Kategori: <strong>{{ $catLabels[request('kategori')] }}</strong>
+                            Kategori: <strong>{{ $activeKategori->nama }}</strong>
                             <a href="{{ route('pengumuman.index', request()->except(['kategori', 'page'])) }}" class="text-danger ms-1 text-decoration-none">&times;</a>
-                        </span>
-                    @endif
-                    @if(request('tahun'))
-                        <span class="badge bg-light text-dark border fw-normal small d-inline-flex align-items-center gap-1" style="font-size: 0.76rem;">
-                            Tahun: <strong>{{ request('tahun') }}</strong>
-                            <a href="{{ route('pengumuman.index', request()->except(['tahun', 'page'])) }}" class="text-danger ms-1 text-decoration-none">&times;</a>
-                        </span>
-                    @endif
-                    @if(request('pdf') === '1')
-                        <span class="badge bg-light text-dark border fw-normal small d-inline-flex align-items-center gap-1" style="font-size: 0.76rem;">
-                            Hanya PDF
-                            <a href="{{ route('pengumuman.index', request()->except(['pdf', 'page'])) }}" class="text-danger ms-1 text-decoration-none">&times;</a>
                         </span>
                     @endif
                 </div>
@@ -217,9 +151,15 @@
                         <!-- TOP ROW: BADGES & DATE -->
                         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
                             <div class="d-flex align-items-center gap-2 flex-wrap">
-                                <span class="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-0.5 rounded-pill fw-semibold" style="font-size: 0.74rem;">
-                                    Siaran Resmi
-                                </span>
+                                @if($item->kategori)
+                                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2.5 py-0.5 rounded-pill fw-semibold" style="font-size: 0.74rem;">
+                                        {{ $item->kategori->nama }}
+                                    </span>
+                                @else
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-0.5 rounded-pill fw-semibold" style="font-size: 0.74rem;">
+                                        Siaran Resmi
+                                    </span>
+                                @endif
                                 @if($item->file_pdf)
                                     <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-2.5 py-0.5 rounded-pill fw-semibold" style="font-size: 0.74rem;">
                                         Lampiran PDF

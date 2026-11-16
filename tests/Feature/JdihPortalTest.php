@@ -139,5 +139,62 @@ class JdihPortalTest extends TestCase
             $response->assertStatus(200);
         }
     }
+
+    /**
+     * Test Dynamic Kategori Pengumuman CRUD and Public Filtering.
+     */
+    public function test_dynamic_kategori_pengumuman_management_and_filtering(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        // 1. Create a new category as admin
+        $storeResponse = $this->actingAs($admin)->post('/admin/pengumuman/kategori', [
+            'nama' => 'Siaran Pers Bupati',
+        ]);
+        $storeResponse->assertRedirect('/admin/pengumuman');
+        $this->assertDatabaseHas('kategori_pengumumen', [
+            'nama' => 'Siaran Pers Bupati',
+            'slug' => 'siaran-pers-bupati',
+        ]);
+
+        $kat = \App\Models\KategoriPengumuman::where('slug', 'siaran-pers-bupati')->first();
+
+        // 2. Create announcement assigned to that category
+        $announcementResponse = $this->actingAs($admin)->post('/admin/pengumuman', [
+            'judul' => 'Rilis Pers Terkait Regulasi Daerah Terbaru',
+            'kategori_id' => $kat->id,
+            'isi' => 'Rilis pers resmi pemerintah daerah Kabupaten Toba...',
+            'tanggal_upload' => '2026-11-16',
+        ]);
+        $announcementResponse->assertRedirect('/admin/pengumuman');
+        $this->assertDatabaseHas('pengumumen', [
+            'judul' => 'Rilis Pers Terkait Regulasi Daerah Terbaru',
+            'kategori_id' => $kat->id,
+        ]);
+
+        // 3. Public index shows category and allows filtering by slug
+        $publicResponse = $this->get('/pengumuman?kategori=siaran-pers-bupati');
+        $publicResponse->assertStatus(200);
+        $publicResponse->assertSee('Siaran Pers Bupati');
+        $publicResponse->assertSee('Rilis Pers Terkait Regulasi Daerah Terbaru');
+
+        // 4. Update category
+        $updateResponse = $this->actingAs($admin)->put("/admin/pengumuman/kategori/{$kat->id}", [
+            'nama' => 'Siaran Pers & Media',
+        ]);
+        $updateResponse->assertRedirect('/admin/pengumuman');
+        $this->assertDatabaseHas('kategori_pengumumen', [
+            'id' => $kat->id,
+            'nama' => 'Siaran Pers & Media',
+            'slug' => 'siaran-pers-media',
+        ]);
+
+        // 5. Delete category
+        $deleteResponse = $this->actingAs($admin)->delete("/admin/pengumuman/kategori/{$kat->id}");
+        $deleteResponse->assertRedirect('/admin/pengumuman');
+        $this->assertDatabaseMissing('kategori_pengumumen', [
+            'id' => $kat->id,
+        ]);
+    }
 }
 

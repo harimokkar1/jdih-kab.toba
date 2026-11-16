@@ -115,11 +115,14 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::put('/berita/{id}', [BeritaController::class, 'update'])->name('admin.berita.update');
     Route::delete('/berita/{id}', [BeritaController::class, 'destroy'])->name('admin.berita.destroy');
 
-    // Pengumuman
+    // Pengumuman & Kategori
     Route::get('/pengumuman', [PengumumanController::class, 'index'])->name('admin.pengumuman.index');
     Route::post('/pengumuman', [PengumumanController::class, 'store'])->name('admin.pengumuman.store');
     Route::put('/pengumuman/{id}', [PengumumanController::class, 'update'])->name('admin.pengumuman.update');
     Route::delete('/pengumuman/{id}', [PengumumanController::class, 'destroy'])->name('admin.pengumuman.destroy');
+    Route::post('/pengumuman/kategori', [PengumumanController::class, 'storeKategori'])->name('admin.pengumuman.kategori.store');
+    Route::put('/pengumuman/kategori/{id}', [PengumumanController::class, 'updateKategori'])->name('admin.pengumuman.kategori.update');
+    Route::delete('/pengumuman/kategori/{id}', [PengumumanController::class, 'destroyKategori'])->name('admin.pengumuman.kategori.destroy');
 
     // Struktur Organisasi
     Route::get('/struktur', [StrukturController::class, 'admin'])->name('admin.struktur');
