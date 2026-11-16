@@ -6,21 +6,21 @@
 @section('content')
 
 <!-- ============================================================
-     PAGE HEADER (CLEAN & NON-REDUNDANT)
+     1. PAGE HEADER (CLEAN & EXECUTIVE)
      ============================================================ -->
 <div class="admin-page-header">
     <div>
         <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
             <h4 class="admin-page-title mb-0">Kelola Akun Administrator</h4>
-            <span class="admin-header-badge">
-                <span class="badge-dot"></span>
+            <span class="stat-pill stat-pill-slate">
+                <span class="pulse-dot-emerald me-1"></span>
                 Otorisasi Hak Akses Sistem
             </span>
         </div>
         <p class="admin-page-subtitle">Manajemen hak akses pengguna dan staf administrator portal JDIH Kabupaten Toba</p>
     </div>
     <div class="mt-3 mt-md-0">
-        <button type="button" class="btn-admin-primary" data-bs-toggle="modal" data-bs-target="#modalTambahAdmin">
+        <button type="button" class="btn btn-admin-primary" data-bs-toggle="modal" data-bs-target="#modalTambahAdmin">
             <i class="bi bi-plus-lg"></i>
             <span>Tambah Admin Baru</span>
         </button>
@@ -28,11 +28,11 @@
 </div>
 
 <!-- ============================================================
-     STAT CARDS (CLEAN, MINIMALIST & HARMONIOUS)
+     2. STAT CARDS (3-COLUMN KPI)
      ============================================================ -->
 <div class="row g-3 mb-4">
     <!-- TOTAL ADMINISTRATOR -->
-    <div class="col-xl-3 col-sm-6">
+    <div class="col-md-4 col-sm-6">
         <div class="admin-stat-card stat-card-blue">
             <div class="stat-card-top">
                 <span class="stat-card-label">Total Administrator</span>
@@ -50,7 +50,7 @@
     </div>
 
     <!-- SUPER ADMINISTRATOR -->
-    <div class="col-xl-3 col-sm-6">
+    <div class="col-md-4 col-sm-6">
         <div class="admin-stat-card stat-card-purple">
             <div class="stat-card-top">
                 <span class="stat-card-label">Super Administrator</span>
@@ -68,7 +68,7 @@
     </div>
 
     <!-- STAF ADMINISTRATOR -->
-    <div class="col-xl-3 col-sm-6">
+    <div class="col-md-4 col-sm-12">
         <div class="admin-stat-card stat-card-cyan">
             <div class="stat-card-top">
                 <span class="stat-card-label">Staf Administrator</span>
@@ -84,55 +84,34 @@
             </div>
         </div>
     </div>
-
-    <!-- KEAMANAN SISTEM -->
-    <div class="col-xl-3 col-sm-6">
-        <div class="admin-stat-card stat-card-emerald">
-            <div class="stat-card-top">
-                <span class="stat-card-label">Status Akses</span>
-                <div class="stat-card-icon">
-                    <i class="bi bi-lock"></i>
-                </div>
-            </div>
-            <div>
-                <div class="stat-card-value text-success">Aktif</div>
-                <div class="stat-card-subtext">
-                    <span class="badge-status-pill status-active">
-                        <span class="status-dot status-dot-emerald"></span>
-                        Enkripsi Bcrypt &amp; RBAC
-                    </span>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 
 <!-- ============================================================
-     TABEL ADMINISTRATOR
+     3. TABEL DAFTAR ADMINISTRATOR
      ============================================================ -->
 <div class="admin-card">
-    <div class="admin-card-header">
+    <div class="admin-card-header d-flex justify-content-between align-items-center">
         <div class="d-flex align-items-center gap-2">
             <h6 class="admin-card-title mb-0">Daftar Administrator</h6>
             <span class="badge bg-light text-dark border px-2">{{ count($admins) }} Akun</span>
         </div>
-        <div class="position-relative">
+        <div class="position-relative" style="max-width: 260px;">
             <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted small"></i>
-            <input type="text" id="adminSearchInput" class="table-search-input" placeholder="Cari nama atau email...">
+            <input type="text" id="adminSearchInput" class="form-control form-control-sm ps-5" placeholder="Cari nama atau email..." style="border-radius: 8px;">
         </div>
     </div>
 
     <div class="table-responsive">
-        <table class="table admin-table align-middle mb-0" id="tableAdminList">
+        <table class="table admin-table-registry align-middle mb-0" id="tableAdminList">
             <thead>
                 <tr>
-                    <th class="ps-4 text-center" style="width: 50px;">No</th>
-                    <th>Administrator</th>
+                    <th class="ps-4 text-center" style="width: 60px;">No</th>
+                    <th>Nama Administrator &amp; Akun</th>
                     <th>Alamat Email</th>
-                    <th>Peran (Role)</th>
-                    <th>Terdaftar Sejak</th>
-                    <th>Status</th>
-                    <th class="text-end pe-4" style="width: 140px;">Aksi</th>
+                    <th style="width: 170px;">Peran (Role)</th>
+                    <th style="width: 160px;">Terdaftar Sejak</th>
+                    <th class="text-center" style="width: 120px;">Status</th>
+                    <th class="text-end pe-4" style="width: 130px;">Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -145,28 +124,31 @@
                             <span class="table-rank-chip">{{ $index + 1 }}</span>
                         </td>
                         <td>
-                            <div class="d-flex align-items-center gap-2">
+                            <div class="d-flex align-items-center gap-3">
                                 @if($adm->role === 'super_admin')
-                                    <div class="table-avatar-initial" style="background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 100%);">
+                                    <div class="admin-avatar-initial-circle" style="background: linear-gradient(135deg, #4338ca 0%, #1e1b4b 100%);">
                                         {{ $initials }}
                                     </div>
                                 @else
-                                    <div class="table-avatar-initial initial-admin">
+                                    <div class="admin-avatar-initial-circle level-2">
                                         {{ $initials }}
                                     </div>
                                 @endif
                                 <div>
-                                    <strong class="text-dark d-block">{{ $adm->name }}</strong>
-                                    @if(auth()->id() === $adm->id)
-                                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill py-0 px-2 small">
-                                            Akun Anda
-                                        </span>
-                                    @endif
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="d-block fw-semibold text-dark" style="font-size: 0.875rem;">{{ $adm->name }}</span>
+                                        @if(auth()->id() === $adm->id)
+                                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill py-1 px-2" style="font-size: 0.68rem;">
+                                                Akun Anda
+                                            </span>
+                                        @endif
+                                    </div>
+                                    <span class="text-muted" style="font-size: 0.72rem;">ID Pengguna: #{{ $adm->id }}</span>
                                 </div>
                             </div>
                         </td>
                         <td>
-                            <span class="text-muted">{{ $adm->email }}</span>
+                            <span class="text-muted small"><i class="bi bi-envelope me-1 text-secondary"></i>{{ $adm->email }}</span>
                         </td>
                         <td>
                             @if($adm->role === 'super_admin')
@@ -180,23 +162,26 @@
                             @endif
                         </td>
                         <td>
-                            <span class="text-dark small d-block"><i class="bi bi-calendar3 me-1 text-muted"></i>{{ $adm->created_at ? $adm->created_at->format('d/m/Y') : '-' }}</span>
-                            <small class="text-muted"><i class="bi bi-clock me-1"></i>{{ $adm->created_at ? $adm->created_at->format('H:i') : '' }} WIB</small>
+                            <span class="text-dark small d-block">
+                                <i class="bi bi-calendar3 me-1 text-muted"></i>{{ $adm->created_at ? $adm->created_at->format('d/m/Y') : '-' }}
+                            </span>
+                            <span class="text-muted" style="font-size: 0.72rem;">
+                                <i class="bi bi-clock me-1"></i>{{ $adm->created_at ? $adm->created_at->format('H:i') : '' }} WIB
+                            </span>
                         </td>
-                        <td>
-                            <span class="badge-status-pill status-active">
-                                <span class="status-dot status-dot-emerald"></span>
+                        <td class="text-center">
+                            <span class="badge-status-pill-active">
+                                <span class="pulse-dot-emerald me-1"></span>
                                 Aktif
                             </span>
                         </td>
                         <td class="text-end pe-4">
                             @if(auth()->id() !== $adm->id)
-                                <button type="button" class="btn-table-action-delete" data-bs-toggle="modal" data-bs-target="#modalHapus{{ $adm->id }}" title="Hapus Administrator">
+                                <button type="button" class="btn-action-icon btn-action-delete" data-bs-toggle="modal" data-bs-target="#modalHapus{{ $adm->id }}" title="Hapus Administrator">
                                     <i class="bi bi-trash3"></i>
-                                    <span>Hapus</span>
                                 </button>
                             @else
-                                <span class="badge bg-light text-muted border px-2 py-1">
+                                <span class="badge bg-light text-muted border px-3 py-1" style="font-size: 0.72rem;">
                                     <i class="bi bi-person-check-fill text-success me-1"></i> Sesi Aktif
                                 </span>
                             @endif
@@ -211,22 +196,23 @@
                                     <form action="{{ route('admin.delete', $adm->id) }}" method="POST">
                                         @csrf
                                         <div class="modal-header border-bottom py-3">
-                                            <h6 class="modal-title fw-bold text-danger mb-0">
-                                                <i class="bi bi-exclamation-triangle me-1"></i> Konfirmasi Hapus Admin
+                                            <h6 class="modal-title fw-bold text-danger mb-0 d-flex align-items-center gap-2">
+                                                <i class="bi bi-exclamation-triangle-fill"></i>
+                                                <span>Konfirmasi Hapus Akun</span>
                                             </h6>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                         </div>
                                         <div class="modal-body p-4 text-center">
                                             <p class="text-muted small mb-2">Apakah Anda yakin ingin menghapus akses administrator berikut?</p>
-                                            <div class="p-3 bg-light rounded-3 border my-3">
+                                            <div class="p-3 bg-light rounded-3 border my-3 text-start">
                                                 <strong class="text-dark d-block">{{ $adm->name }}</strong>
                                                 <span class="text-muted small">{{ $adm->email }}</span>
                                             </div>
                                             <p class="text-danger small mb-0">Tindakan ini tidak dapat dibatalkan.</p>
                                         </div>
-                                        <div class="modal-footer border-top py-2">
+                                        <div class="modal-footer border-top p-3">
                                             <button type="button" class="btn btn-sm btn-light border px-3" data-bs-dismiss="modal">Batal</button>
-                                            <button type="submit" class="btn btn-sm btn-danger px-3">Hapus Akun</button>
+                                            <button type="submit" class="btn btn-sm btn-danger px-3 fw-semibold">Hapus Akun</button>
                                         </div>
                                     </form>
                                 </div>
@@ -235,7 +221,7 @@
                     @endif
                 @empty
                     <tr>
-                        <td colspan="7" class="text-center py-4 text-muted small">
+                        <td colspan="7" class="text-center py-5 text-muted small">
                             Belum ada akun administrator terdaftar.
                         </td>
                     </tr>
@@ -246,50 +232,61 @@
 </div>
 
 <!-- ============================================================
-     MODAL TAMBAH ADMIN BARU
+     4. MODAL TAMBAH ADMIN BARU
      ============================================================ -->
 <div class="modal fade" id="modalTambahAdmin" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" style="max-width: 480px;">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-modern-md">
         <div class="modal-content rounded-3 border-0 shadow">
             <form action="{{ route('admin.store') }}" method="POST">
                 @csrf
-                <div class="modal-header border-bottom py-3">
-                    <h6 class="modal-title fw-bold text-dark mb-0">Tambah Akun Administrator</h6>
+                <div class="modal-header d-flex align-items-center justify-content-between py-3">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="modal-header-icon-squircle icon-squircle-blue">
+                            <i class="bi bi-person-gear"></i>
+                        </div>
+                        <div>
+                            <h6 class="modal-title fw-semibold text-dark mb-0">Tambah Akun Administrator</h6>
+                            <span class="text-muted" style="font-size: 0.72rem;">Daftarkan aparatur pengelola sistem dan atur hak akses</span>
+                        </div>
+                    </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body p-4">
-                    <div class="mb-3">
-                        <label class="form-label small fw-semibold text-dark mb-1">Nama Lengkap <span class="text-danger">*</span></label>
-                        <input type="text" name="name" class="form-control form-control-sm" placeholder="Nama staf / pejabat..." required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label small fw-semibold text-dark mb-1">Alamat Email <span class="text-danger">*</span></label>
-                        <input type="email" name="email" class="form-control form-control-sm" placeholder="nama@jdih.tobakab.go.id" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label small fw-semibold text-dark mb-1">Kata Sandi (Password) <span class="text-danger">*</span></label>
-                        <div class="input-group input-group-sm">
-                            <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Minimal 6 karakter..." minlength="6" required>
-                            <button class="btn btn-outline-secondary" type="button" id="btnTogglePassword">
-                                <i class="bi bi-eye"></i>
-                            </button>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label small fw-semibold text-dark mb-1">Nama Lengkap <span class="text-danger">*</span></label>
+                                <input type="text" name="name" class="form-control" placeholder="Nama staf / pejabat..." required>
+                            </div>
+                            <div class="mb-0">
+                                <label class="form-label small fw-semibold text-dark mb-1">Alamat Email <span class="text-danger">*</span></label>
+                                <input type="email" name="email" class="form-control" placeholder="nama@jdih.tobakab.go.id" required>
+                            </div>
                         </div>
-                        <small class="text-muted">Minimal 6 karakter.</small>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label small fw-semibold text-dark mb-1">Peran Akses (Role)</label>
-                        <select name="role" class="form-select form-select-sm">
-                            <option value="admin" selected>Admin Standar (Kelola Dokumen &amp; Berita)</option>
-                            <option value="super_admin">Super Admin (Hak Penuh &amp; Kelola Akun)</option>
-                        </select>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label small fw-semibold text-dark mb-1">Kata Sandi (Password) <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Minimal 6 karakter..." minlength="6" required>
+                                    <button class="btn btn-outline-secondary" type="button" id="btnTogglePassword">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </div>
+                                <small class="text-muted d-block mt-1" style="font-size: 0.7rem;">Minimal 6 karakter alfanumerik</small>
+                            </div>
+                            <div class="mb-0">
+                                <label class="form-label small fw-semibold text-dark mb-1">Peran Akses (Role)</label>
+                                <select name="role" class="form-select">
+                                    <option value="admin" selected>Admin Standar (Kelola Dokumen &amp; Berita)</option>
+                                    <option value="super_admin">Super Admin (Hak Penuh &amp; Kelola Akun)</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="modal-footer border-top py-2">
+                <div class="modal-footer border-top p-3">
                     <button type="button" class="btn btn-sm btn-light border px-3" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-sm btn-primary px-3">Buat Akun</button>
+                    <button type="submit" class="btn btn-sm btn-admin-primary px-3 fw-semibold">Buat Akun Administrator</button>
                 </div>
             </form>
         </div>

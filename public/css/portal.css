@@ -4042,6 +4042,8 @@ main {
   line-height: 1.7;
   color: #475569;
   margin-bottom: 20px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .mission-pillar-bullets {

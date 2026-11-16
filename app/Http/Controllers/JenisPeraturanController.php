@@ -17,7 +17,16 @@ class JenisPeraturanController extends Controller
             ->orderBy('urutan')
             ->get();
 
-        return view('admin.jenis-peraturan', compact('jenisPeraturans'));
+        $totalKategori = $jenisPeraturans->count();
+        $totalDokumen = $jenisPeraturans->sum('peraturans_count');
+        $topKategori = $jenisPeraturans->sortByDesc('peraturans_count')->first();
+
+        return view('admin.jenis-peraturan', compact(
+            'jenisPeraturans',
+            'totalKategori',
+            'totalDokumen',
+            'topKategori'
+        ));
     }
 
     /**

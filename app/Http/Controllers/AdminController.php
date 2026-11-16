@@ -76,6 +76,72 @@ class AdminController extends Controller
         $maxVisitorVal = count($chartVisitors) > 0 ? max($chartVisitors) : 0;
         $maxVisitorDay = $chartDays[array_search($maxVisitorVal, $chartVisitors)] ?? '-';
 
+        // 2. Data Grafik Kunjungan 30 Hari Terakhir
+        $chartDays30 = [];
+        $chartVisitors30 = [];
+        for ($i = 29; $i >= 0; $i--) {
+            $d = Carbon::today()->subDays($i);
+            $chartDays30[] = $d->translatedFormat('d M');
+            $chartVisitors30[] = Visitor::whereDate('visited_date', $d->toDateString())->count();
+        }
+        $avgVisitors30 = count($chartVisitors30) > 0 ? round(array_sum($chartVisitors30) / count($chartVisitors30)) : 0;
+        $maxVisitor30Val = count($chartVisitors30) > 0 ? max($chartVisitors30) : 0;
+        $maxVisitor30Day = $chartDays30[array_search($maxVisitor30Val, $chartVisitors30)] ?? '-';
+
+        // 3. Data Grafik Kunjungan Per Bulan (12 Bulan Terakhir)
+        $chartMonths = [];
+        $chartVisitorsMonth = [];
+        for ($i = 11; $i >= 0; $i--) {
+            $m = Carbon::today()->subMonths($i);
+            $chartMonths[] = $m->translatedFormat('M Y');
+            $chartVisitorsMonth[] = Visitor::whereYear('visited_date', $m->year)
+                ->whereMonth('visited_date', $m->month)
+                ->count();
+        }
+        $avgVisitorsMonth = count($chartVisitorsMonth) > 0 ? round(array_sum($chartVisitorsMonth) / count($chartVisitorsMonth)) : 0;
+        $maxVisitorMonthVal = count($chartVisitorsMonth) > 0 ? max($chartVisitorsMonth) : 0;
+        $maxVisitorMonthLabel = $chartMonths[array_search($maxVisitorMonthVal, $chartVisitorsMonth)] ?? '-';
+        $visitorsThisMonth = Visitor::whereYear('visited_date', $nowWib->year)
+            ->whereMonth('visited_date', $nowWib->month)
+            ->count();
+        $lastMonthObj = Carbon::today()->subMonth();
+        $visitorsLastMonth = Visitor::whereYear('visited_date', $lastMonthObj->year)
+            ->whereMonth('visited_date', $lastMonthObj->month)
+            ->count();
+
+        // 4. Data Grafik Kunjungan Per Tahun (5 Tahun Terakhir)
+        $chartYears = [];
+        $chartVisitorsYear = [];
+        for ($i = 4; $i >= 0; $i--) {
+            $y = $nowWib->year - $i;
+            $chartYears[] = (string) $y;
+            $chartVisitorsYear[] = Visitor::whereYear('visited_date', $y)->count();
+        }
+        $avgVisitorsYear = count($chartVisitorsYear) > 0 ? round(array_sum($chartVisitorsYear) / count($chartVisitorsYear)) : 0;
+        $maxVisitorYearVal = count($chartVisitorsYear) > 0 ? max($chartVisitorsYear) : 0;
+        $maxVisitorYearLabel = $chartYears[array_search($maxVisitorYearVal, $chartVisitorsYear)] ?? '-';
+        $visitorsThisYear = Visitor::whereYear('visited_date', $nowWib->year)->count();
+        $visitorsLastYear = Visitor::whereYear('visited_date', $nowWib->year - 1)->count();
+
+        // Statistik Kepatuhan & Validasi Berkas Dokumen (Quality Assurance JDIH)
+        $currentYear = $nowWib->year;
+        $totalTahunIni = Peraturan::where('tahun', $currentYear)->count();
+        $totalWithPdf = Peraturan::whereNotNull('file_dokumen')
+            ->where('file_dokumen', '!=', '')
+            ->count();
+        $totalWithoutPdf = max(0, $totalPeraturan - $totalWithPdf);
+        $rasioPdf = $totalPeraturan > 0 ? round(($totalWithPdf / $totalPeraturan) * 100) : 100;
+
+        // 6 Regulasi Terakhir Diinput/Diperbarui untuk Feed Operasional
+        $recentPeraturans = Peraturan::with('jenisPeraturan')
+            ->latest('updated_at')
+            ->take(6)
+            ->get();
+
+        // 3 Berita & Pengumuman Terkini untuk Feed Publikasi
+        $recentBeritas = Berita::latest()->take(3)->get();
+        $recentPengumumans = Pengumuman::with('kategori')->latest()->take(3)->get();
+
         // Statistik Perangkat Pengunjung (Real dari Database Visitor)
         $totalVisitorRecords = Visitor::count();
         $mobileVisitors = Visitor::where(function ($q) {
@@ -108,9 +174,28 @@ class AdminController extends Controller
             'visitorStats',
             'chartDays',
             'chartVisitors',
+            'chartDays30',
+            'chartVisitors30',
             'avgVisitors',
+            'avgVisitors30',
             'maxVisitorVal',
             'maxVisitorDay',
+            'maxVisitor30Val',
+            'maxVisitor30Day',
+            'chartMonths',
+            'chartVisitorsMonth',
+            'avgVisitorsMonth',
+            'maxVisitorMonthVal',
+            'maxVisitorMonthLabel',
+            'visitorsThisMonth',
+            'visitorsLastMonth',
+            'chartYears',
+            'chartVisitorsYear',
+            'avgVisitorsYear',
+            'maxVisitorYearVal',
+            'maxVisitorYearLabel',
+            'visitorsThisYear',
+            'visitorsLastYear',
             'chartCatLabels',
             'chartCatCounts',
             'topJenisSummary',
@@ -118,7 +203,15 @@ class AdminController extends Controller
             'mobileVisitors',
             'desktopVisitors',
             'mobilePct',
-            'desktopPct'
+            'desktopPct',
+            'currentYear',
+            'totalTahunIni',
+            'totalWithPdf',
+            'totalWithoutPdf',
+            'rasioPdf',
+            'recentPeraturans',
+            'recentBeritas',
+            'recentPengumumans'
         ));
     }
 

@@ -40,7 +40,10 @@ class PengumumanController extends Controller
             ->orderBy('nama')
             ->get();
 
-        return view('admin.pengumuman', compact('pengumumans', 'kategoriList'));
+        $totalPengumuman = Pengumuman::count();
+        $totalWithPdf = Pengumuman::whereNotNull('file_pdf')->where('file_pdf', '!=', '')->count();
+
+        return view('admin.pengumuman', compact('pengumumans', 'kategoriList', 'totalPengumuman', 'totalWithPdf'));
     }
 
     // ==============================

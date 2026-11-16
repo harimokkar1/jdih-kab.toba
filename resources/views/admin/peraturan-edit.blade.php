@@ -32,7 +32,7 @@
         <!-- METADATA UTAMA -->
         <div class="col-lg-8">
             <!-- 1. INFORMASI DASAR -->
-            <div class="admin-card p-4 mb-4">
+            <div class="admin-card form-card p-4 mb-4">
                 <h5 class="fw-bold text-primary mb-3"><i class="bi bi-info-circle me-2"></i> 1. Informasi Utama</h5>
 
                 <div class="row g-3">
@@ -147,77 +147,180 @@
         <div class="col-lg-4">
             <!-- STATUS -->
             <div class="admin-card p-4 mb-4">
-                <h6 class="fw-bold text-dark mb-3">Status Keberlakuan</h6>
-                <div class="mb-3">
-                    <div class="form-check mb-2">
-                        <input class="form-check-input" type="radio" name="status" id="statusBerlaku" value="BERLAKU" {{ old('status', $peraturan->status) === 'BERLAKU' ? 'checked' : '' }}>
-                        <label class="form-check-label text-success fw-bold" for="statusBerlaku">
-                            <i class="bi bi-check-circle-fill me-1"></i> BERLAKU
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="status" id="statusTidak" value="TIDAK BERLAKU" {{ old('status', $peraturan->status) === 'TIDAK BERLAKU' ? 'checked' : '' }}>
-                        <label class="form-check-label text-danger fw-bold" for="statusTidak">
-                            <i class="bi bi-x-circle-fill me-1"></i> TIDAK BERLAKU
-                        </label>
-                    </div>
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <h6 class="fw-semibold text-dark mb-0">Status Keberlakuan</h6>
+                    <span class="text-muted" style="font-size: 0.72rem;">Efektivitas Hukum</span>
+                </div>
+                
+                <div class="segmented-status-group">
+                    <input type="radio" class="btn-check" name="status" id="statusBerlaku" value="BERLAKU" autocomplete="off" {{ old('status', $peraturan->status) === 'BERLAKU' ? 'checked' : '' }}>
+                    <label class="segmented-status-card status-card-berlaku" for="statusBerlaku">
+                        <div class="d-flex align-items-center gap-2.5">
+                            <span class="status-indicator-dot"></span>
+                            <div>
+                                <div class="status-title">BERLAKU</div>
+                                <div class="status-desc">Regulasi aktif &amp; mengikat</div>
+                            </div>
+                        </div>
+                        <i class="bi bi-check2-circle status-check-icon"></i>
+                    </label>
+
+                    <input type="radio" class="btn-check" name="status" id="statusTidak" value="TIDAK BERLAKU" autocomplete="off" {{ old('status', $peraturan->status) === 'TIDAK BERLAKU' ? 'checked' : '' }}>
+                    <label class="segmented-status-card status-card-tidak" for="statusTidak">
+                        <div class="d-flex align-items-center gap-2.5">
+                            <span class="status-indicator-dot"></span>
+                            <div>
+                                <div class="status-title">TIDAK BERLAKU</div>
+                                <div class="status-desc">Dicabut / tidak aktif</div>
+                            </div>
+                        </div>
+                        <i class="bi bi-x-circle status-check-icon"></i>
+                    </label>
                 </div>
             </div>
 
             <!-- UNGGAH FILE -->
             <div class="admin-card p-4 mb-4">
-                <h6 class="fw-bold text-dark mb-3"><i class="bi bi-paperclip me-1"></i> Berkas Lampiran</h6>
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <h6 class="fw-semibold text-dark mb-0"><i class="bi bi-paperclip text-primary me-1"></i> Berkas Lampiran</h6>
+                    <span class="badge bg-light text-muted border" style="font-size: 0.68rem;">PDF &bull; Max 30MB</span>
+                </div>
 
                 <!-- FILE UTAMA -->
                 <div class="mb-3">
-                    <label class="form-label small fw-bold text-primary">Ganti PDF Utama (Biarkan kosong jika tidak diganti)</label>
+                    <label class="form-label small fw-semibold text-dark">Ganti PDF Utama (Biarkan kosong jika tetap)</label>
                     @if($peraturan->file_dokumen)
                         <div class="p-2 border rounded-2 bg-light mb-2 small d-flex justify-content-between align-items-center">
-                            <span class="text-truncate" style="max-width: 180px;"><i class="bi bi-file-pdf text-danger me-1"></i> {{ basename($peraturan->file_dokumen) }}</span>
+                            <span class="text-truncate" style="max-width: 180px;"><i class="bi bi-file-earmark-pdf-fill text-danger me-1"></i> {{ basename($peraturan->file_dokumen) }}</span>
                             <a href="{{ $peraturan->file_url }}" target="_blank" class="badge bg-primary text-decoration-none">Lihat</a>
                         </div>
                     @endif
-                    <input type="file" name="file_dokumen" class="form-control form-control-sm @error('file_dokumen') is-invalid @enderror" accept=".pdf">
-                    <small class="text-muted d-block mt-1">Maksimal 30 MB (PDF).</small>
-                    @error('file_dokumen') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    <div class="modern-file-uploader @error('file_dokumen') is-invalid @enderror">
+                        <input type="file" name="file_dokumen" id="input_file_dokumen" class="uploader-native-input" accept=".pdf" onchange="handleFileSelected(this, 'preview_file_dokumen')">
+                        <label for="input_file_dokumen" class="uploader-drop-area">
+                            <div class="uploader-icon-squircle">
+                                <i class="bi bi-cloud-arrow-up"></i>
+                            </div>
+                            <div class="uploader-text-wrapper">
+                                <span class="uploader-title">{{ $peraturan->file_dokumen ? 'Ganti Naskah PDF Utama' : 'Pilih Berkas PDF Utama' }}</span>
+                                <span class="uploader-hint">Format .PDF &bull; Maksimal 30 MB</span>
+                            </div>
+                            <span class="uploader-browse-btn">Jelajahi</span>
+                        </label>
+                        <div id="preview_file_dokumen" class="uploader-file-pill d-none">
+                            <i class="bi bi-file-earmark-pdf-fill text-danger me-2 fs-6"></i>
+                            <span class="uploader-file-name text-truncate"></span>
+                            <span class="uploader-file-size badge bg-white text-muted ms-2 border"></span>
+                            <button type="button" class="btn-clear-file ms-auto" onclick="clearSelectedFile('input_file_dokumen', 'preview_file_dokumen')" title="Hapus berkas terpilih">
+                                <i class="bi bi-x"></i>
+                            </button>
+                        </div>
+                    </div>
+                    @error('file_dokumen') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                 </div>
 
-                <hr class="my-3">
+                <hr class="my-3 opacity-25">
 
                 <!-- ENGLISH -->
                 <div class="mb-3">
-                    <label class="form-label small fw-bold">English Version</label>
+                    <label class="form-label small fw-semibold text-muted">English Version</label>
                     @if($peraturan->english_version)
-                        <div class="small text-muted mb-1"><i class="bi bi-check-circle text-success me-1"></i> File terunggah</div>
+                        <div class="small text-success mb-1 d-flex align-items-center gap-1">
+                            <i class="bi bi-check-circle-fill"></i> <span>Berkas terunggah</span>
+                        </div>
                     @endif
-                    <input type="file" name="english_version" class="form-control form-control-sm" accept=".pdf">
+                    <div class="modern-file-uploader uploader-compact">
+                        <input type="file" name="english_version" id="input_english_version" class="uploader-native-input" accept=".pdf" onchange="handleFileSelected(this, 'preview_english_version')">
+                        <label for="input_english_version" class="uploader-drop-area">
+                            <div class="uploader-icon-squircle">
+                                <i class="bi bi-translate"></i>
+                            </div>
+                            <div class="uploader-text-wrapper">
+                                <span class="uploader-title">PDF Versi Bahasa Inggris</span>
+                                <span class="uploader-hint">Ganti atau unggah baru</span>
+                            </div>
+                            <span class="uploader-browse-btn">Pilih</span>
+                        </label>
+                        <div id="preview_english_version" class="uploader-file-pill d-none">
+                            <i class="bi bi-file-earmark-pdf-fill text-primary me-2"></i>
+                            <span class="uploader-file-name text-truncate"></span>
+                            <span class="uploader-file-size badge bg-white text-muted ms-2 border"></span>
+                            <button type="button" class="btn-clear-file ms-auto" onclick="clearSelectedFile('input_english_version', 'preview_english_version')">
+                                <i class="bi bi-x"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- BRAILLE -->
                 <div class="mb-3">
-                    <label class="form-label small fw-bold">Format Braille</label>
+                    <label class="form-label small fw-semibold text-muted">Format Braille</label>
                     @if($peraturan->braille)
-                        <div class="small text-muted mb-1"><i class="bi bi-check-circle text-success me-1"></i> File terunggah</div>
+                        <div class="small text-success mb-1 d-flex align-items-center gap-1">
+                            <i class="bi bi-check-circle-fill"></i> <span>Berkas terunggah</span>
+                        </div>
                     @endif
-                    <input type="file" name="braille" class="form-control form-control-sm" accept=".pdf">
+                    <div class="modern-file-uploader uploader-compact">
+                        <input type="file" name="braille" id="input_braille" class="uploader-native-input" accept=".pdf" onchange="handleFileSelected(this, 'preview_braille')">
+                        <label for="input_braille" class="uploader-drop-area">
+                            <div class="uploader-icon-squircle">
+                                <i class="bi bi-eye-slash"></i>
+                            </div>
+                            <div class="uploader-text-wrapper">
+                                <span class="uploader-title">Naskah Format Braille</span>
+                                <span class="uploader-hint">Layanan disabilitas netra</span>
+                            </div>
+                            <span class="uploader-browse-btn">Pilih</span>
+                        </label>
+                        <div id="preview_braille" class="uploader-file-pill d-none">
+                            <i class="bi bi-file-earmark-pdf-fill text-purple me-2"></i>
+                            <span class="uploader-file-name text-truncate"></span>
+                            <span class="uploader-file-size badge bg-white text-muted ms-2 border"></span>
+                            <button type="button" class="btn-clear-file ms-auto" onclick="clearSelectedFile('input_braille', 'preview_braille')">
+                                <i class="bi bi-x"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- AUDIO -->
-                <div class="mb-3">
-                    <label class="form-label small fw-bold">Alih Suara (Audio)</label>
+                <div class="mb-2">
+                    <label class="form-label small fw-semibold text-muted">Alih Suara (Audio)</label>
                     @if($peraturan->alih_suara)
-                        <div class="small text-muted mb-1"><i class="bi bi-check-circle text-success me-1"></i> File terunggah</div>
+                        <div class="small text-success mb-1 d-flex align-items-center gap-1">
+                            <i class="bi bi-check-circle-fill"></i> <span>Berkas terunggah</span>
+                        </div>
                     @endif
-                    <input type="file" name="alih_suara" class="form-control form-control-sm" accept=".mp3,.wav,.m4a,.ogg">
+                    <div class="modern-file-uploader uploader-compact">
+                        <input type="file" name="alih_suara" id="input_alih_suara" class="uploader-native-input" accept=".mp3,.wav,.m4a,.ogg" onchange="handleFileSelected(this, 'preview_alih_suara')">
+                        <label for="input_alih_suara" class="uploader-drop-area">
+                            <div class="uploader-icon-squircle">
+                                <i class="bi bi-volume-up"></i>
+                            </div>
+                            <div class="uploader-text-wrapper">
+                                <span class="uploader-title">Rekaman Narasi Suara</span>
+                                <span class="uploader-hint">MP3, WAV, atau OGG</span>
+                            </div>
+                            <span class="uploader-browse-btn">Pilih</span>
+                        </label>
+                        <div id="preview_alih_suara" class="uploader-file-pill d-none">
+                            <i class="bi bi-music-note-beamed text-success me-2"></i>
+                            <span class="uploader-file-name text-truncate"></span>
+                            <span class="uploader-file-size badge bg-white text-muted ms-2 border"></span>
+                            <button type="button" class="btn-clear-file ms-auto" onclick="clearSelectedFile('input_alih_suara', 'preview_alih_suara')">
+                                <i class="bi bi-x"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <!-- SUBMIT -->
             <div class="admin-card p-4">
                 <button type="submit" class="btn btn-admin-primary w-100 justify-content-center py-2 mb-2">
-                    <i class="bi bi-check-lg me-1"></i> Simpan Perubahan
+                    <i class="bi bi-check-lg me-2"></i> Simpan Perubahan
                 </button>
-                <a href="{{ route('admin.peraturan.index') }}" class="btn btn-sm btn-light border w-100">Batal</a>
+                <a href="{{ route('admin.peraturan.index') }}" class="btn btn-sm btn-light border w-100 py-2">Batal</a>
             </div>
         </div>
     </div>

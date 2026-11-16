@@ -7,21 +7,21 @@
 @section('content')
 
 <!-- ============================================================
-     PAGE HEADER WITH EXECUTIVE ACCENT
+     1. PAGE HEADER (CLEAN & EXECUTIVE)
      ============================================================ -->
 <div class="admin-page-header">
     <div>
         <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
             <h4 class="admin-page-title mb-0">Klasifikasi Jenis Peraturan</h4>
-            <span class="admin-header-badge">
-                <span class="badge-dot"></span>
-                Standar BPHN &amp; SPBE 2.4
+            <span class="stat-pill stat-pill-slate">
+                <span class="pulse-dot-emerald me-1"></span>
+                Standar BPHN Permenkumham 8/2019
             </span>
         </div>
-        <p class="admin-page-subtitle">Kelola master data klasifikasi kategori dan hierarki tata urutan produk hukum daerah</p>
+        <p class="admin-page-subtitle">Kelola master data klasifikasi kategori dan hierarki tata urutan perundang-undangan daerah</p>
     </div>
     <div class="mt-3 mt-md-0 d-flex align-items-center gap-2">
-        <button type="button" class="btn-admin-primary" data-bs-toggle="modal" data-bs-target="#modalTambahJenis">
+        <button type="button" class="btn btn-admin-primary" data-bs-toggle="modal" data-bs-target="#modalTambahJenis">
             <i class="bi bi-plus-lg"></i>
             <span>Tambah Jenis Peraturan</span>
         </button>
@@ -29,10 +29,11 @@
 </div>
 
 <!-- ============================================================
-     EXECUTIVE SUMMARY KPI CHIPS
+     2. BALANCED EXECUTIVE STAT CARDS (3-COLUMN KPI)
      ============================================================ -->
 <div class="row g-3 mb-4">
-    <div class="col-md-4 col-sm-6">
+    <!-- Card 1: Total Klasifikasi -->
+    <div class="col-lg-4 col-md-6">
         <div class="admin-stat-card stat-card-blue">
             <div class="stat-card-top">
                 <span class="stat-card-label">Total Jenis Kategori</span>
@@ -41,162 +42,185 @@
                 </div>
             </div>
             <div>
-                <div class="stat-card-value">{{ count($jenisPeraturans) }}</div>
+                <div class="stat-card-value">{{ $totalKategori ?? count($jenisPeraturans) }}</div>
                 <p class="stat-card-subtext">
                     <i class="bi bi-check2-circle text-primary"></i> Klasifikasi regulasi terkonfigurasi
                 </p>
             </div>
         </div>
     </div>
-    <div class="col-md-4 col-sm-6">
+
+    <!-- Card 2: Total Produk Terdata -->
+    <div class="col-lg-4 col-md-6">
         <div class="admin-stat-card stat-card-emerald">
             <div class="stat-card-top">
-                <span class="stat-card-label">Total Produk Hukum Terdata</span>
+                <span class="stat-card-label">Total Naskah Regulasi</span>
                 <div class="stat-card-icon">
                     <i class="bi bi-file-earmark-check"></i>
                 </div>
             </div>
             <div>
-                <div class="stat-card-value">{{ $jenisPeraturans->sum('peraturans_count') }}</div>
+                <div class="stat-card-value">{{ $totalDokumen ?? $jenisPeraturans->sum('peraturans_count') }}</div>
                 <p class="stat-card-subtext">
-                    <i class="bi bi-shield-check text-success"></i> Dokumen peraturan tersimpan di sistem
+                    <i class="bi bi-shield-check text-success"></i> Dokumen aktif tersimpan di pangkalan data
                 </p>
             </div>
         </div>
     </div>
-    <div class="col-md-4 col-sm-12">
-        <div class="admin-stat-card stat-card-amber">
+
+    <!-- Card 3: Kategori Terbanyak -->
+    <div class="col-lg-4 col-md-12">
+        <div class="admin-stat-card stat-card-purple">
             <div class="stat-card-top">
-                <span class="stat-card-label">Status Hierarki</span>
+                <span class="stat-card-label">Kategori Paling Aktif</span>
                 <div class="stat-card-icon">
-                    <i class="bi bi-diagram-3"></i>
+                    <i class="bi bi-bar-chart-steps"></i>
                 </div>
             </div>
             <div>
-                <div class="stat-card-value" style="color: #b45309;">Sesuai UU 12/2011</div>
-                <div class="stat-card-subtext">
-                    <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle">Perda &bull; Perbup &bull; Kepbup &bull; Inbup</span>
+                <div class="stat-card-value text-truncate" style="font-size: 1.45rem;">
+                    {{ $topKategori ? ($topKategori->singkatan ?: Str::limit($topKategori->nama, 15)) : '-' }}
                 </div>
+                <p class="stat-card-subtext text-truncate">
+                    <i class="bi bi-folder-check text-purple"></i> 
+                    @if($topKategori)
+                        {{ $topKategori->peraturans_count }} naskah ({{ $totalDokumen > 0 ? round(($topKategori->peraturans_count / $totalDokumen) * 100) : 0 }}% dari total dokumen)
+                    @else
+                        Belum ada dokumen
+                    @endif
+                </p>
             </div>
         </div>
     </div>
 </div>
 
 <!-- ============================================================
-     TABEL JENIS PERATURAN
+     3. TABEL KLASIFIKASI REGULASI (REGISTRY TABLE)
      ============================================================ -->
 <div class="admin-card">
-    <div class="admin-card-header">
+    <div class="admin-card-header d-flex justify-content-between align-items-center">
         <div class="d-flex align-items-center gap-2">
             <h6 class="admin-card-title mb-0">Daftar Klasifikasi &amp; Tata Urutan Regulasi</h6>
-            <span class="badge bg-light text-dark border px-2">{{ count($jenisPeraturans) }} Kategori</span>
+            <span class="badge bg-light text-dark border px-2">{{ count($jenisPeraturans) }} Master Kategori</span>
         </div>
-        <span class="admin-header-badge d-none d-sm-inline-flex">
-            <i class="bi bi-patch-check-fill text-primary"></i>
-            Metadata Terintegrasi JDIHN
-        </span>
     </div>
 
     <div class="table-responsive">
-        <table class="table admin-table align-middle mb-0">
+        <table class="table admin-table-registry align-middle mb-0">
             <thead>
                 <tr>
-                    <th class="ps-4 text-center" style="width: 70px;">Urutan</th>
-                    <th>Nama Jenis Peraturan</th>
-                    <th style="width: 120px;">Singkatan</th>
-                    <th>Slug URL</th>
-                    <th>Deskripsi</th>
-                    <th class="text-center" style="width: 140px;">Total Dokumen</th>
-                    <th class="text-end pe-4" style="width: 110px;">Aksi</th>
+                    <th class="ps-4 text-center" style="width: 75px;">Urutan</th>
+                    <th>Nama Klasifikasi &amp; Slug Sistem</th>
+                    <th style="width: 130px;">Singkatan</th>
+                    <th>Deskripsi Regulasi</th>
+                    <th class="text-center" style="width: 170px;">Total Dokumen</th>
+                    <th class="text-end pe-4" style="width: 120px;">Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($jenisPeraturans as $item)
                     @php
                         $singk = strtoupper($item->singkatan ?? '');
-                        $badgeClass = 'badge-tag-default';
-                        if ($singk === 'PERDA') $badgeClass = 'badge-tag-perda';
-                        elseif ($singk === 'PERBUP') $badgeClass = 'badge-tag-perbup';
-                        elseif ($singk === 'KEPBUP') $badgeClass = 'badge-tag-kepbup';
-                        elseif ($singk === 'INBUP') $badgeClass = 'badge-tag-inbup';
-                        elseif ($singk === 'SE') $badgeClass = 'badge-tag-se';
+                        $pillClass = 'pill-type-default';
+                        if ($singk === 'PERDA') $pillClass = 'pill-type-perda';
+                        elseif ($singk === 'PERBUP') $pillClass = 'pill-type-perbup';
+                        elseif ($singk === 'KEPBUP') $pillClass = 'pill-type-kepbup';
+                        elseif ($singk === 'INBUP') $pillClass = 'pill-type-inbup';
                     @endphp
                     <tr>
                         <td class="ps-4 text-center">
-                            <span class="table-rank-chip">{{ $item->urutan }}</span>
-                        </td>
-                        <td>
-                            <strong class="text-dark d-block">{{ $item->nama }}</strong>
-                        </td>
-                        <td>
-                            <span class="{{ $badgeClass }}">{{ $item->singkatan ?: '-' }}</span>
-                        </td>
-                        <td>
-                            <code class="small text-secondary bg-white px-2 py-1 rounded border">{{ $item->slug }}</code>
-                        </td>
-                        <td>
-                            <span class="small text-muted">{{ Str::limit($item->deskripsi, 65) ?: '-' }}</span>
-                        </td>
-                        <td class="text-center">
-                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3 py-1 fw-semibold">
-                                {{ $item->peraturans_count }} Dokumen
+                            <span class="table-rank-chip" title="Prioritas Urutan Hierarki">
+                                #{{ $item->urutan }}
                             </span>
                         </td>
+                        <td>
+                            <span class="d-block fw-semibold text-dark mb-1" style="font-size: 0.875rem;">{{ $item->nama }}</span>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="registry-doc-badge font-monospace" style="font-size: 0.7rem;">
+                                    <i class="bi bi-link-45deg me-1"></i>/kategori/{{ $item->slug }}
+                                </span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="pill-type-badge {{ $pillClass }}">
+                                {{ $item->singkatan ?: '-' }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="text-muted small" style="line-height: 1.45; display: block; max-width: 380px;">
+                                {{ $item->deskripsi ?: 'Tidak ada keterangan tambahan.' }}
+                            </span>
+                        </td>
+                        <td class="text-center">
+                            <a href="{{ route('admin.peraturan.index', ['jenis_id' => $item->id]) }}" class="badge-reg-link" title="Buka dan filter dokumen {{ $item->nama }}">
+                                <i class="bi bi-folder2-open"></i>
+                                <span>{{ $item->peraturans_count }} Dokumen</span>
+                                <i class="bi bi-arrow-up-right small"></i>
+                            </a>
+                        </td>
                         <td class="text-end pe-4">
-                            <div class="d-flex justify-content-end gap-1">
-                                <button type="button" class="btn-action-icon btn-action-edit" data-bs-toggle="modal" data-bs-target="#modalEdit{{ $item->id }}" title="Edit Jenis Peraturan">
+                            <div class="d-flex justify-content-end gap-2">
+                                <button type="button" class="btn-action-icon btn-action-edit" data-bs-toggle="modal" data-bs-target="#modalEdit{{ $item->id }}" title="Edit Master Jenis">
                                     <i class="bi bi-pencil"></i>
                                 </button>
-                                <button type="button" class="btn-action-icon btn-action-delete" data-bs-toggle="modal" data-bs-target="#modalHapus{{ $item->id }}" title="Hapus Jenis Peraturan">
+                                <button type="button" class="btn-action-icon btn-action-delete" data-bs-toggle="modal" data-bs-target="#modalHapus{{ $item->id }}" title="Hapus Master Jenis">
                                     <i class="bi bi-trash3"></i>
                                 </button>
                             </div>
                         </td>
                     </tr>
 
-                    <!-- MODAL EDIT -->
+                    <!-- MODAL EDIT JENIS -->
                     <div class="modal fade" id="modalEdit{{ $item->id }}" tabindex="-1" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-dialog modal-dialog-centered modal-dialog-modern-md">
                             <div class="modal-content rounded-3 border-0 shadow">
                                 <form action="{{ route('admin.jenis-peraturan.update', $item->id) }}" method="POST">
                                     @csrf
                                     @method('PUT')
-                                    <div class="modal-header border-bottom py-3">
-                                        <div class="d-flex align-items-center gap-2">
-                                            <i class="bi bi-pencil-square text-warning"></i>
-                                            <h6 class="modal-title fw-bold mb-0">Edit Jenis Peraturan</h6>
+                                    <div class="modal-header d-flex align-items-center justify-content-between py-3">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="modal-header-icon-squircle icon-squircle-amber">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </div>
+                                            <div>
+                                                <h6 class="modal-title fw-semibold text-dark mb-0">Edit Klasifikasi Regulasi</h6>
+                                                <span class="text-muted" style="font-size: 0.72rem;">Perbarui singkatan, hierarki, dan deskripsi yuridis</span>
+                                            </div>
                                         </div>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                     </div>
                                     <div class="modal-body p-4">
                                         <div class="mb-3">
-                                            <label class="form-label small fw-bold">Nama Jenis Peraturan <span class="text-danger">*</span></label>
+                                            <label class="form-label small fw-semibold text-dark">Nama Jenis Peraturan <span class="text-danger">*</span></label>
                                             <input type="text" name="nama" class="form-control" value="{{ $item->nama }}" required>
                                         </div>
-                                        <div class="mb-3">
-                                            <label class="form-label small fw-bold">Singkatan</label>
-                                            <input type="text" name="singkatan" class="form-control" value="{{ $item->singkatan }}">
-                                            <small class="text-muted">Contoh: PERDA, PERBUP, KEPBUP, INBUP</small>
+                                        <div class="row g-2 mb-3">
+                                            <div class="col-md-6">
+                                                <label class="form-label small fw-semibold text-dark">Singkatan Dokumen</label>
+                                                <input type="text" name="singkatan" class="form-control" value="{{ $item->singkatan }}" placeholder="Contoh: PERDA">
+                                                <small class="text-muted" style="font-size: 0.72rem;">Maksimal 50 karakter.</small>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label small fw-semibold text-dark">Urutan Hierarki</label>
+                                                <input type="number" name="urutan" class="form-control" value="{{ $item->urutan }}">
+                                                <small class="text-muted" style="font-size: 0.72rem;">Nomor tata urutan UU.</small>
+                                            </div>
                                         </div>
-                                        <div class="mb-3">
-                                            <label class="form-label small fw-bold">Urutan Tampilan</label>
-                                            <input type="number" name="urutan" class="form-control" value="{{ $item->urutan }}">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label small fw-bold">Deskripsi</label>
+                                        <div class="mb-2">
+                                            <label class="form-label small fw-semibold text-dark">Deskripsi &amp; Cakupan</label>
                                             <textarea name="deskripsi" class="form-control" rows="3">{{ $item->deskripsi }}</textarea>
                                         </div>
                                     </div>
-                                    <div class="modal-footer border-top py-2">
+                                    <div class="modal-footer border-top p-3">
                                         <button type="button" class="btn btn-sm btn-light border px-3" data-bs-dismiss="modal">Batal</button>
-                                        <button type="submit" class="btn btn-sm btn-admin-primary px-3">Simpan Perubahan</button>
+                                        <button type="submit" class="btn btn-sm btn-primary px-3 fw-semibold">Simpan Perubahan</button>
                                     </div>
                                 </form>
                             </div>
                         </div>
                     </div>
 
-                    <!-- MODAL HAPUS -->
+                    <!-- MODAL HAPUS JENIS -->
                     <div class="modal fade" id="modalHapus{{ $item->id }}" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered" style="max-width: 440px;">
                             <div class="modal-content rounded-3 border-0 shadow">
@@ -204,28 +228,29 @@
                                     @csrf
                                     @method('DELETE')
                                     <div class="modal-header border-bottom py-3">
-                                        <h6 class="modal-title fw-bold text-danger mb-0">
-                                            <i class="bi bi-exclamation-triangle me-1"></i> Konfirmasi Hapus Jenis
+                                        <h6 class="modal-title fw-bold text-danger mb-0 d-flex align-items-center gap-2">
+                                            <i class="bi bi-exclamation-triangle-fill"></i>
+                                            <span>Konfirmasi Hapus Klasifikasi</span>
                                         </h6>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                     </div>
                                     <div class="modal-body p-4 text-center">
                                         <p class="text-muted small mb-2">Apakah Anda yakin ingin menghapus klasifikasi jenis peraturan berikut?</p>
-                                        <div class="p-3 bg-light rounded-3 border my-3">
+                                        <div class="p-3 bg-light rounded-3 border my-3 text-start">
                                             <strong class="text-dark d-block">{{ $item->nama }}</strong>
                                             <span class="badge bg-light text-muted border mt-1">{{ $item->singkatan ?: '-' }}</span>
                                         </div>
                                         @if($item->peraturans_count > 0)
-                                            <div class="alert alert-warning small mb-0 text-start">
-                                                <i class="bi bi-info-circle me-1"></i> Klasifikasi ini masih memiliki <strong>{{ $item->peraturans_count }} dokumen peraturan</strong>. Pindahkan atau hapus dokumen tersebut terlebih dahulu.
+                                            <div class="alert alert-warning small mb-0 text-start border-0 shadow-xs">
+                                                <i class="bi bi-info-circle-fill me-1 text-warning"></i> Klasifikasi ini masih memiliki <strong>{{ $item->peraturans_count }} dokumen peraturan</strong>. Pindahkan atau hapus dokumen tersebut terlebih dahulu.
                                             </div>
                                         @else
                                             <p class="text-danger small mb-0">Tindakan ini tidak dapat dibatalkan.</p>
                                         @endif
                                     </div>
-                                    <div class="modal-footer border-top py-2">
+                                    <div class="modal-footer border-top p-3">
                                         <button type="button" class="btn btn-sm btn-light border px-3" data-bs-dismiss="modal">Batal</button>
-                                        <button type="submit" class="btn btn-sm btn-danger px-3" {{ $item->peraturans_count > 0 ? 'disabled' : '' }}>Ya, Hapus</button>
+                                        <button type="submit" class="btn btn-sm btn-danger px-3 fw-semibold" {{ $item->peraturans_count > 0 ? 'disabled' : '' }}>Ya, Hapus</button>
                                     </div>
                                 </form>
                             </div>
@@ -233,7 +258,7 @@
                     </div>
                 @empty
                     <tr>
-                        <td colspan="7" class="text-center py-5 text-muted">
+                        <td colspan="6" class="text-center py-5 text-muted">
                             <i class="bi bi-tags fs-2 d-block mb-2 text-secondary"></i>
                             Belum ada master jenis peraturan terdaftar.
                         </td>
@@ -244,40 +269,49 @@
     </div>
 </div>
 
-<!-- MODAL TAMBAH JENIS -->
+<!-- ============================================================
+     4. MODAL TAMBAH JENIS BARU
+     ============================================================ -->
 <div class="modal fade" id="modalTambahJenis" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-modern-md">
         <div class="modal-content rounded-3 border-0 shadow">
             <form action="{{ route('admin.jenis-peraturan.store') }}" method="POST">
                 @csrf
-                <div class="modal-header border-bottom py-3">
-                    <div class="d-flex align-items-center gap-2">
-                        <i class="bi bi-plus-circle text-primary"></i>
-                        <h6 class="modal-title fw-bold mb-0">Tambah Jenis Peraturan Baru</h6>
+                <div class="modal-header d-flex align-items-center justify-content-between py-3">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="modal-header-icon-squircle icon-squircle-blue">
+                            <i class="bi bi-tags"></i>
+                        </div>
+                        <div>
+                            <h6 class="modal-title fw-semibold text-dark mb-0">Tambah Jenis Peraturan Baru</h6>
+                            <span class="text-muted" style="font-size: 0.72rem;">Konfigurasikan klasifikasi master regulasi daerah</span>
+                        </div>
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body p-4">
                     <div class="mb-3">
-                        <label class="form-label small fw-bold">Nama Jenis Peraturan <span class="text-danger">*</span></label>
+                        <label class="form-label small fw-semibold text-dark">Nama Jenis Peraturan <span class="text-danger">*</span></label>
                         <input type="text" name="nama" class="form-control" placeholder="Contoh: Instruksi Bupati" required>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold">Singkatan</label>
-                        <input type="text" name="singkatan" class="form-control" placeholder="Contoh: INBUP">
+                    <div class="row g-2 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold text-dark">Singkatan Dokumen</label>
+                            <input type="text" name="singkatan" class="form-control" placeholder="Contoh: INBUP">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold text-dark">Urutan Hierarki</label>
+                            <input type="number" name="urutan" class="form-control" value="0">
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold">Urutan Nomor Tampilan</label>
-                        <input type="number" name="urutan" class="form-control" value="0">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold">Deskripsi Singkat</label>
+                    <div class="mb-2">
+                        <label class="form-label small fw-semibold text-dark">Deskripsi &amp; Landasan Yuridis</label>
                         <textarea name="deskripsi" class="form-control" rows="3" placeholder="Penjelasan mengenai jenis peraturan ini..."></textarea>
                     </div>
                 </div>
-                <div class="modal-footer border-top py-2">
+                <div class="modal-footer border-top p-3">
                     <button type="button" class="btn btn-sm btn-light border px-3" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-sm btn-admin-primary px-3">Simpan Jenis</button>
+                    <button type="submit" class="btn btn-sm btn-admin-primary px-3">Simpan Master Jenis</button>
                 </div>
             </form>
         </div>

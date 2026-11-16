@@ -196,5 +196,29 @@ class JdihPortalTest extends TestCase
             'id' => $kat->id,
         ]);
     }
+
+    /**
+     * Test All Admin Management Pages Load Successfully (HTTP 200 OK).
+     */
+    public function test_all_admin_pages_load_successfully(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        $adminPages = [
+            '/admin',
+            '/admin/peraturan',
+            '/admin/peraturan/create',
+            '/admin/jenis-peraturan',
+            '/admin/berita',
+            '/admin/pengumuman',
+            '/admin/struktur',
+            '/admin/visi',
+        ];
+
+        foreach ($adminPages as $page) {
+            $response = $this->actingAs($admin)->get($page);
+            $response->assertStatus(200);
+        }
+    }
 }
 

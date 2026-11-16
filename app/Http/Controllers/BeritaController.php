@@ -14,6 +14,7 @@ class BeritaController extends Controller
     public function index(Request $request)
     {
         $search = $request->search;
+        $totalBerita = Berita::count();
         $beritas = Berita::query()
             ->when($search, function ($query) use ($search) {
                 $query->where('judul', 'like', '%' . $search . '%')
@@ -23,7 +24,7 @@ class BeritaController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        return view('admin.berita', compact('beritas'));
+        return view('admin.berita', compact('beritas', 'totalBerita'));
     }
 
     /**

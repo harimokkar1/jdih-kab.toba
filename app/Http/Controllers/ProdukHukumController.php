@@ -65,6 +65,16 @@ class ProdukHukumController extends Controller
             $query->where('status', $request->status);
         }
 
+        if ($request->has('has_file')) {
+            if ($request->has_file === '0') {
+                $query->where(function ($q) {
+                    $q->whereNull('file_dokumen')->orWhere('file_dokumen', '');
+                });
+            } elseif ($request->has_file === '1') {
+                $query->whereNotNull('file_dokumen')->where('file_dokumen', '!=', '');
+            }
+        }
+
         // Pengurutan (Sorting)
         $sort = $request->get('sort', 'terbaru');
         if ($sort === 'terlama') {
@@ -111,6 +121,16 @@ class ProdukHukumController extends Controller
 
         if ($request->filled('status')) {
             $query->where('status', $request->status);
+        }
+
+        if ($request->has('has_file')) {
+            if ($request->has_file === '0') {
+                $query->where(function ($q) {
+                    $q->whereNull('file_dokumen')->orWhere('file_dokumen', '');
+                });
+            } elseif ($request->has_file === '1') {
+                $query->whereNotNull('file_dokumen')->where('file_dokumen', '!=', '');
+            }
         }
 
         $peraturans = $query->paginate(10)->withQueryString();
@@ -256,10 +276,23 @@ class ProdukHukumController extends Controller
             $query->where('status', $request->status);
         }
 
+        if ($request->has('has_file')) {
+            if ($request->has_file === '0') {
+                $query->where(function ($q) {
+                    $q->whereNull('file_dokumen')->orWhere('file_dokumen', '');
+                });
+            } elseif ($request->has_file === '1') {
+                $query->whereNotNull('file_dokumen')->where('file_dokumen', '!=', '');
+            }
+        }
+
         $peraturans = $query->paginate(15)->withQueryString();
         $jenisList = JenisPeraturan::orderBy('urutan')->get();
+        $totalAll = Peraturan::count();
+        $totalWithPdf = Peraturan::whereNotNull('file_dokumen')->where('file_dokumen', '!=', '')->count();
+        $totalWithoutPdf = max(0, $totalAll - $totalWithPdf);
 
-        return view('admin.peraturan-index', compact('peraturans', 'jenisList'));
+        return view('admin.peraturan-index', compact('peraturans', 'jenisList', 'totalAll', 'totalWithPdf', 'totalWithoutPdf'));
     }
 
     /**

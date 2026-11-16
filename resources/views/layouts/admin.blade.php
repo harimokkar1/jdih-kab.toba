@@ -97,9 +97,16 @@
         <div class="admin-content-area">
             <!-- TOPBAR / APPBAR -->
             <header class="admin-topbar">
-                <div class="admin-topbar-left">
+                <div class="admin-topbar-left d-flex align-items-center gap-2">
                     <button type="button" class="btn-admin-mobile-toggle" id="btnSidebarToggle" aria-label="Toggle Navigation">
                         <i class="bi bi-list"></i>
+                    </button>
+
+                    <!-- Global Command Palette Search Trigger Button -->
+                    <button type="button" class="btn-admin-command-palette d-none d-sm-flex align-items-center gap-2" id="btnOpenCommandPalette" title="Buka Command Palette (Ctrl+K)">
+                        <i class="bi bi-search text-muted"></i>
+                        <span class="command-placeholder">Cari modul, regulasi, aksi cepat...</span>
+                        <kbd class="command-kbd">Ctrl K</kbd>
                     </button>
                 </div>
 
@@ -216,6 +223,101 @@
         </div>
     </div>
 
+    <!-- COMMAND PALETTE MODAL (Ctrl + K) -->
+    <div class="modal fade command-palette-modal" id="commandPaletteModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content command-palette-content border-0 shadow-lg">
+                <div class="command-palette-header d-flex align-items-center px-3 py-3 border-bottom">
+                    <i class="bi bi-search text-primary me-2 fs-5"></i>
+                    <input type="text" class="form-control border-0 shadow-none ps-1 fs-6" id="commandPaletteInput" placeholder="Ketik apa yang ingin Anda cari (e.g. tambah peraturan, berita, perda, izin)..." autocomplete="off">
+                    <button type="button" class="btn-close ms-2" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="command-palette-body p-2" id="commandPaletteResults" style="max-height: 400px; overflow-y: auto;">
+                    <!-- Aksi Cepat -->
+                    <div class="command-group-title">Aksi Cepat Admin</div>
+                    <a href="{{ route('admin.peraturan.create') }}" class="command-item">
+                        <div class="command-item-icon bg-primary-subtle text-primary"><i class="bi bi-plus-lg"></i></div>
+                        <div class="command-item-text">
+                            <span class="command-item-title">Tambah Dokumen Peraturan Baru</span>
+                            <span class="command-item-desc">Unggah naskah PDF &amp; metadata regulasi daerah baru</span>
+                        </div>
+                        <span class="command-item-badge">Peraturan</span>
+                    </a>
+                    <a href="{{ route('admin.peraturan.index', ['has_file' => '0']) }}" class="command-item">
+                        <div class="command-item-icon bg-danger-subtle text-danger"><i class="bi bi-file-earmark-x"></i></div>
+                        <div class="command-item-text">
+                            <span class="command-item-title">Audit Regulasi Belum Ada PDF</span>
+                            <span class="command-item-desc">Filter regulasi yang belum memiliki dokumen naskah digital</span>
+                        </div>
+                        <span class="command-item-badge text-danger">Kepatuhan BPHN</span>
+                    </a>
+                    <a href="{{ route('admin.berita') }}" class="command-item">
+                        <div class="command-item-icon bg-info-subtle text-info"><i class="bi bi-newspaper"></i></div>
+                        <div class="command-item-text">
+                            <span class="command-item-title">Tulis &amp; Kelola Berita Hukum</span>
+                            <span class="command-item-desc">Warta kegiatan sosialisasi dan informasi hukum daerah</span>
+                        </div>
+                        <span class="command-item-badge">Publikasi</span>
+                    </a>
+                    <a href="{{ route('admin.pengumuman.index') }}" class="command-item">
+                        <div class="command-item-icon bg-warning-subtle text-warning"><i class="bi bi-megaphone"></i></div>
+                        <div class="command-item-text">
+                            <span class="command-item-title">Kelola Pengumuman Resmi</span>
+                            <span class="command-item-desc">Rilis maklumat, edaran, dan pengumuman untuk publik</span>
+                        </div>
+                        <span class="command-item-badge">Pengumuman</span>
+                    </a>
+
+                    <!-- Navigasi Halaman -->
+                    <div class="command-group-title mt-2">Navigasi Halaman Administrasi</div>
+                    <a href="{{ route('admin.dashboard') }}" class="command-item">
+                        <div class="command-item-icon bg-secondary-subtle text-secondary"><i class="bi bi-grid-1x2"></i></div>
+                        <div class="command-item-text"><span class="command-item-title">Dasbor Utama (Ringkasan &amp; Analitik)</span></div>
+                        <span class="command-item-shortcut">&crarr;</span>
+                    </a>
+                    <a href="{{ route('admin.jenis-peraturan.index') }}" class="command-item">
+                        <div class="command-item-icon bg-secondary-subtle text-secondary"><i class="bi bi-tags"></i></div>
+                        <div class="command-item-text"><span class="command-item-title">Kelola Klasifikasi &amp; Jenis Peraturan</span></div>
+                        <span class="command-item-shortcut">&crarr;</span>
+                    </a>
+                    <a href="{{ route('admin.peraturan.index') }}" class="command-item">
+                        <div class="command-item-icon bg-secondary-subtle text-secondary"><i class="bi bi-journal-text"></i></div>
+                        <div class="command-item-text"><span class="command-item-title">Database Arsip Peraturan Daerah &amp; Bupati</span></div>
+                        <span class="command-item-shortcut">&crarr;</span>
+                    </a>
+                    <a href="{{ route('admin.struktur') }}" class="command-item">
+                        <div class="command-item-icon bg-secondary-subtle text-secondary"><i class="bi bi-diagram-3"></i></div>
+                        <div class="command-item-text"><span class="command-item-title">Struktur Organisasi Bagian Hukum Toba</span></div>
+                        <span class="command-item-shortcut">&crarr;</span>
+                    </a>
+                    <a href="{{ route('admin.visi') }}" class="command-item">
+                        <div class="command-item-icon bg-secondary-subtle text-secondary"><i class="bi bi-compass"></i></div>
+                        <div class="command-item-text"><span class="command-item-title">Visi &amp; Misi Kabupaten Toba</span></div>
+                        <span class="command-item-shortcut">&crarr;</span>
+                    </a>
+                    <a href="{{ route('home') }}" target="_blank" class="command-item">
+                        <div class="command-item-icon bg-success-subtle text-success"><i class="bi bi-globe2"></i></div>
+                        <div class="command-item-text"><span class="command-item-title">Buka Portal Publik JDIH Kabupaten Toba</span></div>
+                        <span class="command-item-shortcut"><i class="bi bi-box-arrow-up-right"></i></span>
+                    </a>
+                    <a href="{{ route('api.jdihn.index') }}" target="_blank" class="command-item">
+                        <div class="command-item-icon bg-primary-subtle text-primary"><i class="bi bi-code-slash"></i></div>
+                        <div class="command-item-text"><span class="command-item-title">Cek Endpoint Respon API JDIHN (JSON)</span></div>
+                        <span class="command-item-shortcut"><i class="bi bi-box-arrow-up-right"></i></span>
+                    </a>
+                </div>
+                <div class="command-palette-footer d-flex justify-content-between align-items-center px-3 py-2 border-top bg-light rounded-bottom" style="font-size: 0.72rem; color: #64748b;">
+                    <div class="d-flex align-items-center gap-2">
+                        <span><kbd class="kbd-sm">Ctrl + K</kbd> Buka Kapan Saja</span>
+                        <span>&bull;</span>
+                        <span><kbd class="kbd-sm">ESC</kbd> Tutup</span>
+                    </div>
+                    <span>Satu Data JDIH Toba &bull; SPBE</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Bootstrap 5.3.3 JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Chart.js 4.4.4 for Interactive Analytics -->
@@ -237,6 +339,382 @@
 
             if (btnSidebarToggle) btnSidebarToggle.addEventListener('click', toggleSidebar);
             if (adminSidebarBackdrop) adminSidebarBackdrop.addEventListener('click', toggleSidebar);
+
+            // Command Palette (Ctrl+K / Cmd+K)
+            const commandModalEl = document.getElementById('commandPaletteModal');
+            const btnOpenCommand = document.getElementById('btnOpenCommandPalette');
+            const commandInput = document.getElementById('commandPaletteInput');
+            const commandResults = document.getElementById('commandPaletteResults');
+
+            function openCommandPalette() {
+                if (commandModalEl && typeof bootstrap !== 'undefined') {
+                    const modal = bootstrap.Modal.getOrCreateInstance(commandModalEl);
+                    modal.show();
+                    setTimeout(() => {
+                        if (commandInput) {
+                            commandInput.focus();
+                            commandInput.select();
+                        }
+                    }, 150);
+                }
+            }
+
+            if (btnOpenCommand) {
+                btnOpenCommand.addEventListener('click', openCommandPalette);
+            }
+
+            document.addEventListener('keydown', function (e) {
+                if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K')) {
+                    e.preventDefault();
+                    openCommandPalette();
+                }
+            });
+
+            // Live filter items in Command Palette
+            if (commandInput && commandResults) {
+                commandInput.addEventListener('input', function () {
+                    const query = this.value.toLowerCase().trim();
+                    const items = commandResults.querySelectorAll('.command-item');
+                    const titles = commandResults.querySelectorAll('.command-group-title');
+
+                    items.forEach(item => {
+                        const text = item.textContent.toLowerCase();
+                        if (!query || text.includes(query)) {
+                            item.style.display = 'flex';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+
+                    // Hide headers if no items visible in that group
+                    titles.forEach(title => {
+                        title.style.display = query ? 'none' : 'block';
+                    });
+                });
+            }
+        });
+
+        // Global Modern File Uploader Helpers
+        window.handleFileSelected = function(input, previewId) {
+            const preview = document.getElementById(previewId);
+            if (!preview) return;
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
+                const nameEl = preview.querySelector('.uploader-file-name');
+                const sizeEl = preview.querySelector('.uploader-file-size');
+                if (nameEl) nameEl.textContent = file.name;
+                if (sizeEl) sizeEl.textContent = (file.size >= 1048576) ? (sizeMB + ' MB') : ((file.size / 1024).toFixed(0) + ' KB');
+                preview.classList.remove('d-none');
+                const dropArea = input.closest('.modern-file-uploader')?.querySelector('.uploader-drop-area');
+                if (dropArea) dropArea.style.display = 'none';
+            }
+        };
+
+        window.clearSelectedFile = function(inputId, previewId) {
+            const input = document.getElementById(inputId);
+            const preview = document.getElementById(previewId);
+            if (input) input.value = '';
+            if (preview) preview.classList.add('d-none');
+            const dropArea = input?.closest('.modern-file-uploader')?.querySelector('.uploader-drop-area');
+            if (dropArea) dropArea.style.display = 'flex';
+        };
+
+        // ==========================================================================
+        // MODERN SELECT (BEAUTIFUL ENTERPRISE CUSTOM DROPDOWN ENGINE)
+        // ==========================================================================
+        window.initModernSelect = function(selectEl) {
+            if (!selectEl || selectEl.dataset.modernSelectInit === 'true') return;
+            selectEl.dataset.modernSelectInit = 'true';
+
+            // Hide original select visually but keep in DOM for form submission & HTML5 validation
+            selectEl.style.position = 'absolute';
+            selectEl.style.opacity = '0';
+            selectEl.style.pointerEvents = 'none';
+            selectEl.style.width = '1px';
+            selectEl.style.height = '1px';
+            selectEl.style.margin = '-1px';
+            selectEl.style.clip = 'rect(0, 0, 0, 0)';
+            selectEl.tabIndex = -1;
+
+            const isSm = selectEl.classList.contains('form-select-sm') || selectEl.closest('.col-lg-2, .col-lg-3, .col-md-3, .col-md-4');
+
+            // Wrapper
+            const wrapper = document.createElement('div');
+            wrapper.className = 'modern-select-wrapper' + (isSm ? ' modern-select-sm' : '');
+            selectEl.parentNode.insertBefore(wrapper, selectEl);
+            wrapper.appendChild(selectEl);
+
+            // Trigger button
+            const trigger = document.createElement('button');
+            trigger.type = 'button';
+            trigger.className = 'modern-select-trigger' + (isSm ? ' trigger-sm' : '');
+            trigger.setAttribute('aria-haspopup', 'listbox');
+            trigger.setAttribute('aria-expanded', 'false');
+
+            const labelSpan = document.createElement('span');
+            labelSpan.className = 'modern-select-label text-truncate';
+            
+            const chevron = document.createElement('i');
+            chevron.className = 'bi bi-chevron-down modern-select-chevron';
+
+            trigger.appendChild(labelSpan);
+            trigger.appendChild(chevron);
+            wrapper.appendChild(trigger);
+
+            // Menu Dropdown
+            const menu = document.createElement('div');
+            menu.className = 'modern-select-menu';
+            menu.setAttribute('role', 'listbox');
+
+            // Build options list
+            const optionsList = document.createElement('div');
+            optionsList.className = 'modern-select-options-list';
+
+            let totalOptions = 0;
+
+            function updateOptions() {
+                optionsList.innerHTML = '';
+                totalOptions = 0;
+                const selectedVal = selectEl.value;
+                let currentLabel = '';
+
+                const children = Array.from(selectEl.children);
+                children.forEach(child => {
+                    if (child.tagName === 'OPTGROUP') {
+                        const groupHeader = document.createElement('div');
+                        groupHeader.className = 'modern-select-optgroup-label';
+                        groupHeader.textContent = child.label;
+                        optionsList.appendChild(groupHeader);
+
+                        Array.from(child.children).forEach(opt => {
+                            createOptionEl(opt);
+                        });
+                    } else if (child.tagName === 'OPTION') {
+                        createOptionEl(child);
+                    }
+                });
+
+                function createOptionEl(opt) {
+                    totalOptions++;
+                    const isSelected = (opt.value === selectedVal) || (!selectedVal && !opt.value && selectEl.selectedIndex === totalOptions - 1);
+                    if (isSelected || (!currentLabel && totalOptions === 1)) {
+                        currentLabel = opt.textContent.trim();
+                    }
+
+                    const item = document.createElement('div');
+                    item.className = 'modern-select-option' + (isSelected ? ' selected' : '');
+                    item.dataset.value = opt.value;
+                    item.setAttribute('role', 'option');
+                    item.setAttribute('aria-selected', isSelected ? 'true' : 'false');
+
+                    const textSpan = document.createElement('span');
+                    textSpan.className = 'modern-select-option-text';
+                    textSpan.textContent = opt.textContent.trim();
+
+                    const checkIcon = document.createElement('i');
+                    checkIcon.className = 'bi bi-check2 modern-select-check';
+
+                    item.appendChild(textSpan);
+                    item.appendChild(checkIcon);
+
+                    item.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        selectEl.value = opt.value;
+                        labelSpan.textContent = opt.textContent.trim();
+                        
+                        optionsList.querySelectorAll('.modern-select-option').forEach(o => {
+                            o.classList.remove('selected');
+                            o.setAttribute('aria-selected', 'false');
+                        });
+                        item.classList.add('selected');
+                        item.setAttribute('aria-selected', 'true');
+
+                        closeMenu();
+                        selectEl.dispatchEvent(new Event('change', { bubbles: true }));
+                    });
+
+                    optionsList.appendChild(item);
+                }
+
+                labelSpan.textContent = currentLabel || (selectEl.options[selectEl.selectedIndex]?.textContent.trim()) || '-- Pilih --';
+            }
+
+            updateOptions();
+
+            // Search box if options > 6
+            let searchInput = null;
+            if (totalOptions > 6) {
+                const searchBox = document.createElement('div');
+                searchBox.className = 'modern-select-search-box';
+                searchBox.innerHTML = '<i class="bi bi-search"></i>';
+                searchInput = document.createElement('input');
+                searchInput.type = 'text';
+                searchInput.className = 'modern-select-search-input';
+                searchInput.placeholder = 'Cari opsi...';
+                searchInput.autocomplete = 'off';
+
+                searchInput.addEventListener('input', function() {
+                    const q = this.value.toLowerCase().trim();
+                    const optionEls = optionsList.querySelectorAll('.modern-select-option');
+                    optionEls.forEach(el => {
+                        const txt = el.textContent.toLowerCase();
+                        if (!q || txt.includes(q)) {
+                            el.style.display = 'flex';
+                        } else {
+                            el.style.display = 'none';
+                        }
+                    });
+                    optionsList.querySelectorAll('.modern-select-optgroup-label').forEach(hdr => {
+                        let next = hdr.nextElementSibling;
+                        let hasVisible = false;
+                        while (next && !next.classList.contains('modern-select-optgroup-label')) {
+                            if (next.style.display !== 'none') hasVisible = true;
+                            next = next.nextElementSibling;
+                        }
+                        hdr.style.display = hasVisible ? 'block' : 'none';
+                    });
+                });
+
+                searchBox.appendChild(searchInput);
+                menu.appendChild(searchBox);
+            }
+
+            menu.appendChild(optionsList);
+            wrapper.appendChild(menu);
+
+            function openMenu() {
+                document.querySelectorAll('.modern-select-wrapper.is-open').forEach(w => {
+                    if (w !== wrapper) {
+                        w.classList.remove('is-open', 'dropup');
+                        const t = w.querySelector('.modern-select-trigger');
+                        if (t) t.setAttribute('aria-expanded', 'false');
+                        const card = w.closest('.admin-card, .card');
+                        if (card) card.classList.remove('z-dropdown-active');
+                        const col = w.closest('[class*="col-"]');
+                        if (col) col.classList.remove('col-dropdown-active');
+                    }
+                });
+
+                const rect = trigger.getBoundingClientRect();
+                const spaceBelowWindow = window.innerHeight - rect.bottom;
+                const spaceAboveWindow = rect.top;
+
+                // Smart positioning: check if inside modal vs regular card
+                const modalContainer = wrapper.closest('.modal-content, .modal-body');
+                let shouldDropup = false;
+
+                if (modalContainer) {
+                    const modalRect = modalContainer.getBoundingClientRect();
+                    const spaceBelowInModal = modalRect.bottom - rect.bottom;
+                    const spaceAboveInModal = rect.top - modalRect.top;
+
+                    // If space below inside modal is tight (< 220px) and there's more room above, flip up
+                    if (spaceBelowInModal < 220 && spaceAboveInModal > spaceBelowInModal) {
+                        shouldDropup = true;
+                    }
+                } else {
+                    if (spaceBelowWindow < 260 && spaceAboveWindow > 260) {
+                        shouldDropup = true;
+                    }
+                }
+
+                if (shouldDropup) {
+                    wrapper.classList.add('dropup');
+                } else {
+                    wrapper.classList.remove('dropup');
+                }
+
+                wrapper.classList.add('is-open');
+                trigger.setAttribute('aria-expanded', 'true');
+
+                // Elevate parent stacking contexts so nothing clips or overlays the dropdown
+                const parentCard = wrapper.closest('.admin-card, .card');
+                if (parentCard) parentCard.classList.add('z-dropdown-active');
+                
+                const parentCol = wrapper.closest('[class*="col-"]');
+                if (parentCol) parentCol.classList.add('col-dropdown-active');
+
+                if (searchInput) {
+                    searchInput.value = '';
+                    searchInput.dispatchEvent(new Event('input'));
+                    setTimeout(() => searchInput.focus(), 60);
+                }
+            }
+
+            function closeMenu() {
+                wrapper.classList.remove('is-open', 'dropup');
+                trigger.setAttribute('aria-expanded', 'false');
+                const parentCard = wrapper.closest('.admin-card, .card');
+                if (parentCard) parentCard.classList.remove('z-dropdown-active');
+                const parentCol = wrapper.closest('[class*="col-"]');
+                if (parentCol) parentCol.classList.remove('col-dropdown-active');
+            }
+
+            trigger.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (wrapper.classList.contains('is-open')) {
+                    closeMenu();
+                } else {
+                    openMenu();
+                }
+            });
+
+            selectEl.addEventListener('change', function() {
+                const opt = selectEl.options[selectEl.selectedIndex];
+                if (opt) {
+                    labelSpan.textContent = opt.textContent.trim();
+                    optionsList.querySelectorAll('.modern-select-option').forEach(o => {
+                        if (o.dataset.value === opt.value) {
+                            o.classList.add('selected');
+                            o.setAttribute('aria-selected', 'true');
+                        } else {
+                            o.classList.remove('selected');
+                            o.setAttribute('aria-selected', 'false');
+                        }
+                    });
+                }
+            });
+        };
+
+        window.initAllModernSelects = function() {
+            document.querySelectorAll('select.form-select:not(.no-modern-select)').forEach(window.initModernSelect);
+        };
+
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.modern-select-wrapper')) {
+                document.querySelectorAll('.modern-select-wrapper.is-open').forEach(w => {
+                    w.classList.remove('is-open', 'dropup');
+                    const t = w.querySelector('.modern-select-trigger');
+                    if (t) t.setAttribute('aria-expanded', 'false');
+                    const card = w.closest('.admin-card, .card');
+                    if (card) card.classList.remove('z-dropdown-active');
+                    const col = w.closest('[class*="col-"]');
+                    if (col) col.classList.remove('col-dropdown-active');
+                });
+            }
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modern-select-wrapper.is-open').forEach(w => {
+                    w.classList.remove('is-open', 'dropup');
+                    const t = w.querySelector('.modern-select-trigger');
+                    if (t) t.setAttribute('aria-expanded', 'false');
+                    const card = w.closest('.admin-card, .card');
+                    if (card) card.classList.remove('z-dropdown-active');
+                    const col = w.closest('[class*="col-"]');
+                    if (col) col.classList.remove('col-dropdown-active');
+                });
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', window.initAllModernSelects);
+        document.addEventListener('show.bs.modal', function() {
+            setTimeout(window.initAllModernSelects, 60);
+        });
+        document.addEventListener('shown.bs.modal', function() {
+            setTimeout(window.initAllModernSelects, 60);
         });
     </script>
 
